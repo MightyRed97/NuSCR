@@ -1,0 +1,2968 @@
+{
+  "format": "rps-design-json/2.0",
+  "document": {
+    "id": "RPS-SDS-SYN-001",
+    "title": "Software Design Specification - Notional Four-Channel Reactor Protection System (function-block design)",
+    "revision": "1",
+    "date": "2026-09-27",
+    "status": "SYNTHETIC REFERENCE SPECIFICATION - NOT DERIVED FROM ANY PLANT DESIGN - NOT FOR OPERATIONAL, LICENSING OR SAFETY-CLASSIFIED USE WITHOUT FULL INDEPENDENT V&V",
+    "implements": {
+      "id": "NUSCR-RPS-SYN-001",
+      "file": "spec/rps_nuscr_spec.json"
+    },
+    "scope": "Function-block design of the bistable processor (BP) and coincidence processor (CP) software.  Code generation and implementation are out of scope."
+  },
+  "target_tool": {
+    "recommended": "Ansys SCADE Suite",
+    "rationale": [
+      "Synchronous dataflow with hierarchical state machines (Lustre semantics): one step per scan, the same execution model as the NuSCR requirements.  The single-assignment block bodies of this design map one-to-one onto SCADE equations (last_S is SCADE's last 'S).",
+      "Editor, checker and simulator; Design Verifier for formal property proofs with counterexamples.",
+      "Vendor documentation lists an IEC 60880 certification kit for specific versions of the KCG code generator (also qualifiable to DO-178C/DO-330 TQL-1 and certified for IEC 61508 SIL 3 and EN 50128).  Confirm that the kit covers the version to be used; these credentials matter only if the target platform accepts KCG-generated code.",
+      "Nuclear heritage: SCADE's Lustre-based predecessor SAGA was developed for the SPIN protection system of the French N4 reactors, and the Spinline 3 engineering environment (CLARISSE) uses the SCADE editor.",
+      "Design first, code later: the model is the design artefact; code generation is a separate, later step."
+    ],
+    "conditions": [
+      "If the safety I&C platform is already chosen, its qualified engineering tool is normally mandatory.  Such tools build applications from the vendor's pre-qualified function-block library, so each of the 12 blocks must be re-expressed with library primitives and each mapping checked, for example back-to-back against the NuSCR simulator.",
+      "Tool qualification (IEC 60880 / IEEE 7-4.3.2) is required for the programme; a certification kit supports it but does not replace it.  Results from the SCADE simulator or Design Verifier are credited only if that use is qualified or independently checked.",
+      "The exact tool version must be kept under configuration management and supported or archived for the plant lifetime."
+    ],
+    "alternatives": [
+      "Platform vendor engineering environments (e.g. those of TELEPERM XS, Common Q, Spinline 3): mandatory when the platform is fixed.",
+      "MATLAB Simulink/Stateflow: capable, but less established on nuclear safety platforms; super-step semantics and time-based temporal operators need care.",
+      "UML/SysML tools (e.g. IBM Rhapsody): suited to architecture, less to safety logic with exact scan semantics."
+    ],
+    "mapping": [
+      [
+        "Function block (FB_*)",
+        "operator (node)",
+        "FUNCTION_BLOCK, or a composition of platform library blocks"
+      ],
+      [
+        "State S with constant initial value",
+        "S declared with last = init",
+        "VAR S : T := init (not RETAIN)"
+      ],
+      [
+        "last_S (previous-scan value of S)",
+        "last 'S",
+        "value of S at FB entry (read before S is assigned)"
+      ],
+      [
+        "V := E",
+        "V = E;",
+        "V := E;"
+      ],
+      [
+        "Conditional assignment of one variable",
+        "if-then-else expression (state machines, if used: strong transitions only, targets entered with restart)",
+        "IF/ELSIF/ELSE assigning that one variable"
+      ],
+      [
+        "Scan counter CNT",
+        "CNT = if ... then last 'CNT + 1 else 0",
+        "DINT counter (not TON)"
+      ],
+      [
+        "Flag X; X = 1 / X = 0",
+        "bool X; X / not X",
+        "BOOL X; X / NOT X"
+      ],
+      [
+        "Module network",
+        "operator diagram",
+        "FBD program in one cyclic task"
+      ]
+    ]
+  },
+  "types": {
+    "real": {
+      "scade": "float64",
+      "iec": "LREAL",
+      "meaning": "Real value in engineering units."
+    },
+    "count": {
+      "scade": "int32",
+      "iec": "DINT",
+      "meaning": "Non-negative scan count."
+    },
+    "bool": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE when the named condition holds."
+    },
+    "valid_flag": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = VALID."
+    },
+    "permissive": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = bypass PERMITTED."
+    },
+    "bypass_status": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = BYPASSED."
+    },
+    "pushbutton": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = PRESSED."
+    },
+    "switch": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = trip channel BYPASS requested."
+    },
+    "pulse": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = PULSE (one scan)."
+    },
+    "error_flag": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = ERROR."
+    },
+    "trip": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = NORMAL, FALSE = TRIP (de-energize-to-trip)."
+    },
+    "pretrip": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = NORMAL, FALSE = PRETRIP."
+    },
+    "vote": {
+      "scade": "bool",
+      "iec": "BOOL",
+      "meaning": "TRUE = TRIP_VOTE (positive logic)."
+    }
+  },
+  "conventions": [
+    "Synchronous scan: each module is one cyclic task with period k_Scan_Period; no instance runs in another task.  Inputs are sampled at the start of the scan and instances execute once, in the module execution order; every connection is a same-scan transfer (no implicit delays).",
+    "Single assignment: in a block body every output, state variable and local is assigned exactly once per scan, in statement order.  last_S is the value of state variable S at the end of the previous scan; S read after its assignment is the current value.  Reading S before its assignment is not allowed.",
+    "Signals are named after the NuSCR variable they implement, so every design signal can be compared scan by scan with the requirements model.",
+    "Flags are carried as 1/0 in this notation and are BOOL in the tool (X = 1 means X is TRUE); see the data types section for the meaning of TRUE per type.  Trip, pre-trip and coincidence signals are TRUE = NORMAL (FALSE = TRIP, de-energize-to-trip); channel votes and FB_INITIATION.TRIPPED are positive logic (TRUE = trip vote / trip present).",
+    "Persistence delays are scan counters: DELAY = delay / k_Scan_Period must be an integer >= 1 and equal to the requirements' TTS delay (both checked).  The requirements define delays in scans; a counter reproduces them exactly, while a clock-based TON timer can expire one scan later under scan-time jitter.  Either form stretches in wall-clock time on cycle overrun, so overrun must be detected (open items).",
+    "Edge detectors start with PREV = TRUE, so a pushbutton held or stuck at power-up never produces a pulse.",
+    "All initial values are constants.  Start values that depend on parameters (setpoint INIT / MAX) are applied on the first scan through a STARTED flag.",
+    "All block state is non-retentive: every start (power-up, watchdog or processor restart, redundancy switchover) is a cold start that applies the initial values.  No RETAIN or PERSISTENT variables.",
+    "Initial states are fail-safe: trip and pre-trip bistables start tripped (HOLD = TRUE), bypasses start removed, falling setpoints start at their maximum and rising setpoints at their minimum.",
+    "Numeric representation: analog values and constants are 64-bit floating point (float64 / LREAL); scaled integers are not used, so intermediate arithmetic cannot overflow.  The design is verified with exact arithmetic; a boundary-value analysis of the floating-point implementation against it is required (open items).",
+    "Block bodies are loop-free: every scan executes a fixed, statically known amount of work."
+  ],
+  "open_items": [
+    "Choose the target platform, confirm the design tool (SCADE Suite or the platform tool) and its qualification route; if a platform tool is used, map the 12 blocks onto its qualified block library and verify each mapping.",
+    "Floating-point boundary-value analysis: comparators at their thresholds and the accumulation of setpoint rate steps, against the exact-arithmetic design.",
+    "Input conditioning (engineering-unit conversion, filtering) and the mapping of input-module diagnostics and cycle-overrun detection to f_Module_Error / f_Channel_Error.",
+    "Timing budget: scan period, input-to-trip response time, BP-to-CP link latency (modelled here as ideal same-scan transfers) and the effect of unsynchronised BP and CP scan cycles, in scans.",
+    "Confirm on the platform that every restart and redundancy switchover is a cold start.",
+    "Code generation and back-to-back testing of the generated code against this design and the NuSCR requirements model.",
+    "All constants are illustrative placeholders inherited from the requirements specification."
+  ],
+  "blocks": {
+    "FB_RANGE_CHECK": {
+      "description": "Input validity check: VALID while the analog value lies inside [MIN, MAX].",
+      "inputs": [
+        {
+          "name": "X",
+          "type": "real",
+          "description": "Analog process value."
+        }
+      ],
+      "params": [
+        {
+          "name": "MIN",
+          "type": "real",
+          "description": "Lower limit of the valid range."
+        },
+        {
+          "name": "MAX",
+          "type": "real",
+          "description": "Upper limit of the valid range."
+        }
+      ],
+      "state": [],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "TRUE = valid."
+        }
+      ],
+      "body": [
+        {
+          "set": "VALID",
+          "expr": "X >= MIN && X <= MAX"
+        }
+      ],
+      "realizes": "SDT pattern f_<S>_Valid"
+    },
+    "FB_PERMISSIVE_ABOVE": {
+      "description": "Operating-bypass permissive, rising: PERM while the input is valid and X >= LIM.",
+      "inputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "Validity of X."
+        },
+        {
+          "name": "X",
+          "type": "real",
+          "description": "Analog value."
+        }
+      ],
+      "params": [
+        {
+          "name": "LIM",
+          "type": "real",
+          "description": "Permissive threshold."
+        }
+      ],
+      "state": [],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "PERM",
+          "type": "permissive",
+          "description": "TRUE = bypass permitted."
+        }
+      ],
+      "body": [
+        {
+          "set": "PERM",
+          "expr": "VALID = 1 && X >= LIM"
+        }
+      ],
+      "realizes": "SDT pattern f_<X>_OB_Perm (rising)"
+    },
+    "FB_PERMISSIVE_BELOW": {
+      "description": "Operating-bypass permissive, falling: PERM while the input is valid and X < LIM.",
+      "inputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "Validity of X."
+        },
+        {
+          "name": "X",
+          "type": "real",
+          "description": "Analog value."
+        }
+      ],
+      "params": [
+        {
+          "name": "LIM",
+          "type": "real",
+          "description": "Permissive threshold."
+        }
+      ],
+      "state": [],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "PERM",
+          "type": "permissive",
+          "description": "TRUE = bypass permitted."
+        }
+      ],
+      "body": [
+        {
+          "set": "PERM",
+          "expr": "VALID = 1 && X < LIM"
+        }
+      ],
+      "realizes": "SDT patterns f_LP_OB_Perm and f_<X>_OB_Perm (falling)"
+    },
+    "FB_EDGE": {
+      "description": "Rising-edge detector: one-scan pulse per press.  PREV starts TRUE, so a pushbutton that is held or stuck at power-up is ignored until it has been seen released (an IEC 61131-3 R_TRIG whose memory starts TRUE instead of the standard FALSE).",
+      "inputs": [
+        {
+          "name": "PB",
+          "type": "pushbutton",
+          "description": "Pushbutton."
+        }
+      ],
+      "params": [],
+      "state": [
+        {
+          "name": "PREV",
+          "type": "pushbutton",
+          "description": "Pushbutton value in the previous scan.",
+          "init": "1"
+        }
+      ],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "pulse",
+          "description": "TRUE for exactly one scan per press."
+        }
+      ],
+      "body": [
+        {
+          "set": "Q",
+          "expr": "PB = 1 && last_PREV = 0"
+        },
+        {
+          "set": "PREV",
+          "expr": "PB"
+        }
+      ],
+      "realizes": "FSM pattern h_<X>_OB_Pulse / h_<X>_Reset_Pulse"
+    },
+    "FB_OPERATING_BYPASS": {
+      "description": "Operating bypass: reset-dominant latch, set by an initiation pulse while the permissive holds and reset in the first scan without permissive.  Starts removed.",
+      "inputs": [
+        {
+          "name": "PERM",
+          "type": "permissive",
+          "description": "Bypass permissive."
+        },
+        {
+          "name": "PULSE",
+          "type": "pulse",
+          "description": "Initiation pulse from FB_EDGE."
+        }
+      ],
+      "params": [],
+      "state": [
+        {
+          "name": "MEM",
+          "type": "bypass_status",
+          "description": "Bypass memory.",
+          "init": "0"
+        }
+      ],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "bypass_status",
+          "description": "TRUE = bypassed."
+        }
+      ],
+      "body": [
+        {
+          "set": "MEM",
+          "expr": "PERM = 1 && (last_MEM = 1 || PULSE = 1)"
+        },
+        {
+          "set": "Q",
+          "expr": "MEM"
+        }
+      ],
+      "realizes": "FSM pattern h_<X>_OB_Sta"
+    },
+    "FB_LIMIT": {
+      "description": "Clamp: Q = MN if IN <= MN, MX if IN >= MX, otherwise IN.",
+      "inputs": [
+        {
+          "name": "IN",
+          "type": "real",
+          "description": "Unconstrained value."
+        }
+      ],
+      "params": [
+        {
+          "name": "MN",
+          "type": "real",
+          "description": "Lower limit."
+        },
+        {
+          "name": "MX",
+          "type": "real",
+          "description": "Upper limit."
+        }
+      ],
+      "state": [],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "real",
+          "description": "Clamped value."
+        }
+      ],
+      "body": [
+        {
+          "set": "Q",
+          "cases": [
+            [
+              "IN <= MN",
+              "MN"
+            ],
+            [
+              "IN >= MX",
+              "MX"
+            ]
+          ],
+          "else": "IN"
+        }
+      ],
+      "realizes": "SDT pattern f_<X>_SP_Target"
+    },
+    "FB_SP_RATE_UP": {
+      "description": "Variable setpoint that follows a decreasing target at once and rises by at most STEP per scan.  It starts at INIT, is set to the target on the first scan with a valid input, and holds while the input is invalid.  The start value is applied on the first scan (STARTED) so that every state variable has a constant initial value.",
+      "inputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "Validity of the process input."
+        },
+        {
+          "name": "TGT",
+          "type": "real",
+          "description": "Setpoint target from FB_LIMIT."
+        }
+      ],
+      "params": [
+        {
+          "name": "STEP",
+          "type": "real",
+          "description": "Maximum rise per scan."
+        },
+        {
+          "name": "INIT",
+          "type": "real",
+          "description": "Setpoint value until the first valid scan."
+        }
+      ],
+      "state": [
+        {
+          "name": "SP",
+          "type": "real",
+          "description": "Setpoint.",
+          "init": "0"
+        },
+        {
+          "name": "READY",
+          "type": "bool",
+          "description": "TRUE once set from a valid input.",
+          "init": "0"
+        },
+        {
+          "name": "STARTED",
+          "type": "bool",
+          "description": "TRUE after the first scan.",
+          "init": "0"
+        }
+      ],
+      "locals": [
+        {
+          "name": "SP0",
+          "type": "real",
+          "description": "Setpoint at the start of this scan."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "real",
+          "description": "Setpoint."
+        }
+      ],
+      "body": [
+        {
+          "set": "SP0",
+          "cases": [
+            [
+              "last_STARTED = 0",
+              "INIT"
+            ]
+          ],
+          "else": "last_SP"
+        },
+        {
+          "set": "SP",
+          "cases": [
+            [
+              "VALID = 0",
+              "SP0"
+            ],
+            [
+              "last_READY = 0",
+              "TGT"
+            ],
+            [
+              "TGT <= SP0",
+              "TGT"
+            ],
+            [
+              "TGT - SP0 <= STEP",
+              "TGT"
+            ]
+          ],
+          "else": "SP0 + STEP"
+        },
+        {
+          "set": "READY",
+          "cases": [
+            [
+              "VALID = 1",
+              "1"
+            ]
+          ],
+          "else": "last_READY"
+        },
+        {
+          "set": "STARTED",
+          "expr": "1"
+        },
+        {
+          "set": "Q",
+          "expr": "SP"
+        }
+      ],
+      "realizes": "FSM pattern h_<X>_Trip_SP (rate-limited rising)"
+    },
+    "FB_SP_RATE_DOWN": {
+      "description": "Variable setpoint that follows an increasing target at once and falls by at most STEP per scan.  It starts at INIT, is set to the target on the first scan with a valid input, and holds while the input is invalid.",
+      "inputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "Validity of the process input."
+        },
+        {
+          "name": "TGT",
+          "type": "real",
+          "description": "Setpoint target from FB_LIMIT."
+        }
+      ],
+      "params": [
+        {
+          "name": "STEP",
+          "type": "real",
+          "description": "Maximum fall per scan."
+        },
+        {
+          "name": "INIT",
+          "type": "real",
+          "description": "Setpoint value until the first valid scan."
+        }
+      ],
+      "state": [
+        {
+          "name": "SP",
+          "type": "real",
+          "description": "Setpoint.",
+          "init": "0"
+        },
+        {
+          "name": "READY",
+          "type": "bool",
+          "description": "TRUE once set from a valid input.",
+          "init": "0"
+        },
+        {
+          "name": "STARTED",
+          "type": "bool",
+          "description": "TRUE after the first scan.",
+          "init": "0"
+        }
+      ],
+      "locals": [
+        {
+          "name": "SP0",
+          "type": "real",
+          "description": "Setpoint at the start of this scan."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "real",
+          "description": "Setpoint."
+        }
+      ],
+      "body": [
+        {
+          "set": "SP0",
+          "cases": [
+            [
+              "last_STARTED = 0",
+              "INIT"
+            ]
+          ],
+          "else": "last_SP"
+        },
+        {
+          "set": "SP",
+          "cases": [
+            [
+              "VALID = 0",
+              "SP0"
+            ],
+            [
+              "last_READY = 0",
+              "TGT"
+            ],
+            [
+              "TGT >= SP0",
+              "TGT"
+            ],
+            [
+              "SP0 - TGT <= STEP",
+              "TGT"
+            ]
+          ],
+          "else": "SP0 - STEP"
+        },
+        {
+          "set": "READY",
+          "cases": [
+            [
+              "VALID = 1",
+              "1"
+            ]
+          ],
+          "else": "last_READY"
+        },
+        {
+          "set": "STARTED",
+          "expr": "1"
+        },
+        {
+          "set": "Q",
+          "expr": "SP"
+        }
+      ],
+      "realizes": "FSM pattern h_<X>_Trip_SP (rate-limited falling)"
+    },
+    "FB_SP_MANUAL_RESET": {
+      "description": "Manually reset falling setpoint: starts at MAX, rises automatically to stay no more than BAND below X (up to MAX); each reset pulse lowers it to X - BAND (not below MIN).  Holds while the input is invalid.",
+      "inputs": [
+        {
+          "name": "VALID",
+          "type": "valid_flag",
+          "description": "Validity of X."
+        },
+        {
+          "name": "X",
+          "type": "real",
+          "description": "Process value."
+        },
+        {
+          "name": "PULSE",
+          "type": "pulse",
+          "description": "Reset pulse from FB_EDGE."
+        }
+      ],
+      "params": [
+        {
+          "name": "BAND",
+          "type": "real",
+          "description": "Band below the process value."
+        },
+        {
+          "name": "MIN",
+          "type": "real",
+          "description": "Setpoint floor."
+        },
+        {
+          "name": "MAX",
+          "type": "real",
+          "description": "Setpoint ceiling."
+        }
+      ],
+      "state": [
+        {
+          "name": "SP",
+          "type": "real",
+          "description": "Setpoint.",
+          "init": "0"
+        },
+        {
+          "name": "STARTED",
+          "type": "bool",
+          "description": "TRUE after the first scan.",
+          "init": "0"
+        }
+      ],
+      "locals": [
+        {
+          "name": "SP0",
+          "type": "real",
+          "description": "Setpoint at the start of this scan."
+        },
+        {
+          "name": "D",
+          "type": "real",
+          "description": "Process value minus band."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "real",
+          "description": "Setpoint."
+        }
+      ],
+      "body": [
+        {
+          "set": "SP0",
+          "cases": [
+            [
+              "last_STARTED = 0",
+              "MAX"
+            ]
+          ],
+          "else": "last_SP"
+        },
+        {
+          "set": "D",
+          "expr": "X - BAND"
+        },
+        {
+          "set": "SP",
+          "cases": [
+            [
+              "VALID = 0",
+              "SP0"
+            ],
+            [
+              "D > SP0 && D <= MAX",
+              "D"
+            ],
+            [
+              "D > MAX && SP0 < MAX",
+              "MAX"
+            ],
+            [
+              "PULSE = 1 && D < SP0 && D >= MIN",
+              "D"
+            ],
+            [
+              "PULSE = 1 && D < MIN && SP0 > MIN",
+              "MIN"
+            ]
+          ],
+          "else": "SP0"
+        },
+        {
+          "set": "STARTED",
+          "expr": "1"
+        },
+        {
+          "set": "Q",
+          "expr": "SP"
+        }
+      ],
+      "realizes": "FSM pattern h_<X>_Trip_SP (manual reset)"
+    },
+    "FB_TRIP_BISTABLE": {
+      "description": "Trip (or pre-trip) bistable with persistence counter, hysteresis latch and fail-safe error handling.  LATCH holds a process trip: it is kept through errors and released only by RESET or BYP in an error-free scan.  HOLD keeps the output tripped after an error or at start-up until the condition clears or has persisted for DELAY scans.  TIMING and CNT count the persistence of the arming condition in scans (CNT stays in [0, DELAY - 1]).",
+      "inputs": [
+        {
+          "name": "OK",
+          "type": "bool",
+          "description": "TRUE = no error of the function."
+        },
+        {
+          "name": "BYP",
+          "type": "bypass_status",
+          "description": "Operating bypass active (FALSE for functions without bypass)."
+        },
+        {
+          "name": "COND",
+          "type": "bool",
+          "description": "Trip (pre-trip) condition."
+        },
+        {
+          "name": "RESET",
+          "type": "bool",
+          "description": "Recovered past the setpoint by more than the hysteresis."
+        }
+      ],
+      "params": [
+        {
+          "name": "DELAY",
+          "type": "count",
+          "description": "Persistence delay in scans (delay constant / scan period).",
+          "integer": true,
+          "minimum": 1
+        }
+      ],
+      "state": [
+        {
+          "name": "LATCH",
+          "type": "bool",
+          "description": "Process trip latched.",
+          "init": "0"
+        },
+        {
+          "name": "HOLD",
+          "type": "bool",
+          "description": "Output held tripped after an error or at start-up.",
+          "init": "1"
+        },
+        {
+          "name": "TIMING",
+          "type": "bool",
+          "description": "Persistence being timed.",
+          "init": "0"
+        },
+        {
+          "name": "CNT",
+          "type": "count",
+          "description": "Scans the arming condition has persisted since timing started.",
+          "init": "0"
+        }
+      ],
+      "locals": [
+        {
+          "name": "ARM",
+          "type": "bool",
+          "description": "Arming condition: no error, no bypass, condition present."
+        },
+        {
+          "name": "REL",
+          "type": "bool",
+          "description": "Release condition of a latched process trip."
+        },
+        {
+          "name": "FIRE",
+          "type": "bool",
+          "description": "Persistence delay completed in this scan."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "trip",
+          "description": "TRUE = NORMAL, FALSE = TRIP."
+        }
+      ],
+      "body": [
+        {
+          "set": "ARM",
+          "expr": "OK = 1 && BYP = 0 && COND = 1"
+        },
+        {
+          "set": "REL",
+          "expr": "OK = 1 && (BYP = 1 || RESET = 1)"
+        },
+        {
+          "set": "FIRE",
+          "expr": "OK = 1 && last_LATCH = 0 && ARM = 1 && last_TIMING = 1 && last_CNT + 1 >= DELAY"
+        },
+        {
+          "set": "LATCH",
+          "cases": [
+            [
+              "OK = 0",
+              "last_LATCH"
+            ],
+            [
+              "last_LATCH = 1 && REL = 1",
+              "0"
+            ],
+            [
+              "last_LATCH = 1",
+              "1"
+            ],
+            [
+              "FIRE = 1",
+              "1"
+            ]
+          ],
+          "else": "0"
+        },
+        {
+          "set": "HOLD",
+          "cases": [
+            [
+              "OK = 0 && last_LATCH = 0",
+              "1"
+            ],
+            [
+              "OK = 0",
+              "last_HOLD"
+            ],
+            [
+              "last_LATCH = 1 && REL = 1",
+              "0"
+            ],
+            [
+              "last_LATCH = 1",
+              "last_HOLD"
+            ],
+            [
+              "ARM = 0",
+              "0"
+            ],
+            [
+              "FIRE = 1",
+              "0"
+            ]
+          ],
+          "else": "last_HOLD"
+        },
+        {
+          "set": "TIMING",
+          "cases": [
+            [
+              "OK = 0",
+              "0"
+            ],
+            [
+              "last_LATCH = 1",
+              "last_TIMING"
+            ],
+            [
+              "ARM = 0",
+              "0"
+            ],
+            [
+              "FIRE = 1",
+              "0"
+            ]
+          ],
+          "else": "1"
+        },
+        {
+          "set": "CNT",
+          "cases": [
+            [
+              "OK = 0",
+              "0"
+            ],
+            [
+              "last_LATCH = 1",
+              "last_CNT"
+            ],
+            [
+              "ARM = 0",
+              "0"
+            ],
+            [
+              "FIRE = 1",
+              "0"
+            ],
+            [
+              "last_TIMING = 1",
+              "last_CNT + 1"
+            ]
+          ],
+          "else": "0"
+        },
+        {
+          "set": "Q",
+          "expr": "LATCH = 0 && HOLD = 0"
+        }
+      ],
+      "realizes": "TTS pattern th_<X>_Trip / th_<X>_Pretrip"
+    },
+    "FB_VOTE_2OO4": {
+      "description": "2-out-of-4 coincidence with trip channel bypass (2-out-of-3 when exactly one channel requests bypass; all requests ignored when two or more do) and failed links counted as trip votes.  Pure boolean logic, no arithmetic.",
+      "inputs": [
+        {
+          "name": "TRIP_A",
+          "type": "trip",
+          "description": "Trip of channel A (FALSE = TRIP)."
+        },
+        {
+          "name": "TRIP_B",
+          "type": "trip",
+          "description": "Trip of channel B (FALSE = TRIP)."
+        },
+        {
+          "name": "TRIP_C",
+          "type": "trip",
+          "description": "Trip of channel C (FALSE = TRIP)."
+        },
+        {
+          "name": "TRIP_D",
+          "type": "trip",
+          "description": "Trip of channel D (FALSE = TRIP)."
+        },
+        {
+          "name": "BYP_A",
+          "type": "switch",
+          "description": "Trip channel bypass request of channel A."
+        },
+        {
+          "name": "BYP_B",
+          "type": "switch",
+          "description": "Trip channel bypass request of channel B."
+        },
+        {
+          "name": "BYP_C",
+          "type": "switch",
+          "description": "Trip channel bypass request of channel C."
+        },
+        {
+          "name": "BYP_D",
+          "type": "switch",
+          "description": "Trip channel bypass request of channel D."
+        },
+        {
+          "name": "LINK_A",
+          "type": "error_flag",
+          "description": "Data-link failure of channel A."
+        },
+        {
+          "name": "LINK_B",
+          "type": "error_flag",
+          "description": "Data-link failure of channel B."
+        },
+        {
+          "name": "LINK_C",
+          "type": "error_flag",
+          "description": "Data-link failure of channel C."
+        },
+        {
+          "name": "LINK_D",
+          "type": "error_flag",
+          "description": "Data-link failure of channel D."
+        }
+      ],
+      "params": [],
+      "state": [],
+      "locals": [
+        {
+          "name": "ONE_BYP",
+          "type": "bool",
+          "description": "Exactly one channel requests bypass."
+        },
+        {
+          "name": "V_A",
+          "type": "vote",
+          "description": "Channel A votes to trip (positive logic)."
+        },
+        {
+          "name": "V_B",
+          "type": "vote",
+          "description": "Channel B votes to trip (positive logic)."
+        },
+        {
+          "name": "V_C",
+          "type": "vote",
+          "description": "Channel C votes to trip (positive logic)."
+        },
+        {
+          "name": "V_D",
+          "type": "vote",
+          "description": "Channel D votes to trip (positive logic)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "COINC",
+          "type": "trip",
+          "description": "TRUE = NORMAL, FALSE = coincidence trip."
+        }
+      ],
+      "body": [
+        {
+          "set": "ONE_BYP",
+          "expr": "(BYP_A = 1 && BYP_B = 0 && BYP_C = 0 && BYP_D = 0) || (BYP_A = 0 && BYP_B = 1 && BYP_C = 0 && BYP_D = 0) || (BYP_A = 0 && BYP_B = 0 && BYP_C = 1 && BYP_D = 0) || (BYP_A = 0 && BYP_B = 0 && BYP_C = 0 && BYP_D = 1)"
+        },
+        {
+          "set": "V_A",
+          "expr": "!(BYP_A = 1 && ONE_BYP = 1) && (TRIP_A = 0 || LINK_A = 1)"
+        },
+        {
+          "set": "V_B",
+          "expr": "!(BYP_B = 1 && ONE_BYP = 1) && (TRIP_B = 0 || LINK_B = 1)"
+        },
+        {
+          "set": "V_C",
+          "expr": "!(BYP_C = 1 && ONE_BYP = 1) && (TRIP_C = 0 || LINK_C = 1)"
+        },
+        {
+          "set": "V_D",
+          "expr": "!(BYP_D = 1 && ONE_BYP = 1) && (TRIP_D = 0 || LINK_D = 1)"
+        },
+        {
+          "set": "COINC",
+          "expr": "!((V_A = 1 && V_B = 1) || (V_A = 1 && V_C = 1) || (V_A = 1 && V_D = 1) || (V_B = 1 && V_C = 1) || (V_B = 1 && V_D = 1) || (V_C = 1 && V_D = 1))"
+        }
+      ],
+      "realizes": "SDT group f_<X>_Byp_Cnt, f_<X>_Vote_<c>, f_<X>_Vote_Cnt, f_<X>_Coinc"
+    },
+    "FB_INITIATION": {
+      "description": "Reactor trip initiation: Q is FALSE (initiate) when any coincidence trip is present.",
+      "inputs": [
+        {
+          "name": "TRIPPED",
+          "type": "bool",
+          "description": "At least one coincidence trip (positive logic)."
+        }
+      ],
+      "params": [],
+      "state": [],
+      "locals": [],
+      "outputs": [
+        {
+          "name": "Q",
+          "type": "trip",
+          "description": "TRUE = NORMAL, FALSE = initiate reactor trip."
+        }
+      ],
+      "body": [
+        {
+          "set": "Q",
+          "expr": "TRIPPED = 0"
+        }
+      ],
+      "realizes": "SDT f_RT_Init"
+    }
+  },
+  "modules": [
+    {
+      "name": "BP",
+      "title": "Bistable Processor",
+      "description": "Per-channel design: input validation, shared permissive, then for each trip function the bypass, setpoint and bistable blocks.  Signals carry the names of the NuSCR variables they implement.",
+      "interface": "Outputs sent to every coincidence processor: the trip signals th_<X>_Trip (through FB_TRIP_BISTABLE) and the trip channel bypass switches f_<X>_Byp_Sw, which are BP inputs passed through unchanged (no block).  The pre-trip alarms, operating-bypass status and variable setpoints are indication outputs and are not sent to the CPs.",
+      "instances": [
+        {
+          "name": "VAL_NPWR_LIN",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_NPWR_LIN_Valid_Min",
+            "MAX": "k_NPWR_LIN_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_NPWR_LIN"
+          },
+          "outputs": {
+            "VALID": "f_NPWR_LIN_Valid"
+          },
+          "implements": [
+            "f_NPWR_LIN_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_NPWR_LOG",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_NPWR_LOG_Valid_Min",
+            "MAX": "k_NPWR_LOG_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_NPWR_LOG"
+          },
+          "outputs": {
+            "VALID": "f_NPWR_LOG_Valid"
+          },
+          "implements": [
+            "f_NPWR_LOG_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_PZR_P",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_PZR_P_Valid_Min",
+            "MAX": "k_PZR_P_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_PZR_P"
+          },
+          "outputs": {
+            "VALID": "f_PZR_P_Valid"
+          },
+          "implements": [
+            "f_PZR_P_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG1_L",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG1_L_Valid_Min",
+            "MAX": "k_SG1_L_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG1_L"
+          },
+          "outputs": {
+            "VALID": "f_SG1_L_Valid"
+          },
+          "implements": [
+            "f_SG1_L_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG2_L",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG2_L_Valid_Min",
+            "MAX": "k_SG2_L_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG2_L"
+          },
+          "outputs": {
+            "VALID": "f_SG2_L_Valid"
+          },
+          "implements": [
+            "f_SG2_L_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG1_P",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG1_P_Valid_Min",
+            "MAX": "k_SG1_P_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG1_P"
+          },
+          "outputs": {
+            "VALID": "f_SG1_P_Valid"
+          },
+          "implements": [
+            "f_SG1_P_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG2_P",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG2_P_Valid_Min",
+            "MAX": "k_SG2_P_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG2_P"
+          },
+          "outputs": {
+            "VALID": "f_SG2_P_Valid"
+          },
+          "implements": [
+            "f_SG2_P_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_CTMT_P",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_CTMT_P_Valid_Min",
+            "MAX": "k_CTMT_P_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_CTMT_P"
+          },
+          "outputs": {
+            "VALID": "f_CTMT_P_Valid"
+          },
+          "implements": [
+            "f_CTMT_P_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG1_F",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG1_F_Valid_Min",
+            "MAX": "k_SG1_F_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG1_F"
+          },
+          "outputs": {
+            "VALID": "f_SG1_F_Valid"
+          },
+          "implements": [
+            "f_SG1_F_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "VAL_SG2_F",
+          "block": "FB_RANGE_CHECK",
+          "params": {
+            "MIN": "k_SG2_F_Valid_Min",
+            "MAX": "k_SG2_F_Valid_Max"
+          },
+          "inputs": {
+            "X": "f_SG2_F"
+          },
+          "outputs": {
+            "VALID": "f_SG2_F_Valid"
+          },
+          "implements": [
+            "f_SG2_F_Valid"
+          ],
+          "group": "g_Input_Validation"
+        },
+        {
+          "name": "LP_PERM",
+          "block": "FB_PERMISSIVE_BELOW",
+          "params": {
+            "LIM": "k_LP_OB_Perm"
+          },
+          "inputs": {
+            "VALID": "f_NPWR_LOG_Valid",
+            "X": "f_NPWR_LOG"
+          },
+          "outputs": {
+            "PERM": "f_LP_OB_Perm"
+          },
+          "implements": [
+            "f_LP_OB_Perm"
+          ],
+          "group": "g_Permissives"
+        },
+        {
+          "name": "VOPT_SP_TGT",
+          "block": "FB_LIMIT",
+          "params": {
+            "MN": "k_VOPT_SP_Min",
+            "MX": "k_VOPT_SP_Max"
+          },
+          "inputs": {
+            "IN": "f_NPWR_LIN + k_VOPT_Band"
+          },
+          "outputs": {
+            "Q": "f_VOPT_SP_Target"
+          },
+          "implements": [
+            "f_VOPT_SP_Target"
+          ],
+          "group": "g_VOPT"
+        },
+        {
+          "name": "VOPT_SP",
+          "block": "FB_SP_RATE_UP",
+          "params": {
+            "STEP": "k_VOPT_SP_Step",
+            "INIT": "k_VOPT_SP_Min"
+          },
+          "inputs": {
+            "VALID": "f_NPWR_LIN_Valid",
+            "TGT": "f_VOPT_SP_Target"
+          },
+          "outputs": {
+            "Q": "h_VOPT_Trip_SP"
+          },
+          "implements": [
+            "h_VOPT_Trip_SP"
+          ],
+          "group": "g_VOPT"
+        },
+        {
+          "name": "VOPT_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_VOPT_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin",
+            "RESET": "f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin - k_VOPT_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_VOPT_Pretrip"
+          },
+          "implements": [
+            "th_VOPT_Pretrip"
+          ],
+          "group": "g_VOPT"
+        },
+        {
+          "name": "VOPT_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_VOPT_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_NPWR_LIN >= h_VOPT_Trip_SP",
+            "RESET": "f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_VOPT_Trip"
+          },
+          "implements": [
+            "th_VOPT_Trip"
+          ],
+          "group": "g_VOPT"
+        },
+        {
+          "name": "LOGP_HI_OB_PERM",
+          "block": "FB_PERMISSIVE_ABOVE",
+          "params": {
+            "LIM": "k_LOGP_HI_OB_Perm"
+          },
+          "inputs": {
+            "VALID": "f_NPWR_LOG_Valid",
+            "X": "f_NPWR_LOG"
+          },
+          "outputs": {
+            "PERM": "f_LOGP_HI_OB_Perm"
+          },
+          "implements": [
+            "f_LOGP_HI_OB_Perm"
+          ],
+          "group": "g_LOGP_HI"
+        },
+        {
+          "name": "LOGP_HI_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_LOGP_HI_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_LOGP_HI_OB_Pulse"
+          },
+          "implements": [
+            "h_LOGP_HI_OB_Pulse"
+          ],
+          "group": "g_LOGP_HI"
+        },
+        {
+          "name": "LOGP_HI_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_LOGP_HI_OB_Perm",
+            "PULSE": "h_LOGP_HI_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_LOGP_HI_OB_Sta"
+          },
+          "implements": [
+            "h_LOGP_HI_OB_Sta"
+          ],
+          "group": "g_LOGP_HI"
+        },
+        {
+          "name": "LOGP_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_LOGP_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_LOGP_HI_OB_Sta",
+            "COND": "f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP",
+            "RESET": "f_NPWR_LOG < k_LOGP_HI_Pretrip_SP - k_LOGP_HI_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_LOGP_HI_Pretrip"
+          },
+          "implements": [
+            "th_LOGP_HI_Pretrip"
+          ],
+          "group": "g_LOGP_HI"
+        },
+        {
+          "name": "LOGP_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_LOGP_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_LOGP_HI_OB_Sta",
+            "COND": "f_NPWR_LOG >= k_LOGP_HI_Trip_SP",
+            "RESET": "f_NPWR_LOG < k_LOGP_HI_Trip_SP - k_LOGP_HI_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_LOGP_HI_Trip"
+          },
+          "implements": [
+            "th_LOGP_HI_Trip"
+          ],
+          "group": "g_LOGP_HI"
+        },
+        {
+          "name": "LPD_HI_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_LPD_HI_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_LPD_HI_OB_Pulse"
+          },
+          "implements": [
+            "h_LPD_HI_OB_Pulse"
+          ],
+          "group": "g_LPD_HI"
+        },
+        {
+          "name": "LPD_HI_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_LP_OB_Perm",
+            "PULSE": "h_LPD_HI_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_LPD_HI_OB_Sta"
+          },
+          "implements": [
+            "h_LPD_HI_OB_Sta"
+          ],
+          "group": "g_LPD_HI"
+        },
+        {
+          "name": "LPD_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_LPD_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_LPD_HI_OB_Sta",
+            "COND": "f_LPD_HI_Pretrip_In = 0",
+            "RESET": "f_LPD_HI_Pretrip_In = 1"
+          },
+          "outputs": {
+            "Q": "th_LPD_HI_Pretrip"
+          },
+          "implements": [
+            "th_LPD_HI_Pretrip"
+          ],
+          "group": "g_LPD_HI"
+        },
+        {
+          "name": "LPD_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_LPD_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_LPD_HI_OB_Sta",
+            "COND": "f_LPD_HI_Trip_In = 0",
+            "RESET": "f_LPD_HI_Trip_In = 1"
+          },
+          "outputs": {
+            "Q": "th_LPD_HI_Trip"
+          },
+          "implements": [
+            "th_LPD_HI_Trip"
+          ],
+          "group": "g_LPD_HI"
+        },
+        {
+          "name": "DNBR_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_DNBR_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_DNBR_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_DNBR_LO_OB_Pulse"
+          ],
+          "group": "g_DNBR_LO"
+        },
+        {
+          "name": "DNBR_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_LP_OB_Perm",
+            "PULSE": "h_DNBR_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_DNBR_LO_OB_Sta"
+          },
+          "implements": [
+            "h_DNBR_LO_OB_Sta"
+          ],
+          "group": "g_DNBR_LO"
+        },
+        {
+          "name": "DNBR_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_DNBR_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_DNBR_LO_OB_Sta",
+            "COND": "f_DNBR_LO_Pretrip_In = 0",
+            "RESET": "f_DNBR_LO_Pretrip_In = 1"
+          },
+          "outputs": {
+            "Q": "th_DNBR_LO_Pretrip"
+          },
+          "implements": [
+            "th_DNBR_LO_Pretrip"
+          ],
+          "group": "g_DNBR_LO"
+        },
+        {
+          "name": "DNBR_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_DNBR_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_DNBR_LO_OB_Sta",
+            "COND": "f_DNBR_LO_Trip_In = 0",
+            "RESET": "f_DNBR_LO_Trip_In = 1"
+          },
+          "outputs": {
+            "Q": "th_DNBR_LO_Trip"
+          },
+          "implements": [
+            "th_DNBR_LO_Trip"
+          ],
+          "group": "g_DNBR_LO"
+        },
+        {
+          "name": "PZR_P_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_PZR_P_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_PZR_P >= k_PZR_P_HI_Pretrip_SP",
+            "RESET": "f_PZR_P < k_PZR_P_HI_Pretrip_SP - k_PZR_P_HI_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_PZR_P_HI_Pretrip"
+          },
+          "implements": [
+            "th_PZR_P_HI_Pretrip"
+          ],
+          "group": "g_PZR_P_HI"
+        },
+        {
+          "name": "PZR_P_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_PZR_P_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_PZR_P >= k_PZR_P_HI_Trip_SP",
+            "RESET": "f_PZR_P < k_PZR_P_HI_Trip_SP - k_PZR_P_HI_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_PZR_P_HI_Trip"
+          },
+          "implements": [
+            "th_PZR_P_HI_Trip"
+          ],
+          "group": "g_PZR_P_HI"
+        },
+        {
+          "name": "PZR_P_LO_OB_PERM",
+          "block": "FB_PERMISSIVE_BELOW",
+          "params": {
+            "LIM": "k_PZR_P_LO_OB_Perm"
+          },
+          "inputs": {
+            "VALID": "f_PZR_P_Valid",
+            "X": "f_PZR_P"
+          },
+          "outputs": {
+            "PERM": "f_PZR_P_LO_OB_Perm"
+          },
+          "implements": [
+            "f_PZR_P_LO_OB_Perm"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_PZR_P_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_PZR_P_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_PZR_P_LO_OB_Pulse"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_PZR_P_LO_OB_Perm",
+            "PULSE": "h_PZR_P_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_PZR_P_LO_OB_Sta"
+          },
+          "implements": [
+            "h_PZR_P_LO_OB_Sta"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_RST_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_PZR_P_LO_SP_Reset"
+          },
+          "outputs": {
+            "Q": "h_PZR_P_LO_Reset_Pulse"
+          },
+          "implements": [
+            "h_PZR_P_LO_Reset_Pulse"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_SP",
+          "block": "FB_SP_MANUAL_RESET",
+          "params": {
+            "BAND": "k_PZR_P_LO_Band",
+            "MIN": "k_PZR_P_LO_SP_Min",
+            "MAX": "k_PZR_P_LO_SP_Max"
+          },
+          "inputs": {
+            "VALID": "f_PZR_P_Valid",
+            "X": "f_PZR_P",
+            "PULSE": "h_PZR_P_LO_Reset_Pulse"
+          },
+          "outputs": {
+            "Q": "h_PZR_P_LO_Trip_SP"
+          },
+          "implements": [
+            "h_PZR_P_LO_Trip_SP"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_PZR_P_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_PZR_P_LO_OB_Sta",
+            "COND": "f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin",
+            "RESET": "f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin + k_PZR_P_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_PZR_P_LO_Pretrip"
+          },
+          "implements": [
+            "th_PZR_P_LO_Pretrip"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "PZR_P_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_PZR_P_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_PZR_P_LO_OB_Sta",
+            "COND": "f_PZR_P <= h_PZR_P_LO_Trip_SP",
+            "RESET": "f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_PZR_P_LO_Trip"
+          },
+          "implements": [
+            "th_PZR_P_LO_Trip"
+          ],
+          "group": "g_PZR_P_LO"
+        },
+        {
+          "name": "SG1_L_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_L_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG1_L <= k_SG1_L_LO_Pretrip_SP",
+            "RESET": "f_SG1_L > k_SG1_L_LO_Pretrip_SP + k_SG1_L_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_L_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG1_L_LO_Pretrip"
+          ],
+          "group": "g_SG1_L_LO"
+        },
+        {
+          "name": "SG1_L_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_L_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG1_L <= k_SG1_L_LO_Trip_SP",
+            "RESET": "f_SG1_L > k_SG1_L_LO_Trip_SP + k_SG1_L_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_L_LO_Trip"
+          },
+          "implements": [
+            "th_SG1_L_LO_Trip"
+          ],
+          "group": "g_SG1_L_LO"
+        },
+        {
+          "name": "SG2_L_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_L_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG2_L <= k_SG2_L_LO_Pretrip_SP",
+            "RESET": "f_SG2_L > k_SG2_L_LO_Pretrip_SP + k_SG2_L_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_L_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG2_L_LO_Pretrip"
+          ],
+          "group": "g_SG2_L_LO"
+        },
+        {
+          "name": "SG2_L_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_L_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG2_L <= k_SG2_L_LO_Trip_SP",
+            "RESET": "f_SG2_L > k_SG2_L_LO_Trip_SP + k_SG2_L_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_L_LO_Trip"
+          },
+          "implements": [
+            "th_SG2_L_LO_Trip"
+          ],
+          "group": "g_SG2_L_LO"
+        },
+        {
+          "name": "SG1_L_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_L_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG1_L >= k_SG1_L_HI_Pretrip_SP",
+            "RESET": "f_SG1_L < k_SG1_L_HI_Pretrip_SP - k_SG1_L_HI_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_L_HI_Pretrip"
+          },
+          "implements": [
+            "th_SG1_L_HI_Pretrip"
+          ],
+          "group": "g_SG1_L_HI"
+        },
+        {
+          "name": "SG1_L_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_L_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG1_L >= k_SG1_L_HI_Trip_SP",
+            "RESET": "f_SG1_L < k_SG1_L_HI_Trip_SP - k_SG1_L_HI_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_L_HI_Trip"
+          },
+          "implements": [
+            "th_SG1_L_HI_Trip"
+          ],
+          "group": "g_SG1_L_HI"
+        },
+        {
+          "name": "SG2_L_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_L_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG2_L >= k_SG2_L_HI_Pretrip_SP",
+            "RESET": "f_SG2_L < k_SG2_L_HI_Pretrip_SP - k_SG2_L_HI_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_L_HI_Pretrip"
+          },
+          "implements": [
+            "th_SG2_L_HI_Pretrip"
+          ],
+          "group": "g_SG2_L_HI"
+        },
+        {
+          "name": "SG2_L_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_L_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_SG2_L >= k_SG2_L_HI_Trip_SP",
+            "RESET": "f_SG2_L < k_SG2_L_HI_Trip_SP - k_SG2_L_HI_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_L_HI_Trip"
+          },
+          "implements": [
+            "th_SG2_L_HI_Trip"
+          ],
+          "group": "g_SG2_L_HI"
+        },
+        {
+          "name": "SG1_P_LO_OB_PERM",
+          "block": "FB_PERMISSIVE_BELOW",
+          "params": {
+            "LIM": "k_SG1_P_LO_OB_Perm"
+          },
+          "inputs": {
+            "VALID": "f_SG1_P_Valid",
+            "X": "f_SG1_P"
+          },
+          "outputs": {
+            "PERM": "f_SG1_P_LO_OB_Perm"
+          },
+          "implements": [
+            "f_SG1_P_LO_OB_Perm"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG1_P_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_SG1_P_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_SG1_P_LO_OB_Pulse"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_SG1_P_LO_OB_Perm",
+            "PULSE": "h_SG1_P_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG1_P_LO_OB_Sta"
+          },
+          "implements": [
+            "h_SG1_P_LO_OB_Sta"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_RST_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG1_P_LO_SP_Reset"
+          },
+          "outputs": {
+            "Q": "h_SG1_P_LO_Reset_Pulse"
+          },
+          "implements": [
+            "h_SG1_P_LO_Reset_Pulse"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_SP",
+          "block": "FB_SP_MANUAL_RESET",
+          "params": {
+            "BAND": "k_SG1_P_LO_Band",
+            "MIN": "k_SG1_P_LO_SP_Min",
+            "MAX": "k_SG1_P_LO_SP_Max"
+          },
+          "inputs": {
+            "VALID": "f_SG1_P_Valid",
+            "X": "f_SG1_P",
+            "PULSE": "h_SG1_P_LO_Reset_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG1_P_LO_Trip_SP"
+          },
+          "implements": [
+            "h_SG1_P_LO_Trip_SP"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_P_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG1_P_LO_OB_Sta",
+            "COND": "f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin",
+            "RESET": "f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin + k_SG1_P_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_P_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG1_P_LO_Pretrip"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG1_P_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_P_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG1_P_LO_OB_Sta",
+            "COND": "f_SG1_P <= h_SG1_P_LO_Trip_SP",
+            "RESET": "f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_P_LO_Trip"
+          },
+          "implements": [
+            "th_SG1_P_LO_Trip"
+          ],
+          "group": "g_SG1_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_OB_PERM",
+          "block": "FB_PERMISSIVE_BELOW",
+          "params": {
+            "LIM": "k_SG2_P_LO_OB_Perm"
+          },
+          "inputs": {
+            "VALID": "f_SG2_P_Valid",
+            "X": "f_SG2_P"
+          },
+          "outputs": {
+            "PERM": "f_SG2_P_LO_OB_Perm"
+          },
+          "implements": [
+            "f_SG2_P_LO_OB_Perm"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG2_P_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_SG2_P_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_SG2_P_LO_OB_Pulse"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_SG2_P_LO_OB_Perm",
+            "PULSE": "h_SG2_P_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG2_P_LO_OB_Sta"
+          },
+          "implements": [
+            "h_SG2_P_LO_OB_Sta"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_RST_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG2_P_LO_SP_Reset"
+          },
+          "outputs": {
+            "Q": "h_SG2_P_LO_Reset_Pulse"
+          },
+          "implements": [
+            "h_SG2_P_LO_Reset_Pulse"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_SP",
+          "block": "FB_SP_MANUAL_RESET",
+          "params": {
+            "BAND": "k_SG2_P_LO_Band",
+            "MIN": "k_SG2_P_LO_SP_Min",
+            "MAX": "k_SG2_P_LO_SP_Max"
+          },
+          "inputs": {
+            "VALID": "f_SG2_P_Valid",
+            "X": "f_SG2_P",
+            "PULSE": "h_SG2_P_LO_Reset_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG2_P_LO_Trip_SP"
+          },
+          "implements": [
+            "h_SG2_P_LO_Trip_SP"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_P_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG2_P_LO_OB_Sta",
+            "COND": "f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin",
+            "RESET": "f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin + k_SG2_P_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_P_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG2_P_LO_Pretrip"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "SG2_P_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_P_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG2_P_LO_OB_Sta",
+            "COND": "f_SG2_P <= h_SG2_P_LO_Trip_SP",
+            "RESET": "f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_P_LO_Trip"
+          },
+          "implements": [
+            "th_SG2_P_LO_Trip"
+          ],
+          "group": "g_SG2_P_LO"
+        },
+        {
+          "name": "CTMT_P_HI_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_CTMT_P_HI_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP",
+            "RESET": "f_CTMT_P < k_CTMT_P_HI_Pretrip_SP - k_CTMT_P_HI_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_CTMT_P_HI_Pretrip"
+          },
+          "implements": [
+            "th_CTMT_P_HI_Pretrip"
+          ],
+          "group": "g_CTMT_P_HI"
+        },
+        {
+          "name": "CTMT_P_HI_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_CTMT_P_HI_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "0",
+            "COND": "f_CTMT_P >= k_CTMT_P_HI_Trip_SP",
+            "RESET": "f_CTMT_P < k_CTMT_P_HI_Trip_SP - k_CTMT_P_HI_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_CTMT_P_HI_Trip"
+          },
+          "implements": [
+            "th_CTMT_P_HI_Trip"
+          ],
+          "group": "g_CTMT_P_HI"
+        },
+        {
+          "name": "SG1_F_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG1_F_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_SG1_F_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_SG1_F_LO_OB_Pulse"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG1_F_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_LP_OB_Perm",
+            "PULSE": "h_SG1_F_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG1_F_LO_OB_Sta"
+          },
+          "implements": [
+            "h_SG1_F_LO_OB_Sta"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG1_F_LO_SP_TGT",
+          "block": "FB_LIMIT",
+          "params": {
+            "MN": "k_SG1_F_LO_SP_Min",
+            "MX": "k_SG1_F_LO_SP_Max"
+          },
+          "inputs": {
+            "IN": "f_SG1_F - k_SG1_F_LO_Band"
+          },
+          "outputs": {
+            "Q": "f_SG1_F_LO_SP_Target"
+          },
+          "implements": [
+            "f_SG1_F_LO_SP_Target"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG1_F_LO_SP",
+          "block": "FB_SP_RATE_DOWN",
+          "params": {
+            "STEP": "k_SG1_F_LO_SP_Step",
+            "INIT": "k_SG1_F_LO_SP_Max"
+          },
+          "inputs": {
+            "VALID": "f_SG1_F_Valid",
+            "TGT": "f_SG1_F_LO_SP_Target"
+          },
+          "outputs": {
+            "Q": "h_SG1_F_LO_Trip_SP"
+          },
+          "implements": [
+            "h_SG1_F_LO_Trip_SP"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG1_F_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_F_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG1_F_LO_OB_Sta",
+            "COND": "f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin",
+            "RESET": "f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin + k_SG1_F_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_F_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG1_F_LO_Pretrip"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG1_F_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG1_F_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG1_F_LO_OB_Sta",
+            "COND": "f_SG1_F <= h_SG1_F_LO_Trip_SP",
+            "RESET": "f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG1_F_LO_Trip"
+          },
+          "implements": [
+            "th_SG1_F_LO_Trip"
+          ],
+          "group": "g_SG1_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_OB_EDGE",
+          "block": "FB_EDGE",
+          "params": {},
+          "inputs": {
+            "PB": "f_SG2_F_LO_OB_Ini"
+          },
+          "outputs": {
+            "Q": "h_SG2_F_LO_OB_Pulse"
+          },
+          "implements": [
+            "h_SG2_F_LO_OB_Pulse"
+          ],
+          "group": "g_SG2_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_OB",
+          "block": "FB_OPERATING_BYPASS",
+          "params": {},
+          "inputs": {
+            "PERM": "f_LP_OB_Perm",
+            "PULSE": "h_SG2_F_LO_OB_Pulse"
+          },
+          "outputs": {
+            "Q": "h_SG2_F_LO_OB_Sta"
+          },
+          "implements": [
+            "h_SG2_F_LO_OB_Sta"
+          ],
+          "group": "g_SG2_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_SP_TGT",
+          "block": "FB_LIMIT",
+          "params": {
+            "MN": "k_SG2_F_LO_SP_Min",
+            "MX": "k_SG2_F_LO_SP_Max"
+          },
+          "inputs": {
+            "IN": "f_SG2_F - k_SG2_F_LO_Band"
+          },
+          "outputs": {
+            "Q": "f_SG2_F_LO_SP_Target"
+          },
+          "implements": [
+            "f_SG2_F_LO_SP_Target"
+          ],
+          "group": "g_SG2_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_SP",
+          "block": "FB_SP_RATE_DOWN",
+          "params": {
+            "STEP": "k_SG2_F_LO_SP_Step",
+            "INIT": "k_SG2_F_LO_SP_Max"
+          },
+          "inputs": {
+            "VALID": "f_SG2_F_Valid",
+            "TGT": "f_SG2_F_LO_SP_Target"
+          },
+          "outputs": {
+            "Q": "h_SG2_F_LO_Trip_SP"
+          },
+          "implements": [
+            "h_SG2_F_LO_Trip_SP"
+          ],
+          "group": "g_SG2_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_PRETRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_F_LO_Pretrip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG2_F_LO_OB_Sta",
+            "COND": "f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin",
+            "RESET": "f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin + k_SG2_F_LO_Pretrip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_F_LO_Pretrip"
+          },
+          "implements": [
+            "th_SG2_F_LO_Pretrip"
+          ],
+          "group": "g_SG2_F_LO"
+        },
+        {
+          "name": "SG2_F_LO_TRIP",
+          "block": "FB_TRIP_BISTABLE",
+          "params": {
+            "DELAY": "k_SG2_F_LO_Trip_Delay / k_Scan_Period"
+          },
+          "inputs": {
+            "OK": "f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0",
+            "BYP": "h_SG2_F_LO_OB_Sta",
+            "COND": "f_SG2_F <= h_SG2_F_LO_Trip_SP",
+            "RESET": "f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Trip_Hys"
+          },
+          "outputs": {
+            "Q": "th_SG2_F_LO_Trip"
+          },
+          "implements": [
+            "th_SG2_F_LO_Trip"
+          ],
+          "group": "g_SG2_F_LO"
+        }
+      ]
+    },
+    {
+      "name": "CP",
+      "title": "Coincidence Processor",
+      "description": "One FB_VOTE_2OO4 per trip function and one FB_INITIATION.",
+      "interface": "Inputs from each channel c: th_<X>_Trip as f_<c>_<X>_Trip, f_<X>_Byp_Sw as f_<c>_<X>_Byp, and the link diagnostic f_<c>_Link_Error.  Output: f_RT_Init.",
+      "instances": [
+        {
+          "name": "VOPT_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_VOPT_Trip",
+            "BYP_A": "f_A_VOPT_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_VOPT_Trip",
+            "BYP_B": "f_B_VOPT_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_VOPT_Trip",
+            "BYP_C": "f_C_VOPT_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_VOPT_Trip",
+            "BYP_D": "f_D_VOPT_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_VOPT_Coinc"
+          },
+          "implements": [
+            "f_VOPT_Byp_Cnt",
+            "f_VOPT_Vote_A",
+            "f_VOPT_Vote_B",
+            "f_VOPT_Vote_C",
+            "f_VOPT_Vote_D",
+            "f_VOPT_Vote_Cnt",
+            "f_VOPT_Coinc"
+          ],
+          "group": "g_VOPT_Coincidence"
+        },
+        {
+          "name": "LOGP_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_LOGP_HI_Trip",
+            "BYP_A": "f_A_LOGP_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_LOGP_HI_Trip",
+            "BYP_B": "f_B_LOGP_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_LOGP_HI_Trip",
+            "BYP_C": "f_C_LOGP_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_LOGP_HI_Trip",
+            "BYP_D": "f_D_LOGP_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_LOGP_HI_Coinc"
+          },
+          "implements": [
+            "f_LOGP_HI_Byp_Cnt",
+            "f_LOGP_HI_Vote_A",
+            "f_LOGP_HI_Vote_B",
+            "f_LOGP_HI_Vote_C",
+            "f_LOGP_HI_Vote_D",
+            "f_LOGP_HI_Vote_Cnt",
+            "f_LOGP_HI_Coinc"
+          ],
+          "group": "g_LOGP_HI_Coincidence"
+        },
+        {
+          "name": "LPD_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_LPD_HI_Trip",
+            "BYP_A": "f_A_LPD_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_LPD_HI_Trip",
+            "BYP_B": "f_B_LPD_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_LPD_HI_Trip",
+            "BYP_C": "f_C_LPD_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_LPD_HI_Trip",
+            "BYP_D": "f_D_LPD_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_LPD_HI_Coinc"
+          },
+          "implements": [
+            "f_LPD_HI_Byp_Cnt",
+            "f_LPD_HI_Vote_A",
+            "f_LPD_HI_Vote_B",
+            "f_LPD_HI_Vote_C",
+            "f_LPD_HI_Vote_D",
+            "f_LPD_HI_Vote_Cnt",
+            "f_LPD_HI_Coinc"
+          ],
+          "group": "g_LPD_HI_Coincidence"
+        },
+        {
+          "name": "DNBR_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_DNBR_LO_Trip",
+            "BYP_A": "f_A_DNBR_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_DNBR_LO_Trip",
+            "BYP_B": "f_B_DNBR_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_DNBR_LO_Trip",
+            "BYP_C": "f_C_DNBR_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_DNBR_LO_Trip",
+            "BYP_D": "f_D_DNBR_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_DNBR_LO_Coinc"
+          },
+          "implements": [
+            "f_DNBR_LO_Byp_Cnt",
+            "f_DNBR_LO_Vote_A",
+            "f_DNBR_LO_Vote_B",
+            "f_DNBR_LO_Vote_C",
+            "f_DNBR_LO_Vote_D",
+            "f_DNBR_LO_Vote_Cnt",
+            "f_DNBR_LO_Coinc"
+          ],
+          "group": "g_DNBR_LO_Coincidence"
+        },
+        {
+          "name": "PZR_P_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_PZR_P_HI_Trip",
+            "BYP_A": "f_A_PZR_P_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_PZR_P_HI_Trip",
+            "BYP_B": "f_B_PZR_P_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_PZR_P_HI_Trip",
+            "BYP_C": "f_C_PZR_P_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_PZR_P_HI_Trip",
+            "BYP_D": "f_D_PZR_P_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_PZR_P_HI_Coinc"
+          },
+          "implements": [
+            "f_PZR_P_HI_Byp_Cnt",
+            "f_PZR_P_HI_Vote_A",
+            "f_PZR_P_HI_Vote_B",
+            "f_PZR_P_HI_Vote_C",
+            "f_PZR_P_HI_Vote_D",
+            "f_PZR_P_HI_Vote_Cnt",
+            "f_PZR_P_HI_Coinc"
+          ],
+          "group": "g_PZR_P_HI_Coincidence"
+        },
+        {
+          "name": "PZR_P_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_PZR_P_LO_Trip",
+            "BYP_A": "f_A_PZR_P_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_PZR_P_LO_Trip",
+            "BYP_B": "f_B_PZR_P_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_PZR_P_LO_Trip",
+            "BYP_C": "f_C_PZR_P_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_PZR_P_LO_Trip",
+            "BYP_D": "f_D_PZR_P_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_PZR_P_LO_Coinc"
+          },
+          "implements": [
+            "f_PZR_P_LO_Byp_Cnt",
+            "f_PZR_P_LO_Vote_A",
+            "f_PZR_P_LO_Vote_B",
+            "f_PZR_P_LO_Vote_C",
+            "f_PZR_P_LO_Vote_D",
+            "f_PZR_P_LO_Vote_Cnt",
+            "f_PZR_P_LO_Coinc"
+          ],
+          "group": "g_PZR_P_LO_Coincidence"
+        },
+        {
+          "name": "SG1_L_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG1_L_LO_Trip",
+            "BYP_A": "f_A_SG1_L_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG1_L_LO_Trip",
+            "BYP_B": "f_B_SG1_L_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG1_L_LO_Trip",
+            "BYP_C": "f_C_SG1_L_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG1_L_LO_Trip",
+            "BYP_D": "f_D_SG1_L_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG1_L_LO_Coinc"
+          },
+          "implements": [
+            "f_SG1_L_LO_Byp_Cnt",
+            "f_SG1_L_LO_Vote_A",
+            "f_SG1_L_LO_Vote_B",
+            "f_SG1_L_LO_Vote_C",
+            "f_SG1_L_LO_Vote_D",
+            "f_SG1_L_LO_Vote_Cnt",
+            "f_SG1_L_LO_Coinc"
+          ],
+          "group": "g_SG1_L_LO_Coincidence"
+        },
+        {
+          "name": "SG2_L_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG2_L_LO_Trip",
+            "BYP_A": "f_A_SG2_L_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG2_L_LO_Trip",
+            "BYP_B": "f_B_SG2_L_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG2_L_LO_Trip",
+            "BYP_C": "f_C_SG2_L_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG2_L_LO_Trip",
+            "BYP_D": "f_D_SG2_L_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG2_L_LO_Coinc"
+          },
+          "implements": [
+            "f_SG2_L_LO_Byp_Cnt",
+            "f_SG2_L_LO_Vote_A",
+            "f_SG2_L_LO_Vote_B",
+            "f_SG2_L_LO_Vote_C",
+            "f_SG2_L_LO_Vote_D",
+            "f_SG2_L_LO_Vote_Cnt",
+            "f_SG2_L_LO_Coinc"
+          ],
+          "group": "g_SG2_L_LO_Coincidence"
+        },
+        {
+          "name": "SG1_L_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG1_L_HI_Trip",
+            "BYP_A": "f_A_SG1_L_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG1_L_HI_Trip",
+            "BYP_B": "f_B_SG1_L_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG1_L_HI_Trip",
+            "BYP_C": "f_C_SG1_L_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG1_L_HI_Trip",
+            "BYP_D": "f_D_SG1_L_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG1_L_HI_Coinc"
+          },
+          "implements": [
+            "f_SG1_L_HI_Byp_Cnt",
+            "f_SG1_L_HI_Vote_A",
+            "f_SG1_L_HI_Vote_B",
+            "f_SG1_L_HI_Vote_C",
+            "f_SG1_L_HI_Vote_D",
+            "f_SG1_L_HI_Vote_Cnt",
+            "f_SG1_L_HI_Coinc"
+          ],
+          "group": "g_SG1_L_HI_Coincidence"
+        },
+        {
+          "name": "SG2_L_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG2_L_HI_Trip",
+            "BYP_A": "f_A_SG2_L_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG2_L_HI_Trip",
+            "BYP_B": "f_B_SG2_L_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG2_L_HI_Trip",
+            "BYP_C": "f_C_SG2_L_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG2_L_HI_Trip",
+            "BYP_D": "f_D_SG2_L_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG2_L_HI_Coinc"
+          },
+          "implements": [
+            "f_SG2_L_HI_Byp_Cnt",
+            "f_SG2_L_HI_Vote_A",
+            "f_SG2_L_HI_Vote_B",
+            "f_SG2_L_HI_Vote_C",
+            "f_SG2_L_HI_Vote_D",
+            "f_SG2_L_HI_Vote_Cnt",
+            "f_SG2_L_HI_Coinc"
+          ],
+          "group": "g_SG2_L_HI_Coincidence"
+        },
+        {
+          "name": "SG1_P_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG1_P_LO_Trip",
+            "BYP_A": "f_A_SG1_P_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG1_P_LO_Trip",
+            "BYP_B": "f_B_SG1_P_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG1_P_LO_Trip",
+            "BYP_C": "f_C_SG1_P_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG1_P_LO_Trip",
+            "BYP_D": "f_D_SG1_P_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG1_P_LO_Coinc"
+          },
+          "implements": [
+            "f_SG1_P_LO_Byp_Cnt",
+            "f_SG1_P_LO_Vote_A",
+            "f_SG1_P_LO_Vote_B",
+            "f_SG1_P_LO_Vote_C",
+            "f_SG1_P_LO_Vote_D",
+            "f_SG1_P_LO_Vote_Cnt",
+            "f_SG1_P_LO_Coinc"
+          ],
+          "group": "g_SG1_P_LO_Coincidence"
+        },
+        {
+          "name": "SG2_P_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG2_P_LO_Trip",
+            "BYP_A": "f_A_SG2_P_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG2_P_LO_Trip",
+            "BYP_B": "f_B_SG2_P_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG2_P_LO_Trip",
+            "BYP_C": "f_C_SG2_P_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG2_P_LO_Trip",
+            "BYP_D": "f_D_SG2_P_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG2_P_LO_Coinc"
+          },
+          "implements": [
+            "f_SG2_P_LO_Byp_Cnt",
+            "f_SG2_P_LO_Vote_A",
+            "f_SG2_P_LO_Vote_B",
+            "f_SG2_P_LO_Vote_C",
+            "f_SG2_P_LO_Vote_D",
+            "f_SG2_P_LO_Vote_Cnt",
+            "f_SG2_P_LO_Coinc"
+          ],
+          "group": "g_SG2_P_LO_Coincidence"
+        },
+        {
+          "name": "CTMT_P_HI_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_CTMT_P_HI_Trip",
+            "BYP_A": "f_A_CTMT_P_HI_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_CTMT_P_HI_Trip",
+            "BYP_B": "f_B_CTMT_P_HI_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_CTMT_P_HI_Trip",
+            "BYP_C": "f_C_CTMT_P_HI_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_CTMT_P_HI_Trip",
+            "BYP_D": "f_D_CTMT_P_HI_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_CTMT_P_HI_Coinc"
+          },
+          "implements": [
+            "f_CTMT_P_HI_Byp_Cnt",
+            "f_CTMT_P_HI_Vote_A",
+            "f_CTMT_P_HI_Vote_B",
+            "f_CTMT_P_HI_Vote_C",
+            "f_CTMT_P_HI_Vote_D",
+            "f_CTMT_P_HI_Vote_Cnt",
+            "f_CTMT_P_HI_Coinc"
+          ],
+          "group": "g_CTMT_P_HI_Coincidence"
+        },
+        {
+          "name": "SG1_F_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG1_F_LO_Trip",
+            "BYP_A": "f_A_SG1_F_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG1_F_LO_Trip",
+            "BYP_B": "f_B_SG1_F_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG1_F_LO_Trip",
+            "BYP_C": "f_C_SG1_F_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG1_F_LO_Trip",
+            "BYP_D": "f_D_SG1_F_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG1_F_LO_Coinc"
+          },
+          "implements": [
+            "f_SG1_F_LO_Byp_Cnt",
+            "f_SG1_F_LO_Vote_A",
+            "f_SG1_F_LO_Vote_B",
+            "f_SG1_F_LO_Vote_C",
+            "f_SG1_F_LO_Vote_D",
+            "f_SG1_F_LO_Vote_Cnt",
+            "f_SG1_F_LO_Coinc"
+          ],
+          "group": "g_SG1_F_LO_Coincidence"
+        },
+        {
+          "name": "SG2_F_LO_VOTE",
+          "block": "FB_VOTE_2OO4",
+          "params": {},
+          "inputs": {
+            "TRIP_A": "f_A_SG2_F_LO_Trip",
+            "BYP_A": "f_A_SG2_F_LO_Byp",
+            "LINK_A": "f_A_Link_Error",
+            "TRIP_B": "f_B_SG2_F_LO_Trip",
+            "BYP_B": "f_B_SG2_F_LO_Byp",
+            "LINK_B": "f_B_Link_Error",
+            "TRIP_C": "f_C_SG2_F_LO_Trip",
+            "BYP_C": "f_C_SG2_F_LO_Byp",
+            "LINK_C": "f_C_Link_Error",
+            "TRIP_D": "f_D_SG2_F_LO_Trip",
+            "BYP_D": "f_D_SG2_F_LO_Byp",
+            "LINK_D": "f_D_Link_Error"
+          },
+          "outputs": {
+            "COINC": "f_SG2_F_LO_Coinc"
+          },
+          "implements": [
+            "f_SG2_F_LO_Byp_Cnt",
+            "f_SG2_F_LO_Vote_A",
+            "f_SG2_F_LO_Vote_B",
+            "f_SG2_F_LO_Vote_C",
+            "f_SG2_F_LO_Vote_D",
+            "f_SG2_F_LO_Vote_Cnt",
+            "f_SG2_F_LO_Coinc"
+          ],
+          "group": "g_SG2_F_LO_Coincidence"
+        },
+        {
+          "name": "RT_INIT",
+          "block": "FB_INITIATION",
+          "params": {},
+          "inputs": {
+            "TRIPPED": "f_VOPT_Coinc = 0 || f_LOGP_HI_Coinc = 0 || f_LPD_HI_Coinc = 0 || f_DNBR_LO_Coinc = 0 || f_PZR_P_HI_Coinc = 0 || f_PZR_P_LO_Coinc = 0 || f_SG1_L_LO_Coinc = 0 || f_SG2_L_LO_Coinc = 0 || f_SG1_L_HI_Coinc = 0 || f_SG2_L_HI_Coinc = 0 || f_SG1_P_LO_Coinc = 0 || f_SG2_P_LO_Coinc = 0 || f_CTMT_P_HI_Coinc = 0 || f_SG1_F_LO_Coinc = 0 || f_SG2_F_LO_Coinc = 0"
+          },
+          "outputs": {
+            "Q": "f_RT_Init"
+          },
+          "implements": [
+            "f_RT_Init"
+          ],
+          "group": "g_Trip_Initiation"
+        }
+      ]
+    }
+  ]
+}

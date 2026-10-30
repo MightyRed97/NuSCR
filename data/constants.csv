@@ -1,0 +1,127 @@
+name,value,expr,evaluated,unit,category,status,description
+k_Scan_Period,50,,50,ms,timing,ILLUSTRATIVE,Scan (cycle) period of the bistable and coincidence processors.
+k_LP_OB_Perm,0.0001,,0.0001,%RTP,permissive,ILLUSTRATIVE,Low-power operating-bypass permissive: bypass of the CPC and low-flow trips is permitted while logarithmic power is below this value.
+k_NPWR_LIN_Valid_Min,0,,0,%RTP,range,ILLUSTRATIVE,Lower limit of the valid range of f_NPWR_LIN.
+k_NPWR_LIN_Valid_Max,200,,200,%RTP,range,ILLUSTRATIVE,Upper limit of the valid range of f_NPWR_LIN.
+k_NPWR_LOG_Valid_Min,1.0e-8,,0.00000001,%RTP,range,ILLUSTRATIVE,Lower limit of the valid range of f_NPWR_LOG.
+k_NPWR_LOG_Valid_Max,200,,200,%RTP,range,ILLUSTRATIVE,Upper limit of the valid range of f_NPWR_LOG.
+k_PZR_P_Valid_Min,0,,0,psia,range,ILLUSTRATIVE,Lower limit of the valid range of f_PZR_P.
+k_PZR_P_Valid_Max,3000,,3000,psia,range,ILLUSTRATIVE,Upper limit of the valid range of f_PZR_P.
+k_SG1_L_Valid_Min,0,,0,%NR,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG1_L.
+k_SG1_L_Valid_Max,100,,100,%NR,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG1_L.
+k_SG2_L_Valid_Min,0,,0,%NR,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG2_L.
+k_SG2_L_Valid_Max,100,,100,%NR,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG2_L.
+k_SG1_P_Valid_Min,0,,0,psia,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG1_P.
+k_SG1_P_Valid_Max,1500,,1500,psia,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG1_P.
+k_SG2_P_Valid_Min,0,,0,psia,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG2_P.
+k_SG2_P_Valid_Max,1500,,1500,psia,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG2_P.
+k_CTMT_P_Valid_Min,-5,,-5,psig,range,ILLUSTRATIVE,Lower limit of the valid range of f_CTMT_P.
+k_CTMT_P_Valid_Max,70,,70,psig,range,ILLUSTRATIVE,Upper limit of the valid range of f_CTMT_P.
+k_SG1_F_Valid_Min,0,,0,%DF,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG1_F.
+k_SG1_F_Valid_Max,120,,120,%DF,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG1_F.
+k_SG2_F_Valid_Min,0,,0,%DF,range,ILLUSTRATIVE,Lower limit of the valid range of f_SG2_F.
+k_SG2_F_Valid_Max,120,,120,%DF,range,ILLUSTRATIVE,Upper limit of the valid range of f_SG2_F.
+k_VOPT_Band,10,,10,%RTP,setpoint,ILLUSTRATIVE,Variable Overpower: Band between the process value and the variable setpoint.
+k_VOPT_SP_Min,30,,30,%RTP,setpoint,ILLUSTRATIVE,Variable Overpower: Minimum (floor) value of the variable setpoint.
+k_VOPT_SP_Max,110,,110,%RTP,setpoint,ILLUSTRATIVE,Variable Overpower: Maximum (ceiling) value of the variable setpoint.
+k_VOPT_SP_Rate,0.2,,0.2,%RTP/s,setpoint,ILLUSTRATIVE,Variable Overpower: Maximum rate of change of the variable setpoint.
+k_VOPT_Pretrip_Margin,5,,5,%RTP,setpoint,ILLUSTRATIVE,Variable Overpower: Pre-trip margin from the variable trip setpoint.
+k_VOPT_Trip_Hys,1,,1,%RTP,hysteresis,ILLUSTRATIVE,Variable Overpower: Trip reset hysteresis.
+k_VOPT_Pretrip_Hys,1,,1,%RTP,hysteresis,ILLUSTRATIVE,Variable Overpower: Pre-trip reset hysteresis.
+k_VOPT_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Variable Overpower: Trip time delay (persistence / noise filter).
+k_VOPT_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Variable Overpower: Pre-trip time delay (persistence / noise filter).
+k_VOPT_SP_Step,,k_VOPT_SP_Rate * k_Scan_Period / 1000,0.01,%RTP,setpoint,DERIVED,Variable Overpower: maximum setpoint change per scan.
+k_LOGP_HI_Trip_SP,0.01,,0.01,%RTP,setpoint,ILLUSTRATIVE,High Logarithmic Power Level: Trip setpoint.
+k_LOGP_HI_Pretrip_SP,0.005,,0.005,%RTP,setpoint,ILLUSTRATIVE,High Logarithmic Power Level: Pre-trip (alarm) setpoint.
+k_LOGP_HI_Trip_Hys,0.001,,0.001,%RTP,hysteresis,ILLUSTRATIVE,High Logarithmic Power Level: Trip reset hysteresis.
+k_LOGP_HI_Pretrip_Hys,0.0005,,0.0005,%RTP,hysteresis,ILLUSTRATIVE,High Logarithmic Power Level: Pre-trip reset hysteresis.
+k_LOGP_HI_OB_Perm,0.0001,,0.0001,%RTP,permissive,ILLUSTRATIVE,High Logarithmic Power Level: Operating-bypass permissive threshold.
+k_LOGP_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Logarithmic Power Level: Trip time delay (persistence / noise filter).
+k_LOGP_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Logarithmic Power Level: Pre-trip time delay (persistence / noise filter).
+k_LPD_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Local Power Density (CPC): Trip time delay (persistence / noise filter).
+k_LPD_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Local Power Density (CPC): Pre-trip time delay (persistence / noise filter).
+k_DNBR_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low DNBR (CPC): Trip time delay (persistence / noise filter).
+k_DNBR_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low DNBR (CPC): Pre-trip time delay (persistence / noise filter).
+k_PZR_P_HI_Trip_SP,2385,,2385,psia,setpoint,ILLUSTRATIVE,High Pressurizer Pressure: Trip setpoint.
+k_PZR_P_HI_Pretrip_SP,2350,,2350,psia,setpoint,ILLUSTRATIVE,High Pressurizer Pressure: Pre-trip (alarm) setpoint.
+k_PZR_P_HI_Trip_Hys,10,,10,psia,hysteresis,ILLUSTRATIVE,High Pressurizer Pressure: Trip reset hysteresis.
+k_PZR_P_HI_Pretrip_Hys,10,,10,psia,hysteresis,ILLUSTRATIVE,High Pressurizer Pressure: Pre-trip reset hysteresis.
+k_PZR_P_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Pressurizer Pressure: Trip time delay (persistence / noise filter).
+k_PZR_P_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Pressurizer Pressure: Pre-trip time delay (persistence / noise filter).
+k_PZR_P_LO_SP_Max,1800,,1800,psia,setpoint,ILLUSTRATIVE,Low Pressurizer Pressure: Maximum (ceiling) value of the variable setpoint.
+k_PZR_P_LO_SP_Min,100,,100,psia,setpoint,ILLUSTRATIVE,Low Pressurizer Pressure: Minimum (floor) value of the variable setpoint.
+k_PZR_P_LO_Band,200,,200,psia,setpoint,ILLUSTRATIVE,Low Pressurizer Pressure: Band between the process value and the variable setpoint.
+k_PZR_P_LO_Pretrip_Margin,50,,50,psia,setpoint,ILLUSTRATIVE,Low Pressurizer Pressure: Pre-trip margin from the variable trip setpoint.
+k_PZR_P_LO_Trip_Hys,10,,10,psia,hysteresis,ILLUSTRATIVE,Low Pressurizer Pressure: Trip reset hysteresis.
+k_PZR_P_LO_Pretrip_Hys,10,,10,psia,hysteresis,ILLUSTRATIVE,Low Pressurizer Pressure: Pre-trip reset hysteresis.
+k_PZR_P_LO_OB_Perm,400,,400,psia,permissive,ILLUSTRATIVE,Low Pressurizer Pressure: Operating-bypass permissive threshold.
+k_PZR_P_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Pressurizer Pressure: Trip time delay (persistence / noise filter).
+k_PZR_P_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Pressurizer Pressure: Pre-trip time delay (persistence / noise filter).
+k_SG1_L_LO_Trip_SP,25,,25,%NR,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Trip setpoint.
+k_SG1_L_LO_Pretrip_SP,30,,30,%NR,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Pre-trip (alarm) setpoint.
+k_SG1_L_LO_Trip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Trip reset hysteresis.
+k_SG1_L_LO_Pretrip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Pre-trip reset hysteresis.
+k_SG1_L_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Trip time delay (persistence / noise filter).
+k_SG1_L_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 1 Water Level: Pre-trip time delay (persistence / noise filter).
+k_SG2_L_LO_Trip_SP,25,,25,%NR,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Trip setpoint.
+k_SG2_L_LO_Pretrip_SP,30,,30,%NR,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Pre-trip (alarm) setpoint.
+k_SG2_L_LO_Trip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Trip reset hysteresis.
+k_SG2_L_LO_Pretrip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Pre-trip reset hysteresis.
+k_SG2_L_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Trip time delay (persistence / noise filter).
+k_SG2_L_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 2 Water Level: Pre-trip time delay (persistence / noise filter).
+k_SG1_L_HI_Trip_SP,90,,90,%NR,setpoint,ILLUSTRATIVE,High Steam Generator 1 Water Level: Trip setpoint.
+k_SG1_L_HI_Pretrip_SP,85,,85,%NR,setpoint,ILLUSTRATIVE,High Steam Generator 1 Water Level: Pre-trip (alarm) setpoint.
+k_SG1_L_HI_Trip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,High Steam Generator 1 Water Level: Trip reset hysteresis.
+k_SG1_L_HI_Pretrip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,High Steam Generator 1 Water Level: Pre-trip reset hysteresis.
+k_SG1_L_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Steam Generator 1 Water Level: Trip time delay (persistence / noise filter).
+k_SG1_L_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Steam Generator 1 Water Level: Pre-trip time delay (persistence / noise filter).
+k_SG2_L_HI_Trip_SP,90,,90,%NR,setpoint,ILLUSTRATIVE,High Steam Generator 2 Water Level: Trip setpoint.
+k_SG2_L_HI_Pretrip_SP,85,,85,%NR,setpoint,ILLUSTRATIVE,High Steam Generator 2 Water Level: Pre-trip (alarm) setpoint.
+k_SG2_L_HI_Trip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,High Steam Generator 2 Water Level: Trip reset hysteresis.
+k_SG2_L_HI_Pretrip_Hys,1,,1,%NR,hysteresis,ILLUSTRATIVE,High Steam Generator 2 Water Level: Pre-trip reset hysteresis.
+k_SG2_L_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Steam Generator 2 Water Level: Trip time delay (persistence / noise filter).
+k_SG2_L_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Steam Generator 2 Water Level: Pre-trip time delay (persistence / noise filter).
+k_SG1_P_LO_SP_Max,810,,810,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Maximum (ceiling) value of the variable setpoint.
+k_SG1_P_LO_SP_Min,100,,100,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Minimum (floor) value of the variable setpoint.
+k_SG1_P_LO_Band,200,,200,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Band between the process value and the variable setpoint.
+k_SG1_P_LO_Pretrip_Margin,40,,40,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Pre-trip margin from the variable trip setpoint.
+k_SG1_P_LO_Trip_Hys,5,,5,psia,hysteresis,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Trip reset hysteresis.
+k_SG1_P_LO_Pretrip_Hys,5,,5,psia,hysteresis,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Pre-trip reset hysteresis.
+k_SG1_P_LO_OB_Perm,500,,500,psia,permissive,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Operating-bypass permissive threshold.
+k_SG1_P_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Trip time delay (persistence / noise filter).
+k_SG1_P_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 1 Pressure: Pre-trip time delay (persistence / noise filter).
+k_SG2_P_LO_SP_Max,810,,810,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Maximum (ceiling) value of the variable setpoint.
+k_SG2_P_LO_SP_Min,100,,100,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Minimum (floor) value of the variable setpoint.
+k_SG2_P_LO_Band,200,,200,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Band between the process value and the variable setpoint.
+k_SG2_P_LO_Pretrip_Margin,40,,40,psia,setpoint,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Pre-trip margin from the variable trip setpoint.
+k_SG2_P_LO_Trip_Hys,5,,5,psia,hysteresis,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Trip reset hysteresis.
+k_SG2_P_LO_Pretrip_Hys,5,,5,psia,hysteresis,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Pre-trip reset hysteresis.
+k_SG2_P_LO_OB_Perm,500,,500,psia,permissive,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Operating-bypass permissive threshold.
+k_SG2_P_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Trip time delay (persistence / noise filter).
+k_SG2_P_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Steam Generator 2 Pressure: Pre-trip time delay (persistence / noise filter).
+k_CTMT_P_HI_Trip_SP,3.0,,3,psig,setpoint,ILLUSTRATIVE,High Containment Pressure: Trip setpoint.
+k_CTMT_P_HI_Pretrip_SP,2.7,,2.7,psig,setpoint,ILLUSTRATIVE,High Containment Pressure: Pre-trip (alarm) setpoint.
+k_CTMT_P_HI_Trip_Hys,0.1,,0.1,psig,hysteresis,ILLUSTRATIVE,High Containment Pressure: Trip reset hysteresis.
+k_CTMT_P_HI_Pretrip_Hys,0.1,,0.1,psig,hysteresis,ILLUSTRATIVE,High Containment Pressure: Pre-trip reset hysteresis.
+k_CTMT_P_HI_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Containment Pressure: Trip time delay (persistence / noise filter).
+k_CTMT_P_HI_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,High Containment Pressure: Pre-trip time delay (persistence / noise filter).
+k_SG1_F_LO_Band,8,,8,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Band between the process value and the variable setpoint.
+k_SG1_F_LO_SP_Min,40,,40,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Minimum (floor) value of the variable setpoint.
+k_SG1_F_LO_SP_Max,90,,90,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Maximum (ceiling) value of the variable setpoint.
+k_SG1_F_LO_SP_Rate,2.0,,2,%DF/s,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Maximum rate of change of the variable setpoint.
+k_SG1_F_LO_Pretrip_Margin,3,,3,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Pre-trip margin from the variable trip setpoint.
+k_SG1_F_LO_Trip_Hys,1,,1,%DF,hysteresis,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Trip reset hysteresis.
+k_SG1_F_LO_Pretrip_Hys,1,,1,%DF,hysteresis,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Pre-trip reset hysteresis.
+k_SG1_F_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Trip time delay (persistence / noise filter).
+k_SG1_F_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Reactor Coolant Flow (SG1 loop): Pre-trip time delay (persistence / noise filter).
+k_SG1_F_LO_SP_Step,,k_SG1_F_LO_SP_Rate * k_Scan_Period / 1000,0.1,%DF,setpoint,DERIVED,Low Reactor Coolant Flow (SG1 loop): maximum setpoint change per scan.
+k_SG2_F_LO_Band,8,,8,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Band between the process value and the variable setpoint.
+k_SG2_F_LO_SP_Min,40,,40,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Minimum (floor) value of the variable setpoint.
+k_SG2_F_LO_SP_Max,90,,90,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Maximum (ceiling) value of the variable setpoint.
+k_SG2_F_LO_SP_Rate,2.0,,2,%DF/s,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Maximum rate of change of the variable setpoint.
+k_SG2_F_LO_Pretrip_Margin,3,,3,%DF,setpoint,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Pre-trip margin from the variable trip setpoint.
+k_SG2_F_LO_Trip_Hys,1,,1,%DF,hysteresis,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Trip reset hysteresis.
+k_SG2_F_LO_Pretrip_Hys,1,,1,%DF,hysteresis,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Pre-trip reset hysteresis.
+k_SG2_F_LO_Trip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Trip time delay (persistence / noise filter).
+k_SG2_F_LO_Pretrip_Delay,100,,100,ms,timing,ILLUSTRATIVE,Low Reactor Coolant Flow (SG2 loop): Pre-trip time delay (persistence / noise filter).
+k_SG2_F_LO_SP_Step,,k_SG2_F_LO_SP_Rate * k_Scan_Period / 1000,0.1,%DF,setpoint,DERIVED,Low Reactor Coolant Flow (SG2 loop): maximum setpoint change per scan.

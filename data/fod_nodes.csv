@@ -1,0 +1,180 @@
+module,fod_node,group,variable,kind,inputs,execution_index,traces
+BP,1.1,g_Input_Validation,f_NPWR_LIN_Valid,SDT,f_NPWR_LIN,1,SYS-GEN-03
+BP,1.2,g_Input_Validation,f_NPWR_LOG_Valid,SDT,f_NPWR_LOG,2,SYS-GEN-03
+BP,1.3,g_Input_Validation,f_PZR_P_Valid,SDT,f_PZR_P,3,SYS-GEN-03
+BP,1.4,g_Input_Validation,f_SG1_L_Valid,SDT,f_SG1_L,4,SYS-GEN-03
+BP,1.5,g_Input_Validation,f_SG2_L_Valid,SDT,f_SG2_L,5,SYS-GEN-03
+BP,1.6,g_Input_Validation,f_SG1_P_Valid,SDT,f_SG1_P,6,SYS-GEN-03
+BP,1.7,g_Input_Validation,f_SG2_P_Valid,SDT,f_SG2_P,7,SYS-GEN-03
+BP,1.8,g_Input_Validation,f_CTMT_P_Valid,SDT,f_CTMT_P,8,SYS-GEN-03
+BP,1.9,g_Input_Validation,f_SG1_F_Valid,SDT,f_SG1_F,9,SYS-GEN-03
+BP,1.10,g_Input_Validation,f_SG2_F_Valid,SDT,f_SG2_F,10,SYS-GEN-03
+BP,2.1,g_Permissives,f_LP_OB_Perm,SDT,f_NPWR_LOG f_NPWR_LOG_Valid,11,SYS-GEN-09 SYS-LPD_HI-03 SYS-DNBR_LO-03 SYS-SG1_F_LO-03 SYS-SG2_F_LO-03
+BP,3.1,g_VOPT,f_VOPT_SP_Target,SDT,f_NPWR_LIN,12,SYS-VOPT-02
+BP,3.2,g_VOPT,h_VOPT_Trip_SP,FSM,f_NPWR_LIN_Valid f_VOPT_SP_Target,13,SYS-VOPT-02
+BP,3.3,g_VOPT,th_VOPT_Pretrip,TTS,f_Channel_Error f_Module_Error f_NPWR_LIN f_NPWR_LIN_Valid h_VOPT_Trip_SP,14,SYS-GEN-08 SYS-VOPT-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,3.4,g_VOPT,th_VOPT_Trip,TTS,f_Channel_Error f_Module_Error f_NPWR_LIN f_NPWR_LIN_Valid h_VOPT_Trip_SP,15,SYS-VOPT-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,4.1,g_LOGP_HI,f_LOGP_HI_OB_Perm,SDT,f_NPWR_LOG f_NPWR_LOG_Valid,16,SYS-LOGP_HI-03 SYS-GEN-09 SYS-GEN-04
+BP,4.2,g_LOGP_HI,h_LOGP_HI_OB_Pulse,FSM,f_LOGP_HI_OB_Ini,17,SYS-LOGP_HI-03 SYS-GEN-09 SYS-GEN-04
+BP,4.3,g_LOGP_HI,h_LOGP_HI_OB_Sta,FSM,f_LOGP_HI_OB_Perm h_LOGP_HI_OB_Pulse,18,SYS-LOGP_HI-03 SYS-GEN-09 SYS-GEN-04
+BP,4.4,g_LOGP_HI,th_LOGP_HI_Pretrip,TTS,f_Channel_Error f_Module_Error f_NPWR_LOG f_NPWR_LOG_Valid h_LOGP_HI_OB_Sta,19,SYS-GEN-08 SYS-LOGP_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,4.5,g_LOGP_HI,th_LOGP_HI_Trip,TTS,f_Channel_Error f_Module_Error f_NPWR_LOG f_NPWR_LOG_Valid h_LOGP_HI_OB_Sta,20,SYS-LOGP_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,5.1,g_LPD_HI,h_LPD_HI_OB_Pulse,FSM,f_LPD_HI_OB_Ini,21,SYS-LPD_HI-03 SYS-GEN-09 SYS-GEN-04
+BP,5.2,g_LPD_HI,h_LPD_HI_OB_Sta,FSM,f_LP_OB_Perm h_LPD_HI_OB_Pulse,22,SYS-LPD_HI-03 SYS-GEN-09 SYS-GEN-04
+BP,5.3,g_LPD_HI,th_LPD_HI_Pretrip,TTS,f_CPC_Link_Error f_Channel_Error f_LPD_HI_Pretrip_In f_Module_Error h_LPD_HI_OB_Sta,23,SYS-GEN-08 SYS-LPD_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,5.4,g_LPD_HI,th_LPD_HI_Trip,TTS,f_CPC_Link_Error f_Channel_Error f_LPD_HI_Trip_In f_Module_Error h_LPD_HI_OB_Sta,24,SYS-LPD_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,6.1,g_DNBR_LO,h_DNBR_LO_OB_Pulse,FSM,f_DNBR_LO_OB_Ini,25,SYS-DNBR_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,6.2,g_DNBR_LO,h_DNBR_LO_OB_Sta,FSM,f_LP_OB_Perm h_DNBR_LO_OB_Pulse,26,SYS-DNBR_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,6.3,g_DNBR_LO,th_DNBR_LO_Pretrip,TTS,f_CPC_Link_Error f_Channel_Error f_DNBR_LO_Pretrip_In f_Module_Error h_DNBR_LO_OB_Sta,27,SYS-GEN-08 SYS-DNBR_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,6.4,g_DNBR_LO,th_DNBR_LO_Trip,TTS,f_CPC_Link_Error f_Channel_Error f_DNBR_LO_Trip_In f_Module_Error h_DNBR_LO_OB_Sta,28,SYS-DNBR_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,7.1,g_PZR_P_HI,th_PZR_P_HI_Pretrip,TTS,f_Channel_Error f_Module_Error f_PZR_P f_PZR_P_Valid,29,SYS-GEN-08 SYS-PZR_P_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,7.2,g_PZR_P_HI,th_PZR_P_HI_Trip,TTS,f_Channel_Error f_Module_Error f_PZR_P f_PZR_P_Valid,30,SYS-PZR_P_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,8.1,g_PZR_P_LO,f_PZR_P_LO_OB_Perm,SDT,f_PZR_P f_PZR_P_Valid,31,SYS-PZR_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,8.2,g_PZR_P_LO,h_PZR_P_LO_OB_Pulse,FSM,f_PZR_P_LO_OB_Ini,32,SYS-PZR_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,8.3,g_PZR_P_LO,h_PZR_P_LO_OB_Sta,FSM,f_PZR_P_LO_OB_Perm h_PZR_P_LO_OB_Pulse,33,SYS-PZR_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,8.4,g_PZR_P_LO,h_PZR_P_LO_Reset_Pulse,FSM,f_PZR_P_LO_SP_Reset,34,SYS-PZR_P_LO-02
+BP,8.5,g_PZR_P_LO,h_PZR_P_LO_Trip_SP,FSM,f_PZR_P f_PZR_P_Valid h_PZR_P_LO_Reset_Pulse,35,SYS-PZR_P_LO-02
+BP,8.6,g_PZR_P_LO,th_PZR_P_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_PZR_P f_PZR_P_Valid h_PZR_P_LO_OB_Sta h_PZR_P_LO_Trip_SP,36,SYS-GEN-08 SYS-PZR_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,8.7,g_PZR_P_LO,th_PZR_P_LO_Trip,TTS,f_Channel_Error f_Module_Error f_PZR_P f_PZR_P_Valid h_PZR_P_LO_OB_Sta h_PZR_P_LO_Trip_SP,37,SYS-PZR_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,9.1,g_SG1_L_LO,th_SG1_L_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG1_L f_SG1_L_Valid,38,SYS-GEN-08 SYS-SG1_L_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,9.2,g_SG1_L_LO,th_SG1_L_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG1_L f_SG1_L_Valid,39,SYS-SG1_L_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,10.1,g_SG2_L_LO,th_SG2_L_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG2_L f_SG2_L_Valid,40,SYS-GEN-08 SYS-SG2_L_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,10.2,g_SG2_L_LO,th_SG2_L_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG2_L f_SG2_L_Valid,41,SYS-SG2_L_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,11.1,g_SG1_L_HI,th_SG1_L_HI_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG1_L f_SG1_L_Valid,42,SYS-GEN-08 SYS-SG1_L_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,11.2,g_SG1_L_HI,th_SG1_L_HI_Trip,TTS,f_Channel_Error f_Module_Error f_SG1_L f_SG1_L_Valid,43,SYS-SG1_L_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,12.1,g_SG2_L_HI,th_SG2_L_HI_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG2_L f_SG2_L_Valid,44,SYS-GEN-08 SYS-SG2_L_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,12.2,g_SG2_L_HI,th_SG2_L_HI_Trip,TTS,f_Channel_Error f_Module_Error f_SG2_L f_SG2_L_Valid,45,SYS-SG2_L_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,13.1,g_SG1_P_LO,f_SG1_P_LO_OB_Perm,SDT,f_SG1_P f_SG1_P_Valid,46,SYS-SG1_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,13.2,g_SG1_P_LO,h_SG1_P_LO_OB_Pulse,FSM,f_SG1_P_LO_OB_Ini,47,SYS-SG1_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,13.3,g_SG1_P_LO,h_SG1_P_LO_OB_Sta,FSM,f_SG1_P_LO_OB_Perm h_SG1_P_LO_OB_Pulse,48,SYS-SG1_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,13.4,g_SG1_P_LO,h_SG1_P_LO_Reset_Pulse,FSM,f_SG1_P_LO_SP_Reset,49,SYS-SG1_P_LO-02
+BP,13.5,g_SG1_P_LO,h_SG1_P_LO_Trip_SP,FSM,f_SG1_P f_SG1_P_Valid h_SG1_P_LO_Reset_Pulse,50,SYS-SG1_P_LO-02
+BP,13.6,g_SG1_P_LO,th_SG1_P_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG1_P f_SG1_P_Valid h_SG1_P_LO_OB_Sta h_SG1_P_LO_Trip_SP,51,SYS-GEN-08 SYS-SG1_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,13.7,g_SG1_P_LO,th_SG1_P_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG1_P f_SG1_P_Valid h_SG1_P_LO_OB_Sta h_SG1_P_LO_Trip_SP,52,SYS-SG1_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,14.1,g_SG2_P_LO,f_SG2_P_LO_OB_Perm,SDT,f_SG2_P f_SG2_P_Valid,53,SYS-SG2_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,14.2,g_SG2_P_LO,h_SG2_P_LO_OB_Pulse,FSM,f_SG2_P_LO_OB_Ini,54,SYS-SG2_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,14.3,g_SG2_P_LO,h_SG2_P_LO_OB_Sta,FSM,f_SG2_P_LO_OB_Perm h_SG2_P_LO_OB_Pulse,55,SYS-SG2_P_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,14.4,g_SG2_P_LO,h_SG2_P_LO_Reset_Pulse,FSM,f_SG2_P_LO_SP_Reset,56,SYS-SG2_P_LO-02
+BP,14.5,g_SG2_P_LO,h_SG2_P_LO_Trip_SP,FSM,f_SG2_P f_SG2_P_Valid h_SG2_P_LO_Reset_Pulse,57,SYS-SG2_P_LO-02
+BP,14.6,g_SG2_P_LO,th_SG2_P_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG2_P f_SG2_P_Valid h_SG2_P_LO_OB_Sta h_SG2_P_LO_Trip_SP,58,SYS-GEN-08 SYS-SG2_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,14.7,g_SG2_P_LO,th_SG2_P_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG2_P f_SG2_P_Valid h_SG2_P_LO_OB_Sta h_SG2_P_LO_Trip_SP,59,SYS-SG2_P_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,15.1,g_CTMT_P_HI,th_CTMT_P_HI_Pretrip,TTS,f_CTMT_P f_CTMT_P_Valid f_Channel_Error f_Module_Error,60,SYS-GEN-08 SYS-CTMT_P_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,15.2,g_CTMT_P_HI,th_CTMT_P_HI_Trip,TTS,f_CTMT_P f_CTMT_P_Valid f_Channel_Error f_Module_Error,61,SYS-CTMT_P_HI-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07
+BP,16.1,g_SG1_F_LO,h_SG1_F_LO_OB_Pulse,FSM,f_SG1_F_LO_OB_Ini,62,SYS-SG1_F_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,16.2,g_SG1_F_LO,h_SG1_F_LO_OB_Sta,FSM,f_LP_OB_Perm h_SG1_F_LO_OB_Pulse,63,SYS-SG1_F_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,16.3,g_SG1_F_LO,f_SG1_F_LO_SP_Target,SDT,f_SG1_F,64,SYS-SG1_F_LO-02
+BP,16.4,g_SG1_F_LO,h_SG1_F_LO_Trip_SP,FSM,f_SG1_F_LO_SP_Target f_SG1_F_Valid,65,SYS-SG1_F_LO-02
+BP,16.5,g_SG1_F_LO,th_SG1_F_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG1_F f_SG1_F_Valid h_SG1_F_LO_OB_Sta h_SG1_F_LO_Trip_SP,66,SYS-GEN-08 SYS-SG1_F_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,16.6,g_SG1_F_LO,th_SG1_F_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG1_F f_SG1_F_Valid h_SG1_F_LO_OB_Sta h_SG1_F_LO_Trip_SP,67,SYS-SG1_F_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,17.1,g_SG2_F_LO,h_SG2_F_LO_OB_Pulse,FSM,f_SG2_F_LO_OB_Ini,68,SYS-SG2_F_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,17.2,g_SG2_F_LO,h_SG2_F_LO_OB_Sta,FSM,f_LP_OB_Perm h_SG2_F_LO_OB_Pulse,69,SYS-SG2_F_LO-03 SYS-GEN-09 SYS-GEN-04
+BP,17.3,g_SG2_F_LO,f_SG2_F_LO_SP_Target,SDT,f_SG2_F,70,SYS-SG2_F_LO-02
+BP,17.4,g_SG2_F_LO,h_SG2_F_LO_Trip_SP,FSM,f_SG2_F_LO_SP_Target f_SG2_F_Valid,71,SYS-SG2_F_LO-02
+BP,17.5,g_SG2_F_LO,th_SG2_F_LO_Pretrip,TTS,f_Channel_Error f_Module_Error f_SG2_F f_SG2_F_Valid h_SG2_F_LO_OB_Sta h_SG2_F_LO_Trip_SP,72,SYS-GEN-08 SYS-SG2_F_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+BP,17.6,g_SG2_F_LO,th_SG2_F_LO_Trip,TTS,f_Channel_Error f_Module_Error f_SG2_F f_SG2_F_Valid h_SG2_F_LO_OB_Sta h_SG2_F_LO_Trip_SP,73,SYS-SG2_F_LO-01 SYS-GEN-02 SYS-GEN-04 SYS-GEN-05 SYS-GEN-06 SYS-GEN-07 SYS-GEN-09
+CP,1.1,g_VOPT_Coincidence,f_VOPT_Byp_Cnt,SDT,f_A_VOPT_Byp f_B_VOPT_Byp f_C_VOPT_Byp f_D_VOPT_Byp,1,SYS-CP-02
+CP,1.2,g_VOPT_Coincidence,f_VOPT_Vote_A,SDT,f_A_Link_Error f_A_VOPT_Byp f_A_VOPT_Trip f_VOPT_Byp_Cnt,2,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,1.3,g_VOPT_Coincidence,f_VOPT_Vote_B,SDT,f_B_Link_Error f_B_VOPT_Byp f_B_VOPT_Trip f_VOPT_Byp_Cnt,3,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,1.4,g_VOPT_Coincidence,f_VOPT_Vote_C,SDT,f_C_Link_Error f_C_VOPT_Byp f_C_VOPT_Trip f_VOPT_Byp_Cnt,4,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,1.5,g_VOPT_Coincidence,f_VOPT_Vote_D,SDT,f_D_Link_Error f_D_VOPT_Byp f_D_VOPT_Trip f_VOPT_Byp_Cnt,5,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,1.6,g_VOPT_Coincidence,f_VOPT_Vote_Cnt,SDT,f_VOPT_Vote_A f_VOPT_Vote_B f_VOPT_Vote_C f_VOPT_Vote_D,6,SYS-CP-01
+CP,1.7,g_VOPT_Coincidence,f_VOPT_Coinc,SDT,f_VOPT_Vote_Cnt,7,SYS-CP-01 SYS-CP-02
+CP,2.1,g_LOGP_HI_Coincidence,f_LOGP_HI_Byp_Cnt,SDT,f_A_LOGP_HI_Byp f_B_LOGP_HI_Byp f_C_LOGP_HI_Byp f_D_LOGP_HI_Byp,8,SYS-CP-02
+CP,2.2,g_LOGP_HI_Coincidence,f_LOGP_HI_Vote_A,SDT,f_A_LOGP_HI_Byp f_A_LOGP_HI_Trip f_A_Link_Error f_LOGP_HI_Byp_Cnt,9,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,2.3,g_LOGP_HI_Coincidence,f_LOGP_HI_Vote_B,SDT,f_B_LOGP_HI_Byp f_B_LOGP_HI_Trip f_B_Link_Error f_LOGP_HI_Byp_Cnt,10,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,2.4,g_LOGP_HI_Coincidence,f_LOGP_HI_Vote_C,SDT,f_C_LOGP_HI_Byp f_C_LOGP_HI_Trip f_C_Link_Error f_LOGP_HI_Byp_Cnt,11,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,2.5,g_LOGP_HI_Coincidence,f_LOGP_HI_Vote_D,SDT,f_D_LOGP_HI_Byp f_D_LOGP_HI_Trip f_D_Link_Error f_LOGP_HI_Byp_Cnt,12,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,2.6,g_LOGP_HI_Coincidence,f_LOGP_HI_Vote_Cnt,SDT,f_LOGP_HI_Vote_A f_LOGP_HI_Vote_B f_LOGP_HI_Vote_C f_LOGP_HI_Vote_D,13,SYS-CP-01
+CP,2.7,g_LOGP_HI_Coincidence,f_LOGP_HI_Coinc,SDT,f_LOGP_HI_Vote_Cnt,14,SYS-CP-01 SYS-CP-02
+CP,3.1,g_LPD_HI_Coincidence,f_LPD_HI_Byp_Cnt,SDT,f_A_LPD_HI_Byp f_B_LPD_HI_Byp f_C_LPD_HI_Byp f_D_LPD_HI_Byp,15,SYS-CP-02
+CP,3.2,g_LPD_HI_Coincidence,f_LPD_HI_Vote_A,SDT,f_A_LPD_HI_Byp f_A_LPD_HI_Trip f_A_Link_Error f_LPD_HI_Byp_Cnt,16,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,3.3,g_LPD_HI_Coincidence,f_LPD_HI_Vote_B,SDT,f_B_LPD_HI_Byp f_B_LPD_HI_Trip f_B_Link_Error f_LPD_HI_Byp_Cnt,17,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,3.4,g_LPD_HI_Coincidence,f_LPD_HI_Vote_C,SDT,f_C_LPD_HI_Byp f_C_LPD_HI_Trip f_C_Link_Error f_LPD_HI_Byp_Cnt,18,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,3.5,g_LPD_HI_Coincidence,f_LPD_HI_Vote_D,SDT,f_D_LPD_HI_Byp f_D_LPD_HI_Trip f_D_Link_Error f_LPD_HI_Byp_Cnt,19,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,3.6,g_LPD_HI_Coincidence,f_LPD_HI_Vote_Cnt,SDT,f_LPD_HI_Vote_A f_LPD_HI_Vote_B f_LPD_HI_Vote_C f_LPD_HI_Vote_D,20,SYS-CP-01
+CP,3.7,g_LPD_HI_Coincidence,f_LPD_HI_Coinc,SDT,f_LPD_HI_Vote_Cnt,21,SYS-CP-01 SYS-CP-02
+CP,4.1,g_DNBR_LO_Coincidence,f_DNBR_LO_Byp_Cnt,SDT,f_A_DNBR_LO_Byp f_B_DNBR_LO_Byp f_C_DNBR_LO_Byp f_D_DNBR_LO_Byp,22,SYS-CP-02
+CP,4.2,g_DNBR_LO_Coincidence,f_DNBR_LO_Vote_A,SDT,f_A_DNBR_LO_Byp f_A_DNBR_LO_Trip f_A_Link_Error f_DNBR_LO_Byp_Cnt,23,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,4.3,g_DNBR_LO_Coincidence,f_DNBR_LO_Vote_B,SDT,f_B_DNBR_LO_Byp f_B_DNBR_LO_Trip f_B_Link_Error f_DNBR_LO_Byp_Cnt,24,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,4.4,g_DNBR_LO_Coincidence,f_DNBR_LO_Vote_C,SDT,f_C_DNBR_LO_Byp f_C_DNBR_LO_Trip f_C_Link_Error f_DNBR_LO_Byp_Cnt,25,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,4.5,g_DNBR_LO_Coincidence,f_DNBR_LO_Vote_D,SDT,f_DNBR_LO_Byp_Cnt f_D_DNBR_LO_Byp f_D_DNBR_LO_Trip f_D_Link_Error,26,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,4.6,g_DNBR_LO_Coincidence,f_DNBR_LO_Vote_Cnt,SDT,f_DNBR_LO_Vote_A f_DNBR_LO_Vote_B f_DNBR_LO_Vote_C f_DNBR_LO_Vote_D,27,SYS-CP-01
+CP,4.7,g_DNBR_LO_Coincidence,f_DNBR_LO_Coinc,SDT,f_DNBR_LO_Vote_Cnt,28,SYS-CP-01 SYS-CP-02
+CP,5.1,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Byp_Cnt,SDT,f_A_PZR_P_HI_Byp f_B_PZR_P_HI_Byp f_C_PZR_P_HI_Byp f_D_PZR_P_HI_Byp,29,SYS-CP-02
+CP,5.2,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Vote_A,SDT,f_A_Link_Error f_A_PZR_P_HI_Byp f_A_PZR_P_HI_Trip f_PZR_P_HI_Byp_Cnt,30,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,5.3,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Vote_B,SDT,f_B_Link_Error f_B_PZR_P_HI_Byp f_B_PZR_P_HI_Trip f_PZR_P_HI_Byp_Cnt,31,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,5.4,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Vote_C,SDT,f_C_Link_Error f_C_PZR_P_HI_Byp f_C_PZR_P_HI_Trip f_PZR_P_HI_Byp_Cnt,32,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,5.5,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Vote_D,SDT,f_D_Link_Error f_D_PZR_P_HI_Byp f_D_PZR_P_HI_Trip f_PZR_P_HI_Byp_Cnt,33,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,5.6,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Vote_Cnt,SDT,f_PZR_P_HI_Vote_A f_PZR_P_HI_Vote_B f_PZR_P_HI_Vote_C f_PZR_P_HI_Vote_D,34,SYS-CP-01
+CP,5.7,g_PZR_P_HI_Coincidence,f_PZR_P_HI_Coinc,SDT,f_PZR_P_HI_Vote_Cnt,35,SYS-CP-01 SYS-CP-02
+CP,6.1,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Byp_Cnt,SDT,f_A_PZR_P_LO_Byp f_B_PZR_P_LO_Byp f_C_PZR_P_LO_Byp f_D_PZR_P_LO_Byp,36,SYS-CP-02
+CP,6.2,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Vote_A,SDT,f_A_Link_Error f_A_PZR_P_LO_Byp f_A_PZR_P_LO_Trip f_PZR_P_LO_Byp_Cnt,37,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,6.3,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Vote_B,SDT,f_B_Link_Error f_B_PZR_P_LO_Byp f_B_PZR_P_LO_Trip f_PZR_P_LO_Byp_Cnt,38,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,6.4,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Vote_C,SDT,f_C_Link_Error f_C_PZR_P_LO_Byp f_C_PZR_P_LO_Trip f_PZR_P_LO_Byp_Cnt,39,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,6.5,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Vote_D,SDT,f_D_Link_Error f_D_PZR_P_LO_Byp f_D_PZR_P_LO_Trip f_PZR_P_LO_Byp_Cnt,40,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,6.6,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Vote_Cnt,SDT,f_PZR_P_LO_Vote_A f_PZR_P_LO_Vote_B f_PZR_P_LO_Vote_C f_PZR_P_LO_Vote_D,41,SYS-CP-01
+CP,6.7,g_PZR_P_LO_Coincidence,f_PZR_P_LO_Coinc,SDT,f_PZR_P_LO_Vote_Cnt,42,SYS-CP-01 SYS-CP-02
+CP,7.1,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Byp_Cnt,SDT,f_A_SG1_L_LO_Byp f_B_SG1_L_LO_Byp f_C_SG1_L_LO_Byp f_D_SG1_L_LO_Byp,43,SYS-CP-02
+CP,7.2,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Vote_A,SDT,f_A_Link_Error f_A_SG1_L_LO_Byp f_A_SG1_L_LO_Trip f_SG1_L_LO_Byp_Cnt,44,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,7.3,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Vote_B,SDT,f_B_Link_Error f_B_SG1_L_LO_Byp f_B_SG1_L_LO_Trip f_SG1_L_LO_Byp_Cnt,45,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,7.4,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Vote_C,SDT,f_C_Link_Error f_C_SG1_L_LO_Byp f_C_SG1_L_LO_Trip f_SG1_L_LO_Byp_Cnt,46,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,7.5,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Vote_D,SDT,f_D_Link_Error f_D_SG1_L_LO_Byp f_D_SG1_L_LO_Trip f_SG1_L_LO_Byp_Cnt,47,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,7.6,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Vote_Cnt,SDT,f_SG1_L_LO_Vote_A f_SG1_L_LO_Vote_B f_SG1_L_LO_Vote_C f_SG1_L_LO_Vote_D,48,SYS-CP-01
+CP,7.7,g_SG1_L_LO_Coincidence,f_SG1_L_LO_Coinc,SDT,f_SG1_L_LO_Vote_Cnt,49,SYS-CP-01 SYS-CP-02
+CP,8.1,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Byp_Cnt,SDT,f_A_SG2_L_LO_Byp f_B_SG2_L_LO_Byp f_C_SG2_L_LO_Byp f_D_SG2_L_LO_Byp,50,SYS-CP-02
+CP,8.2,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Vote_A,SDT,f_A_Link_Error f_A_SG2_L_LO_Byp f_A_SG2_L_LO_Trip f_SG2_L_LO_Byp_Cnt,51,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,8.3,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Vote_B,SDT,f_B_Link_Error f_B_SG2_L_LO_Byp f_B_SG2_L_LO_Trip f_SG2_L_LO_Byp_Cnt,52,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,8.4,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Vote_C,SDT,f_C_Link_Error f_C_SG2_L_LO_Byp f_C_SG2_L_LO_Trip f_SG2_L_LO_Byp_Cnt,53,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,8.5,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Vote_D,SDT,f_D_Link_Error f_D_SG2_L_LO_Byp f_D_SG2_L_LO_Trip f_SG2_L_LO_Byp_Cnt,54,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,8.6,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Vote_Cnt,SDT,f_SG2_L_LO_Vote_A f_SG2_L_LO_Vote_B f_SG2_L_LO_Vote_C f_SG2_L_LO_Vote_D,55,SYS-CP-01
+CP,8.7,g_SG2_L_LO_Coincidence,f_SG2_L_LO_Coinc,SDT,f_SG2_L_LO_Vote_Cnt,56,SYS-CP-01 SYS-CP-02
+CP,9.1,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Byp_Cnt,SDT,f_A_SG1_L_HI_Byp f_B_SG1_L_HI_Byp f_C_SG1_L_HI_Byp f_D_SG1_L_HI_Byp,57,SYS-CP-02
+CP,9.2,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Vote_A,SDT,f_A_Link_Error f_A_SG1_L_HI_Byp f_A_SG1_L_HI_Trip f_SG1_L_HI_Byp_Cnt,58,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,9.3,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Vote_B,SDT,f_B_Link_Error f_B_SG1_L_HI_Byp f_B_SG1_L_HI_Trip f_SG1_L_HI_Byp_Cnt,59,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,9.4,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Vote_C,SDT,f_C_Link_Error f_C_SG1_L_HI_Byp f_C_SG1_L_HI_Trip f_SG1_L_HI_Byp_Cnt,60,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,9.5,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Vote_D,SDT,f_D_Link_Error f_D_SG1_L_HI_Byp f_D_SG1_L_HI_Trip f_SG1_L_HI_Byp_Cnt,61,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,9.6,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Vote_Cnt,SDT,f_SG1_L_HI_Vote_A f_SG1_L_HI_Vote_B f_SG1_L_HI_Vote_C f_SG1_L_HI_Vote_D,62,SYS-CP-01
+CP,9.7,g_SG1_L_HI_Coincidence,f_SG1_L_HI_Coinc,SDT,f_SG1_L_HI_Vote_Cnt,63,SYS-CP-01 SYS-CP-02
+CP,10.1,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Byp_Cnt,SDT,f_A_SG2_L_HI_Byp f_B_SG2_L_HI_Byp f_C_SG2_L_HI_Byp f_D_SG2_L_HI_Byp,64,SYS-CP-02
+CP,10.2,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Vote_A,SDT,f_A_Link_Error f_A_SG2_L_HI_Byp f_A_SG2_L_HI_Trip f_SG2_L_HI_Byp_Cnt,65,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,10.3,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Vote_B,SDT,f_B_Link_Error f_B_SG2_L_HI_Byp f_B_SG2_L_HI_Trip f_SG2_L_HI_Byp_Cnt,66,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,10.4,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Vote_C,SDT,f_C_Link_Error f_C_SG2_L_HI_Byp f_C_SG2_L_HI_Trip f_SG2_L_HI_Byp_Cnt,67,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,10.5,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Vote_D,SDT,f_D_Link_Error f_D_SG2_L_HI_Byp f_D_SG2_L_HI_Trip f_SG2_L_HI_Byp_Cnt,68,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,10.6,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Vote_Cnt,SDT,f_SG2_L_HI_Vote_A f_SG2_L_HI_Vote_B f_SG2_L_HI_Vote_C f_SG2_L_HI_Vote_D,69,SYS-CP-01
+CP,10.7,g_SG2_L_HI_Coincidence,f_SG2_L_HI_Coinc,SDT,f_SG2_L_HI_Vote_Cnt,70,SYS-CP-01 SYS-CP-02
+CP,11.1,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Byp_Cnt,SDT,f_A_SG1_P_LO_Byp f_B_SG1_P_LO_Byp f_C_SG1_P_LO_Byp f_D_SG1_P_LO_Byp,71,SYS-CP-02
+CP,11.2,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Vote_A,SDT,f_A_Link_Error f_A_SG1_P_LO_Byp f_A_SG1_P_LO_Trip f_SG1_P_LO_Byp_Cnt,72,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,11.3,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Vote_B,SDT,f_B_Link_Error f_B_SG1_P_LO_Byp f_B_SG1_P_LO_Trip f_SG1_P_LO_Byp_Cnt,73,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,11.4,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Vote_C,SDT,f_C_Link_Error f_C_SG1_P_LO_Byp f_C_SG1_P_LO_Trip f_SG1_P_LO_Byp_Cnt,74,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,11.5,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Vote_D,SDT,f_D_Link_Error f_D_SG1_P_LO_Byp f_D_SG1_P_LO_Trip f_SG1_P_LO_Byp_Cnt,75,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,11.6,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Vote_Cnt,SDT,f_SG1_P_LO_Vote_A f_SG1_P_LO_Vote_B f_SG1_P_LO_Vote_C f_SG1_P_LO_Vote_D,76,SYS-CP-01
+CP,11.7,g_SG1_P_LO_Coincidence,f_SG1_P_LO_Coinc,SDT,f_SG1_P_LO_Vote_Cnt,77,SYS-CP-01 SYS-CP-02
+CP,12.1,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Byp_Cnt,SDT,f_A_SG2_P_LO_Byp f_B_SG2_P_LO_Byp f_C_SG2_P_LO_Byp f_D_SG2_P_LO_Byp,78,SYS-CP-02
+CP,12.2,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Vote_A,SDT,f_A_Link_Error f_A_SG2_P_LO_Byp f_A_SG2_P_LO_Trip f_SG2_P_LO_Byp_Cnt,79,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,12.3,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Vote_B,SDT,f_B_Link_Error f_B_SG2_P_LO_Byp f_B_SG2_P_LO_Trip f_SG2_P_LO_Byp_Cnt,80,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,12.4,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Vote_C,SDT,f_C_Link_Error f_C_SG2_P_LO_Byp f_C_SG2_P_LO_Trip f_SG2_P_LO_Byp_Cnt,81,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,12.5,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Vote_D,SDT,f_D_Link_Error f_D_SG2_P_LO_Byp f_D_SG2_P_LO_Trip f_SG2_P_LO_Byp_Cnt,82,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,12.6,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Vote_Cnt,SDT,f_SG2_P_LO_Vote_A f_SG2_P_LO_Vote_B f_SG2_P_LO_Vote_C f_SG2_P_LO_Vote_D,83,SYS-CP-01
+CP,12.7,g_SG2_P_LO_Coincidence,f_SG2_P_LO_Coinc,SDT,f_SG2_P_LO_Vote_Cnt,84,SYS-CP-01 SYS-CP-02
+CP,13.1,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Byp_Cnt,SDT,f_A_CTMT_P_HI_Byp f_B_CTMT_P_HI_Byp f_C_CTMT_P_HI_Byp f_D_CTMT_P_HI_Byp,85,SYS-CP-02
+CP,13.2,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Vote_A,SDT,f_A_CTMT_P_HI_Byp f_A_CTMT_P_HI_Trip f_A_Link_Error f_CTMT_P_HI_Byp_Cnt,86,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,13.3,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Vote_B,SDT,f_B_CTMT_P_HI_Byp f_B_CTMT_P_HI_Trip f_B_Link_Error f_CTMT_P_HI_Byp_Cnt,87,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,13.4,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Vote_C,SDT,f_CTMT_P_HI_Byp_Cnt f_C_CTMT_P_HI_Byp f_C_CTMT_P_HI_Trip f_C_Link_Error,88,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,13.5,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Vote_D,SDT,f_CTMT_P_HI_Byp_Cnt f_D_CTMT_P_HI_Byp f_D_CTMT_P_HI_Trip f_D_Link_Error,89,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,13.6,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Vote_Cnt,SDT,f_CTMT_P_HI_Vote_A f_CTMT_P_HI_Vote_B f_CTMT_P_HI_Vote_C f_CTMT_P_HI_Vote_D,90,SYS-CP-01
+CP,13.7,g_CTMT_P_HI_Coincidence,f_CTMT_P_HI_Coinc,SDT,f_CTMT_P_HI_Vote_Cnt,91,SYS-CP-01 SYS-CP-02
+CP,14.1,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Byp_Cnt,SDT,f_A_SG1_F_LO_Byp f_B_SG1_F_LO_Byp f_C_SG1_F_LO_Byp f_D_SG1_F_LO_Byp,92,SYS-CP-02
+CP,14.2,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Vote_A,SDT,f_A_Link_Error f_A_SG1_F_LO_Byp f_A_SG1_F_LO_Trip f_SG1_F_LO_Byp_Cnt,93,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,14.3,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Vote_B,SDT,f_B_Link_Error f_B_SG1_F_LO_Byp f_B_SG1_F_LO_Trip f_SG1_F_LO_Byp_Cnt,94,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,14.4,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Vote_C,SDT,f_C_Link_Error f_C_SG1_F_LO_Byp f_C_SG1_F_LO_Trip f_SG1_F_LO_Byp_Cnt,95,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,14.5,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Vote_D,SDT,f_D_Link_Error f_D_SG1_F_LO_Byp f_D_SG1_F_LO_Trip f_SG1_F_LO_Byp_Cnt,96,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,14.6,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Vote_Cnt,SDT,f_SG1_F_LO_Vote_A f_SG1_F_LO_Vote_B f_SG1_F_LO_Vote_C f_SG1_F_LO_Vote_D,97,SYS-CP-01
+CP,14.7,g_SG1_F_LO_Coincidence,f_SG1_F_LO_Coinc,SDT,f_SG1_F_LO_Vote_Cnt,98,SYS-CP-01 SYS-CP-02
+CP,15.1,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Byp_Cnt,SDT,f_A_SG2_F_LO_Byp f_B_SG2_F_LO_Byp f_C_SG2_F_LO_Byp f_D_SG2_F_LO_Byp,99,SYS-CP-02
+CP,15.2,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Vote_A,SDT,f_A_Link_Error f_A_SG2_F_LO_Byp f_A_SG2_F_LO_Trip f_SG2_F_LO_Byp_Cnt,100,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,15.3,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Vote_B,SDT,f_B_Link_Error f_B_SG2_F_LO_Byp f_B_SG2_F_LO_Trip f_SG2_F_LO_Byp_Cnt,101,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,15.4,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Vote_C,SDT,f_C_Link_Error f_C_SG2_F_LO_Byp f_C_SG2_F_LO_Trip f_SG2_F_LO_Byp_Cnt,102,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,15.5,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Vote_D,SDT,f_D_Link_Error f_D_SG2_F_LO_Byp f_D_SG2_F_LO_Trip f_SG2_F_LO_Byp_Cnt,103,SYS-CP-01 SYS-CP-02 SYS-CP-03
+CP,15.6,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Vote_Cnt,SDT,f_SG2_F_LO_Vote_A f_SG2_F_LO_Vote_B f_SG2_F_LO_Vote_C f_SG2_F_LO_Vote_D,104,SYS-CP-01
+CP,15.7,g_SG2_F_LO_Coincidence,f_SG2_F_LO_Coinc,SDT,f_SG2_F_LO_Vote_Cnt,105,SYS-CP-01 SYS-CP-02
+CP,16.1,g_Trip_Initiation,f_RT_Init,SDT,f_CTMT_P_HI_Coinc f_DNBR_LO_Coinc f_LOGP_HI_Coinc f_LPD_HI_Coinc f_PZR_P_HI_Coinc f_PZR_P_LO_Coinc f_SG1_F_LO_Coinc f_SG1_L_HI_Coinc f_SG1_L_LO_Coinc f_SG1_P_LO_Coinc f_SG2_F_LO_Coinc f_SG2_L_HI_Coinc f_SG2_L_LO_Coinc f_SG2_P_LO_Coinc f_VOPT_Coinc,106,SYS-CP-04

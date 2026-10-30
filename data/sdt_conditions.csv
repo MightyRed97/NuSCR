@@ -1,0 +1,173 @@
+module,variable,condition_no,condition
+BP,f_NPWR_LIN_Valid,1,f_NPWR_LIN >= k_NPWR_LIN_Valid_Min
+BP,f_NPWR_LIN_Valid,2,f_NPWR_LIN <= k_NPWR_LIN_Valid_Max
+BP,f_NPWR_LOG_Valid,1,f_NPWR_LOG >= k_NPWR_LOG_Valid_Min
+BP,f_NPWR_LOG_Valid,2,f_NPWR_LOG <= k_NPWR_LOG_Valid_Max
+BP,f_PZR_P_Valid,1,f_PZR_P >= k_PZR_P_Valid_Min
+BP,f_PZR_P_Valid,2,f_PZR_P <= k_PZR_P_Valid_Max
+BP,f_SG1_L_Valid,1,f_SG1_L >= k_SG1_L_Valid_Min
+BP,f_SG1_L_Valid,2,f_SG1_L <= k_SG1_L_Valid_Max
+BP,f_SG2_L_Valid,1,f_SG2_L >= k_SG2_L_Valid_Min
+BP,f_SG2_L_Valid,2,f_SG2_L <= k_SG2_L_Valid_Max
+BP,f_SG1_P_Valid,1,f_SG1_P >= k_SG1_P_Valid_Min
+BP,f_SG1_P_Valid,2,f_SG1_P <= k_SG1_P_Valid_Max
+BP,f_SG2_P_Valid,1,f_SG2_P >= k_SG2_P_Valid_Min
+BP,f_SG2_P_Valid,2,f_SG2_P <= k_SG2_P_Valid_Max
+BP,f_CTMT_P_Valid,1,f_CTMT_P >= k_CTMT_P_Valid_Min
+BP,f_CTMT_P_Valid,2,f_CTMT_P <= k_CTMT_P_Valid_Max
+BP,f_SG1_F_Valid,1,f_SG1_F >= k_SG1_F_Valid_Min
+BP,f_SG1_F_Valid,2,f_SG1_F <= k_SG1_F_Valid_Max
+BP,f_SG2_F_Valid,1,f_SG2_F >= k_SG2_F_Valid_Min
+BP,f_SG2_F_Valid,2,f_SG2_F <= k_SG2_F_Valid_Max
+BP,f_LP_OB_Perm,1,f_NPWR_LOG_Valid = 1
+BP,f_LP_OB_Perm,2,f_NPWR_LOG < k_LP_OB_Perm
+BP,f_VOPT_SP_Target,1,f_NPWR_LIN + k_VOPT_Band <= k_VOPT_SP_Min
+BP,f_VOPT_SP_Target,2,f_NPWR_LIN + k_VOPT_Band >= k_VOPT_SP_Max
+BP,f_LOGP_HI_OB_Perm,1,f_NPWR_LOG_Valid = 1
+BP,f_LOGP_HI_OB_Perm,2,f_NPWR_LOG >= k_LOGP_HI_OB_Perm
+BP,f_PZR_P_LO_OB_Perm,1,f_PZR_P_Valid = 1
+BP,f_PZR_P_LO_OB_Perm,2,f_PZR_P < k_PZR_P_LO_OB_Perm
+BP,f_SG1_P_LO_OB_Perm,1,f_SG1_P_Valid = 1
+BP,f_SG1_P_LO_OB_Perm,2,f_SG1_P < k_SG1_P_LO_OB_Perm
+BP,f_SG2_P_LO_OB_Perm,1,f_SG2_P_Valid = 1
+BP,f_SG2_P_LO_OB_Perm,2,f_SG2_P < k_SG2_P_LO_OB_Perm
+BP,f_SG1_F_LO_SP_Target,1,f_SG1_F - k_SG1_F_LO_Band <= k_SG1_F_LO_SP_Min
+BP,f_SG1_F_LO_SP_Target,2,f_SG1_F - k_SG1_F_LO_Band >= k_SG1_F_LO_SP_Max
+BP,f_SG2_F_LO_SP_Target,1,f_SG2_F - k_SG2_F_LO_Band <= k_SG2_F_LO_SP_Min
+BP,f_SG2_F_LO_SP_Target,2,f_SG2_F - k_SG2_F_LO_Band >= k_SG2_F_LO_SP_Max
+CP,f_VOPT_Vote_A,1,f_A_VOPT_Byp = 1 && f_VOPT_Byp_Cnt = 1
+CP,f_VOPT_Vote_A,2,f_A_VOPT_Trip = 0 || f_A_Link_Error = 1
+CP,f_VOPT_Vote_B,1,f_B_VOPT_Byp = 1 && f_VOPT_Byp_Cnt = 1
+CP,f_VOPT_Vote_B,2,f_B_VOPT_Trip = 0 || f_B_Link_Error = 1
+CP,f_VOPT_Vote_C,1,f_C_VOPT_Byp = 1 && f_VOPT_Byp_Cnt = 1
+CP,f_VOPT_Vote_C,2,f_C_VOPT_Trip = 0 || f_C_Link_Error = 1
+CP,f_VOPT_Vote_D,1,f_D_VOPT_Byp = 1 && f_VOPT_Byp_Cnt = 1
+CP,f_VOPT_Vote_D,2,f_D_VOPT_Trip = 0 || f_D_Link_Error = 1
+CP,f_VOPT_Coinc,1,f_VOPT_Vote_Cnt >= 2
+CP,f_LOGP_HI_Vote_A,1,f_A_LOGP_HI_Byp = 1 && f_LOGP_HI_Byp_Cnt = 1
+CP,f_LOGP_HI_Vote_A,2,f_A_LOGP_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_LOGP_HI_Vote_B,1,f_B_LOGP_HI_Byp = 1 && f_LOGP_HI_Byp_Cnt = 1
+CP,f_LOGP_HI_Vote_B,2,f_B_LOGP_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_LOGP_HI_Vote_C,1,f_C_LOGP_HI_Byp = 1 && f_LOGP_HI_Byp_Cnt = 1
+CP,f_LOGP_HI_Vote_C,2,f_C_LOGP_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_LOGP_HI_Vote_D,1,f_D_LOGP_HI_Byp = 1 && f_LOGP_HI_Byp_Cnt = 1
+CP,f_LOGP_HI_Vote_D,2,f_D_LOGP_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_LOGP_HI_Coinc,1,f_LOGP_HI_Vote_Cnt >= 2
+CP,f_LPD_HI_Vote_A,1,f_A_LPD_HI_Byp = 1 && f_LPD_HI_Byp_Cnt = 1
+CP,f_LPD_HI_Vote_A,2,f_A_LPD_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_LPD_HI_Vote_B,1,f_B_LPD_HI_Byp = 1 && f_LPD_HI_Byp_Cnt = 1
+CP,f_LPD_HI_Vote_B,2,f_B_LPD_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_LPD_HI_Vote_C,1,f_C_LPD_HI_Byp = 1 && f_LPD_HI_Byp_Cnt = 1
+CP,f_LPD_HI_Vote_C,2,f_C_LPD_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_LPD_HI_Vote_D,1,f_D_LPD_HI_Byp = 1 && f_LPD_HI_Byp_Cnt = 1
+CP,f_LPD_HI_Vote_D,2,f_D_LPD_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_LPD_HI_Coinc,1,f_LPD_HI_Vote_Cnt >= 2
+CP,f_DNBR_LO_Vote_A,1,f_A_DNBR_LO_Byp = 1 && f_DNBR_LO_Byp_Cnt = 1
+CP,f_DNBR_LO_Vote_A,2,f_A_DNBR_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_DNBR_LO_Vote_B,1,f_B_DNBR_LO_Byp = 1 && f_DNBR_LO_Byp_Cnt = 1
+CP,f_DNBR_LO_Vote_B,2,f_B_DNBR_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_DNBR_LO_Vote_C,1,f_C_DNBR_LO_Byp = 1 && f_DNBR_LO_Byp_Cnt = 1
+CP,f_DNBR_LO_Vote_C,2,f_C_DNBR_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_DNBR_LO_Vote_D,1,f_D_DNBR_LO_Byp = 1 && f_DNBR_LO_Byp_Cnt = 1
+CP,f_DNBR_LO_Vote_D,2,f_D_DNBR_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_DNBR_LO_Coinc,1,f_DNBR_LO_Vote_Cnt >= 2
+CP,f_PZR_P_HI_Vote_A,1,f_A_PZR_P_HI_Byp = 1 && f_PZR_P_HI_Byp_Cnt = 1
+CP,f_PZR_P_HI_Vote_A,2,f_A_PZR_P_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_PZR_P_HI_Vote_B,1,f_B_PZR_P_HI_Byp = 1 && f_PZR_P_HI_Byp_Cnt = 1
+CP,f_PZR_P_HI_Vote_B,2,f_B_PZR_P_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_PZR_P_HI_Vote_C,1,f_C_PZR_P_HI_Byp = 1 && f_PZR_P_HI_Byp_Cnt = 1
+CP,f_PZR_P_HI_Vote_C,2,f_C_PZR_P_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_PZR_P_HI_Vote_D,1,f_D_PZR_P_HI_Byp = 1 && f_PZR_P_HI_Byp_Cnt = 1
+CP,f_PZR_P_HI_Vote_D,2,f_D_PZR_P_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_PZR_P_HI_Coinc,1,f_PZR_P_HI_Vote_Cnt >= 2
+CP,f_PZR_P_LO_Vote_A,1,f_A_PZR_P_LO_Byp = 1 && f_PZR_P_LO_Byp_Cnt = 1
+CP,f_PZR_P_LO_Vote_A,2,f_A_PZR_P_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_PZR_P_LO_Vote_B,1,f_B_PZR_P_LO_Byp = 1 && f_PZR_P_LO_Byp_Cnt = 1
+CP,f_PZR_P_LO_Vote_B,2,f_B_PZR_P_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_PZR_P_LO_Vote_C,1,f_C_PZR_P_LO_Byp = 1 && f_PZR_P_LO_Byp_Cnt = 1
+CP,f_PZR_P_LO_Vote_C,2,f_C_PZR_P_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_PZR_P_LO_Vote_D,1,f_D_PZR_P_LO_Byp = 1 && f_PZR_P_LO_Byp_Cnt = 1
+CP,f_PZR_P_LO_Vote_D,2,f_D_PZR_P_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_PZR_P_LO_Coinc,1,f_PZR_P_LO_Vote_Cnt >= 2
+CP,f_SG1_L_LO_Vote_A,1,f_A_SG1_L_LO_Byp = 1 && f_SG1_L_LO_Byp_Cnt = 1
+CP,f_SG1_L_LO_Vote_A,2,f_A_SG1_L_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG1_L_LO_Vote_B,1,f_B_SG1_L_LO_Byp = 1 && f_SG1_L_LO_Byp_Cnt = 1
+CP,f_SG1_L_LO_Vote_B,2,f_B_SG1_L_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG1_L_LO_Vote_C,1,f_C_SG1_L_LO_Byp = 1 && f_SG1_L_LO_Byp_Cnt = 1
+CP,f_SG1_L_LO_Vote_C,2,f_C_SG1_L_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG1_L_LO_Vote_D,1,f_D_SG1_L_LO_Byp = 1 && f_SG1_L_LO_Byp_Cnt = 1
+CP,f_SG1_L_LO_Vote_D,2,f_D_SG1_L_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG1_L_LO_Coinc,1,f_SG1_L_LO_Vote_Cnt >= 2
+CP,f_SG2_L_LO_Vote_A,1,f_A_SG2_L_LO_Byp = 1 && f_SG2_L_LO_Byp_Cnt = 1
+CP,f_SG2_L_LO_Vote_A,2,f_A_SG2_L_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG2_L_LO_Vote_B,1,f_B_SG2_L_LO_Byp = 1 && f_SG2_L_LO_Byp_Cnt = 1
+CP,f_SG2_L_LO_Vote_B,2,f_B_SG2_L_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG2_L_LO_Vote_C,1,f_C_SG2_L_LO_Byp = 1 && f_SG2_L_LO_Byp_Cnt = 1
+CP,f_SG2_L_LO_Vote_C,2,f_C_SG2_L_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG2_L_LO_Vote_D,1,f_D_SG2_L_LO_Byp = 1 && f_SG2_L_LO_Byp_Cnt = 1
+CP,f_SG2_L_LO_Vote_D,2,f_D_SG2_L_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG2_L_LO_Coinc,1,f_SG2_L_LO_Vote_Cnt >= 2
+CP,f_SG1_L_HI_Vote_A,1,f_A_SG1_L_HI_Byp = 1 && f_SG1_L_HI_Byp_Cnt = 1
+CP,f_SG1_L_HI_Vote_A,2,f_A_SG1_L_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG1_L_HI_Vote_B,1,f_B_SG1_L_HI_Byp = 1 && f_SG1_L_HI_Byp_Cnt = 1
+CP,f_SG1_L_HI_Vote_B,2,f_B_SG1_L_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG1_L_HI_Vote_C,1,f_C_SG1_L_HI_Byp = 1 && f_SG1_L_HI_Byp_Cnt = 1
+CP,f_SG1_L_HI_Vote_C,2,f_C_SG1_L_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG1_L_HI_Vote_D,1,f_D_SG1_L_HI_Byp = 1 && f_SG1_L_HI_Byp_Cnt = 1
+CP,f_SG1_L_HI_Vote_D,2,f_D_SG1_L_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG1_L_HI_Coinc,1,f_SG1_L_HI_Vote_Cnt >= 2
+CP,f_SG2_L_HI_Vote_A,1,f_A_SG2_L_HI_Byp = 1 && f_SG2_L_HI_Byp_Cnt = 1
+CP,f_SG2_L_HI_Vote_A,2,f_A_SG2_L_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG2_L_HI_Vote_B,1,f_B_SG2_L_HI_Byp = 1 && f_SG2_L_HI_Byp_Cnt = 1
+CP,f_SG2_L_HI_Vote_B,2,f_B_SG2_L_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG2_L_HI_Vote_C,1,f_C_SG2_L_HI_Byp = 1 && f_SG2_L_HI_Byp_Cnt = 1
+CP,f_SG2_L_HI_Vote_C,2,f_C_SG2_L_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG2_L_HI_Vote_D,1,f_D_SG2_L_HI_Byp = 1 && f_SG2_L_HI_Byp_Cnt = 1
+CP,f_SG2_L_HI_Vote_D,2,f_D_SG2_L_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG2_L_HI_Coinc,1,f_SG2_L_HI_Vote_Cnt >= 2
+CP,f_SG1_P_LO_Vote_A,1,f_A_SG1_P_LO_Byp = 1 && f_SG1_P_LO_Byp_Cnt = 1
+CP,f_SG1_P_LO_Vote_A,2,f_A_SG1_P_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG1_P_LO_Vote_B,1,f_B_SG1_P_LO_Byp = 1 && f_SG1_P_LO_Byp_Cnt = 1
+CP,f_SG1_P_LO_Vote_B,2,f_B_SG1_P_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG1_P_LO_Vote_C,1,f_C_SG1_P_LO_Byp = 1 && f_SG1_P_LO_Byp_Cnt = 1
+CP,f_SG1_P_LO_Vote_C,2,f_C_SG1_P_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG1_P_LO_Vote_D,1,f_D_SG1_P_LO_Byp = 1 && f_SG1_P_LO_Byp_Cnt = 1
+CP,f_SG1_P_LO_Vote_D,2,f_D_SG1_P_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG1_P_LO_Coinc,1,f_SG1_P_LO_Vote_Cnt >= 2
+CP,f_SG2_P_LO_Vote_A,1,f_A_SG2_P_LO_Byp = 1 && f_SG2_P_LO_Byp_Cnt = 1
+CP,f_SG2_P_LO_Vote_A,2,f_A_SG2_P_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG2_P_LO_Vote_B,1,f_B_SG2_P_LO_Byp = 1 && f_SG2_P_LO_Byp_Cnt = 1
+CP,f_SG2_P_LO_Vote_B,2,f_B_SG2_P_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG2_P_LO_Vote_C,1,f_C_SG2_P_LO_Byp = 1 && f_SG2_P_LO_Byp_Cnt = 1
+CP,f_SG2_P_LO_Vote_C,2,f_C_SG2_P_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG2_P_LO_Vote_D,1,f_D_SG2_P_LO_Byp = 1 && f_SG2_P_LO_Byp_Cnt = 1
+CP,f_SG2_P_LO_Vote_D,2,f_D_SG2_P_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG2_P_LO_Coinc,1,f_SG2_P_LO_Vote_Cnt >= 2
+CP,f_CTMT_P_HI_Vote_A,1,f_A_CTMT_P_HI_Byp = 1 && f_CTMT_P_HI_Byp_Cnt = 1
+CP,f_CTMT_P_HI_Vote_A,2,f_A_CTMT_P_HI_Trip = 0 || f_A_Link_Error = 1
+CP,f_CTMT_P_HI_Vote_B,1,f_B_CTMT_P_HI_Byp = 1 && f_CTMT_P_HI_Byp_Cnt = 1
+CP,f_CTMT_P_HI_Vote_B,2,f_B_CTMT_P_HI_Trip = 0 || f_B_Link_Error = 1
+CP,f_CTMT_P_HI_Vote_C,1,f_C_CTMT_P_HI_Byp = 1 && f_CTMT_P_HI_Byp_Cnt = 1
+CP,f_CTMT_P_HI_Vote_C,2,f_C_CTMT_P_HI_Trip = 0 || f_C_Link_Error = 1
+CP,f_CTMT_P_HI_Vote_D,1,f_D_CTMT_P_HI_Byp = 1 && f_CTMT_P_HI_Byp_Cnt = 1
+CP,f_CTMT_P_HI_Vote_D,2,f_D_CTMT_P_HI_Trip = 0 || f_D_Link_Error = 1
+CP,f_CTMT_P_HI_Coinc,1,f_CTMT_P_HI_Vote_Cnt >= 2
+CP,f_SG1_F_LO_Vote_A,1,f_A_SG1_F_LO_Byp = 1 && f_SG1_F_LO_Byp_Cnt = 1
+CP,f_SG1_F_LO_Vote_A,2,f_A_SG1_F_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG1_F_LO_Vote_B,1,f_B_SG1_F_LO_Byp = 1 && f_SG1_F_LO_Byp_Cnt = 1
+CP,f_SG1_F_LO_Vote_B,2,f_B_SG1_F_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG1_F_LO_Vote_C,1,f_C_SG1_F_LO_Byp = 1 && f_SG1_F_LO_Byp_Cnt = 1
+CP,f_SG1_F_LO_Vote_C,2,f_C_SG1_F_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG1_F_LO_Vote_D,1,f_D_SG1_F_LO_Byp = 1 && f_SG1_F_LO_Byp_Cnt = 1
+CP,f_SG1_F_LO_Vote_D,2,f_D_SG1_F_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG1_F_LO_Coinc,1,f_SG1_F_LO_Vote_Cnt >= 2
+CP,f_SG2_F_LO_Vote_A,1,f_A_SG2_F_LO_Byp = 1 && f_SG2_F_LO_Byp_Cnt = 1
+CP,f_SG2_F_LO_Vote_A,2,f_A_SG2_F_LO_Trip = 0 || f_A_Link_Error = 1
+CP,f_SG2_F_LO_Vote_B,1,f_B_SG2_F_LO_Byp = 1 && f_SG2_F_LO_Byp_Cnt = 1
+CP,f_SG2_F_LO_Vote_B,2,f_B_SG2_F_LO_Trip = 0 || f_B_Link_Error = 1
+CP,f_SG2_F_LO_Vote_C,1,f_C_SG2_F_LO_Byp = 1 && f_SG2_F_LO_Byp_Cnt = 1
+CP,f_SG2_F_LO_Vote_C,2,f_C_SG2_F_LO_Trip = 0 || f_C_Link_Error = 1
+CP,f_SG2_F_LO_Vote_D,1,f_D_SG2_F_LO_Byp = 1 && f_SG2_F_LO_Byp_Cnt = 1
+CP,f_SG2_F_LO_Vote_D,2,f_D_SG2_F_LO_Trip = 0 || f_D_Link_Error = 1
+CP,f_SG2_F_LO_Coinc,1,f_SG2_F_LO_Vote_Cnt >= 2
+CP,f_RT_Init,1,f_VOPT_Coinc = 0 || f_LOGP_HI_Coinc = 0 || f_LPD_HI_Coinc = 0 || f_DNBR_LO_Coinc = 0 || f_PZR_P_HI_Coinc = 0 || f_PZR_P_LO_Coinc = 0 || f_SG1_L_LO_Coinc = 0 || f_SG2_L_LO_Coinc = 0 || f_SG1_L_HI_Coinc = 0 || f_SG2_L_HI_Coinc = 0 || f_SG1_P_LO_Coinc = 0 || f_SG2_P_LO_Coinc = 0 || f_CTMT_P_HI_Coinc = 0 || f_SG1_F_LO_Coinc = 0 || f_SG2_F_LO_Coinc = 0

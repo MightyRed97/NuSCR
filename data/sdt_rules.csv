@@ -1,0 +1,297 @@
+module,variable,rule,cells,action
+BP,f_NPWR_LIN_Valid,1,T T,1
+BP,f_NPWR_LIN_Valid,2,T F,0
+BP,f_NPWR_LIN_Valid,3,F -,0
+BP,f_NPWR_LOG_Valid,1,T T,1
+BP,f_NPWR_LOG_Valid,2,T F,0
+BP,f_NPWR_LOG_Valid,3,F -,0
+BP,f_PZR_P_Valid,1,T T,1
+BP,f_PZR_P_Valid,2,T F,0
+BP,f_PZR_P_Valid,3,F -,0
+BP,f_SG1_L_Valid,1,T T,1
+BP,f_SG1_L_Valid,2,T F,0
+BP,f_SG1_L_Valid,3,F -,0
+BP,f_SG2_L_Valid,1,T T,1
+BP,f_SG2_L_Valid,2,T F,0
+BP,f_SG2_L_Valid,3,F -,0
+BP,f_SG1_P_Valid,1,T T,1
+BP,f_SG1_P_Valid,2,T F,0
+BP,f_SG1_P_Valid,3,F -,0
+BP,f_SG2_P_Valid,1,T T,1
+BP,f_SG2_P_Valid,2,T F,0
+BP,f_SG2_P_Valid,3,F -,0
+BP,f_CTMT_P_Valid,1,T T,1
+BP,f_CTMT_P_Valid,2,T F,0
+BP,f_CTMT_P_Valid,3,F -,0
+BP,f_SG1_F_Valid,1,T T,1
+BP,f_SG1_F_Valid,2,T F,0
+BP,f_SG1_F_Valid,3,F -,0
+BP,f_SG2_F_Valid,1,T T,1
+BP,f_SG2_F_Valid,2,T F,0
+BP,f_SG2_F_Valid,3,F -,0
+BP,f_LP_OB_Perm,1,T T,1
+BP,f_LP_OB_Perm,2,T F,0
+BP,f_LP_OB_Perm,3,F -,0
+BP,f_VOPT_SP_Target,1,T F,k_VOPT_SP_Min
+BP,f_VOPT_SP_Target,2,F T,k_VOPT_SP_Max
+BP,f_VOPT_SP_Target,3,F F,f_NPWR_LIN + k_VOPT_Band
+BP,f_LOGP_HI_OB_Perm,1,T T,1
+BP,f_LOGP_HI_OB_Perm,2,T F,0
+BP,f_LOGP_HI_OB_Perm,3,F -,0
+BP,f_PZR_P_LO_OB_Perm,1,T T,1
+BP,f_PZR_P_LO_OB_Perm,2,T F,0
+BP,f_PZR_P_LO_OB_Perm,3,F -,0
+BP,f_SG1_P_LO_OB_Perm,1,T T,1
+BP,f_SG1_P_LO_OB_Perm,2,T F,0
+BP,f_SG1_P_LO_OB_Perm,3,F -,0
+BP,f_SG2_P_LO_OB_Perm,1,T T,1
+BP,f_SG2_P_LO_OB_Perm,2,T F,0
+BP,f_SG2_P_LO_OB_Perm,3,F -,0
+BP,f_SG1_F_LO_SP_Target,1,T F,k_SG1_F_LO_SP_Min
+BP,f_SG1_F_LO_SP_Target,2,F T,k_SG1_F_LO_SP_Max
+BP,f_SG1_F_LO_SP_Target,3,F F,f_SG1_F - k_SG1_F_LO_Band
+BP,f_SG2_F_LO_SP_Target,1,T F,k_SG2_F_LO_SP_Min
+BP,f_SG2_F_LO_SP_Target,2,F T,k_SG2_F_LO_SP_Max
+BP,f_SG2_F_LO_SP_Target,3,F F,f_SG2_F - k_SG2_F_LO_Band
+CP,f_VOPT_Byp_Cnt,1,,f_A_VOPT_Byp + f_B_VOPT_Byp + f_C_VOPT_Byp + f_D_VOPT_Byp
+CP,f_VOPT_Vote_A,1,T -,0
+CP,f_VOPT_Vote_A,2,F T,1
+CP,f_VOPT_Vote_A,3,F F,0
+CP,f_VOPT_Vote_B,1,T -,0
+CP,f_VOPT_Vote_B,2,F T,1
+CP,f_VOPT_Vote_B,3,F F,0
+CP,f_VOPT_Vote_C,1,T -,0
+CP,f_VOPT_Vote_C,2,F T,1
+CP,f_VOPT_Vote_C,3,F F,0
+CP,f_VOPT_Vote_D,1,T -,0
+CP,f_VOPT_Vote_D,2,F T,1
+CP,f_VOPT_Vote_D,3,F F,0
+CP,f_VOPT_Vote_Cnt,1,,f_VOPT_Vote_A + f_VOPT_Vote_B + f_VOPT_Vote_C + f_VOPT_Vote_D
+CP,f_VOPT_Coinc,1,T,0
+CP,f_VOPT_Coinc,2,F,1
+CP,f_LOGP_HI_Byp_Cnt,1,,f_A_LOGP_HI_Byp + f_B_LOGP_HI_Byp + f_C_LOGP_HI_Byp + f_D_LOGP_HI_Byp
+CP,f_LOGP_HI_Vote_A,1,T -,0
+CP,f_LOGP_HI_Vote_A,2,F T,1
+CP,f_LOGP_HI_Vote_A,3,F F,0
+CP,f_LOGP_HI_Vote_B,1,T -,0
+CP,f_LOGP_HI_Vote_B,2,F T,1
+CP,f_LOGP_HI_Vote_B,3,F F,0
+CP,f_LOGP_HI_Vote_C,1,T -,0
+CP,f_LOGP_HI_Vote_C,2,F T,1
+CP,f_LOGP_HI_Vote_C,3,F F,0
+CP,f_LOGP_HI_Vote_D,1,T -,0
+CP,f_LOGP_HI_Vote_D,2,F T,1
+CP,f_LOGP_HI_Vote_D,3,F F,0
+CP,f_LOGP_HI_Vote_Cnt,1,,f_LOGP_HI_Vote_A + f_LOGP_HI_Vote_B + f_LOGP_HI_Vote_C + f_LOGP_HI_Vote_D
+CP,f_LOGP_HI_Coinc,1,T,0
+CP,f_LOGP_HI_Coinc,2,F,1
+CP,f_LPD_HI_Byp_Cnt,1,,f_A_LPD_HI_Byp + f_B_LPD_HI_Byp + f_C_LPD_HI_Byp + f_D_LPD_HI_Byp
+CP,f_LPD_HI_Vote_A,1,T -,0
+CP,f_LPD_HI_Vote_A,2,F T,1
+CP,f_LPD_HI_Vote_A,3,F F,0
+CP,f_LPD_HI_Vote_B,1,T -,0
+CP,f_LPD_HI_Vote_B,2,F T,1
+CP,f_LPD_HI_Vote_B,3,F F,0
+CP,f_LPD_HI_Vote_C,1,T -,0
+CP,f_LPD_HI_Vote_C,2,F T,1
+CP,f_LPD_HI_Vote_C,3,F F,0
+CP,f_LPD_HI_Vote_D,1,T -,0
+CP,f_LPD_HI_Vote_D,2,F T,1
+CP,f_LPD_HI_Vote_D,3,F F,0
+CP,f_LPD_HI_Vote_Cnt,1,,f_LPD_HI_Vote_A + f_LPD_HI_Vote_B + f_LPD_HI_Vote_C + f_LPD_HI_Vote_D
+CP,f_LPD_HI_Coinc,1,T,0
+CP,f_LPD_HI_Coinc,2,F,1
+CP,f_DNBR_LO_Byp_Cnt,1,,f_A_DNBR_LO_Byp + f_B_DNBR_LO_Byp + f_C_DNBR_LO_Byp + f_D_DNBR_LO_Byp
+CP,f_DNBR_LO_Vote_A,1,T -,0
+CP,f_DNBR_LO_Vote_A,2,F T,1
+CP,f_DNBR_LO_Vote_A,3,F F,0
+CP,f_DNBR_LO_Vote_B,1,T -,0
+CP,f_DNBR_LO_Vote_B,2,F T,1
+CP,f_DNBR_LO_Vote_B,3,F F,0
+CP,f_DNBR_LO_Vote_C,1,T -,0
+CP,f_DNBR_LO_Vote_C,2,F T,1
+CP,f_DNBR_LO_Vote_C,3,F F,0
+CP,f_DNBR_LO_Vote_D,1,T -,0
+CP,f_DNBR_LO_Vote_D,2,F T,1
+CP,f_DNBR_LO_Vote_D,3,F F,0
+CP,f_DNBR_LO_Vote_Cnt,1,,f_DNBR_LO_Vote_A + f_DNBR_LO_Vote_B + f_DNBR_LO_Vote_C + f_DNBR_LO_Vote_D
+CP,f_DNBR_LO_Coinc,1,T,0
+CP,f_DNBR_LO_Coinc,2,F,1
+CP,f_PZR_P_HI_Byp_Cnt,1,,f_A_PZR_P_HI_Byp + f_B_PZR_P_HI_Byp + f_C_PZR_P_HI_Byp + f_D_PZR_P_HI_Byp
+CP,f_PZR_P_HI_Vote_A,1,T -,0
+CP,f_PZR_P_HI_Vote_A,2,F T,1
+CP,f_PZR_P_HI_Vote_A,3,F F,0
+CP,f_PZR_P_HI_Vote_B,1,T -,0
+CP,f_PZR_P_HI_Vote_B,2,F T,1
+CP,f_PZR_P_HI_Vote_B,3,F F,0
+CP,f_PZR_P_HI_Vote_C,1,T -,0
+CP,f_PZR_P_HI_Vote_C,2,F T,1
+CP,f_PZR_P_HI_Vote_C,3,F F,0
+CP,f_PZR_P_HI_Vote_D,1,T -,0
+CP,f_PZR_P_HI_Vote_D,2,F T,1
+CP,f_PZR_P_HI_Vote_D,3,F F,0
+CP,f_PZR_P_HI_Vote_Cnt,1,,f_PZR_P_HI_Vote_A + f_PZR_P_HI_Vote_B + f_PZR_P_HI_Vote_C + f_PZR_P_HI_Vote_D
+CP,f_PZR_P_HI_Coinc,1,T,0
+CP,f_PZR_P_HI_Coinc,2,F,1
+CP,f_PZR_P_LO_Byp_Cnt,1,,f_A_PZR_P_LO_Byp + f_B_PZR_P_LO_Byp + f_C_PZR_P_LO_Byp + f_D_PZR_P_LO_Byp
+CP,f_PZR_P_LO_Vote_A,1,T -,0
+CP,f_PZR_P_LO_Vote_A,2,F T,1
+CP,f_PZR_P_LO_Vote_A,3,F F,0
+CP,f_PZR_P_LO_Vote_B,1,T -,0
+CP,f_PZR_P_LO_Vote_B,2,F T,1
+CP,f_PZR_P_LO_Vote_B,3,F F,0
+CP,f_PZR_P_LO_Vote_C,1,T -,0
+CP,f_PZR_P_LO_Vote_C,2,F T,1
+CP,f_PZR_P_LO_Vote_C,3,F F,0
+CP,f_PZR_P_LO_Vote_D,1,T -,0
+CP,f_PZR_P_LO_Vote_D,2,F T,1
+CP,f_PZR_P_LO_Vote_D,3,F F,0
+CP,f_PZR_P_LO_Vote_Cnt,1,,f_PZR_P_LO_Vote_A + f_PZR_P_LO_Vote_B + f_PZR_P_LO_Vote_C + f_PZR_P_LO_Vote_D
+CP,f_PZR_P_LO_Coinc,1,T,0
+CP,f_PZR_P_LO_Coinc,2,F,1
+CP,f_SG1_L_LO_Byp_Cnt,1,,f_A_SG1_L_LO_Byp + f_B_SG1_L_LO_Byp + f_C_SG1_L_LO_Byp + f_D_SG1_L_LO_Byp
+CP,f_SG1_L_LO_Vote_A,1,T -,0
+CP,f_SG1_L_LO_Vote_A,2,F T,1
+CP,f_SG1_L_LO_Vote_A,3,F F,0
+CP,f_SG1_L_LO_Vote_B,1,T -,0
+CP,f_SG1_L_LO_Vote_B,2,F T,1
+CP,f_SG1_L_LO_Vote_B,3,F F,0
+CP,f_SG1_L_LO_Vote_C,1,T -,0
+CP,f_SG1_L_LO_Vote_C,2,F T,1
+CP,f_SG1_L_LO_Vote_C,3,F F,0
+CP,f_SG1_L_LO_Vote_D,1,T -,0
+CP,f_SG1_L_LO_Vote_D,2,F T,1
+CP,f_SG1_L_LO_Vote_D,3,F F,0
+CP,f_SG1_L_LO_Vote_Cnt,1,,f_SG1_L_LO_Vote_A + f_SG1_L_LO_Vote_B + f_SG1_L_LO_Vote_C + f_SG1_L_LO_Vote_D
+CP,f_SG1_L_LO_Coinc,1,T,0
+CP,f_SG1_L_LO_Coinc,2,F,1
+CP,f_SG2_L_LO_Byp_Cnt,1,,f_A_SG2_L_LO_Byp + f_B_SG2_L_LO_Byp + f_C_SG2_L_LO_Byp + f_D_SG2_L_LO_Byp
+CP,f_SG2_L_LO_Vote_A,1,T -,0
+CP,f_SG2_L_LO_Vote_A,2,F T,1
+CP,f_SG2_L_LO_Vote_A,3,F F,0
+CP,f_SG2_L_LO_Vote_B,1,T -,0
+CP,f_SG2_L_LO_Vote_B,2,F T,1
+CP,f_SG2_L_LO_Vote_B,3,F F,0
+CP,f_SG2_L_LO_Vote_C,1,T -,0
+CP,f_SG2_L_LO_Vote_C,2,F T,1
+CP,f_SG2_L_LO_Vote_C,3,F F,0
+CP,f_SG2_L_LO_Vote_D,1,T -,0
+CP,f_SG2_L_LO_Vote_D,2,F T,1
+CP,f_SG2_L_LO_Vote_D,3,F F,0
+CP,f_SG2_L_LO_Vote_Cnt,1,,f_SG2_L_LO_Vote_A + f_SG2_L_LO_Vote_B + f_SG2_L_LO_Vote_C + f_SG2_L_LO_Vote_D
+CP,f_SG2_L_LO_Coinc,1,T,0
+CP,f_SG2_L_LO_Coinc,2,F,1
+CP,f_SG1_L_HI_Byp_Cnt,1,,f_A_SG1_L_HI_Byp + f_B_SG1_L_HI_Byp + f_C_SG1_L_HI_Byp + f_D_SG1_L_HI_Byp
+CP,f_SG1_L_HI_Vote_A,1,T -,0
+CP,f_SG1_L_HI_Vote_A,2,F T,1
+CP,f_SG1_L_HI_Vote_A,3,F F,0
+CP,f_SG1_L_HI_Vote_B,1,T -,0
+CP,f_SG1_L_HI_Vote_B,2,F T,1
+CP,f_SG1_L_HI_Vote_B,3,F F,0
+CP,f_SG1_L_HI_Vote_C,1,T -,0
+CP,f_SG1_L_HI_Vote_C,2,F T,1
+CP,f_SG1_L_HI_Vote_C,3,F F,0
+CP,f_SG1_L_HI_Vote_D,1,T -,0
+CP,f_SG1_L_HI_Vote_D,2,F T,1
+CP,f_SG1_L_HI_Vote_D,3,F F,0
+CP,f_SG1_L_HI_Vote_Cnt,1,,f_SG1_L_HI_Vote_A + f_SG1_L_HI_Vote_B + f_SG1_L_HI_Vote_C + f_SG1_L_HI_Vote_D
+CP,f_SG1_L_HI_Coinc,1,T,0
+CP,f_SG1_L_HI_Coinc,2,F,1
+CP,f_SG2_L_HI_Byp_Cnt,1,,f_A_SG2_L_HI_Byp + f_B_SG2_L_HI_Byp + f_C_SG2_L_HI_Byp + f_D_SG2_L_HI_Byp
+CP,f_SG2_L_HI_Vote_A,1,T -,0
+CP,f_SG2_L_HI_Vote_A,2,F T,1
+CP,f_SG2_L_HI_Vote_A,3,F F,0
+CP,f_SG2_L_HI_Vote_B,1,T -,0
+CP,f_SG2_L_HI_Vote_B,2,F T,1
+CP,f_SG2_L_HI_Vote_B,3,F F,0
+CP,f_SG2_L_HI_Vote_C,1,T -,0
+CP,f_SG2_L_HI_Vote_C,2,F T,1
+CP,f_SG2_L_HI_Vote_C,3,F F,0
+CP,f_SG2_L_HI_Vote_D,1,T -,0
+CP,f_SG2_L_HI_Vote_D,2,F T,1
+CP,f_SG2_L_HI_Vote_D,3,F F,0
+CP,f_SG2_L_HI_Vote_Cnt,1,,f_SG2_L_HI_Vote_A + f_SG2_L_HI_Vote_B + f_SG2_L_HI_Vote_C + f_SG2_L_HI_Vote_D
+CP,f_SG2_L_HI_Coinc,1,T,0
+CP,f_SG2_L_HI_Coinc,2,F,1
+CP,f_SG1_P_LO_Byp_Cnt,1,,f_A_SG1_P_LO_Byp + f_B_SG1_P_LO_Byp + f_C_SG1_P_LO_Byp + f_D_SG1_P_LO_Byp
+CP,f_SG1_P_LO_Vote_A,1,T -,0
+CP,f_SG1_P_LO_Vote_A,2,F T,1
+CP,f_SG1_P_LO_Vote_A,3,F F,0
+CP,f_SG1_P_LO_Vote_B,1,T -,0
+CP,f_SG1_P_LO_Vote_B,2,F T,1
+CP,f_SG1_P_LO_Vote_B,3,F F,0
+CP,f_SG1_P_LO_Vote_C,1,T -,0
+CP,f_SG1_P_LO_Vote_C,2,F T,1
+CP,f_SG1_P_LO_Vote_C,3,F F,0
+CP,f_SG1_P_LO_Vote_D,1,T -,0
+CP,f_SG1_P_LO_Vote_D,2,F T,1
+CP,f_SG1_P_LO_Vote_D,3,F F,0
+CP,f_SG1_P_LO_Vote_Cnt,1,,f_SG1_P_LO_Vote_A + f_SG1_P_LO_Vote_B + f_SG1_P_LO_Vote_C + f_SG1_P_LO_Vote_D
+CP,f_SG1_P_LO_Coinc,1,T,0
+CP,f_SG1_P_LO_Coinc,2,F,1
+CP,f_SG2_P_LO_Byp_Cnt,1,,f_A_SG2_P_LO_Byp + f_B_SG2_P_LO_Byp + f_C_SG2_P_LO_Byp + f_D_SG2_P_LO_Byp
+CP,f_SG2_P_LO_Vote_A,1,T -,0
+CP,f_SG2_P_LO_Vote_A,2,F T,1
+CP,f_SG2_P_LO_Vote_A,3,F F,0
+CP,f_SG2_P_LO_Vote_B,1,T -,0
+CP,f_SG2_P_LO_Vote_B,2,F T,1
+CP,f_SG2_P_LO_Vote_B,3,F F,0
+CP,f_SG2_P_LO_Vote_C,1,T -,0
+CP,f_SG2_P_LO_Vote_C,2,F T,1
+CP,f_SG2_P_LO_Vote_C,3,F F,0
+CP,f_SG2_P_LO_Vote_D,1,T -,0
+CP,f_SG2_P_LO_Vote_D,2,F T,1
+CP,f_SG2_P_LO_Vote_D,3,F F,0
+CP,f_SG2_P_LO_Vote_Cnt,1,,f_SG2_P_LO_Vote_A + f_SG2_P_LO_Vote_B + f_SG2_P_LO_Vote_C + f_SG2_P_LO_Vote_D
+CP,f_SG2_P_LO_Coinc,1,T,0
+CP,f_SG2_P_LO_Coinc,2,F,1
+CP,f_CTMT_P_HI_Byp_Cnt,1,,f_A_CTMT_P_HI_Byp + f_B_CTMT_P_HI_Byp + f_C_CTMT_P_HI_Byp + f_D_CTMT_P_HI_Byp
+CP,f_CTMT_P_HI_Vote_A,1,T -,0
+CP,f_CTMT_P_HI_Vote_A,2,F T,1
+CP,f_CTMT_P_HI_Vote_A,3,F F,0
+CP,f_CTMT_P_HI_Vote_B,1,T -,0
+CP,f_CTMT_P_HI_Vote_B,2,F T,1
+CP,f_CTMT_P_HI_Vote_B,3,F F,0
+CP,f_CTMT_P_HI_Vote_C,1,T -,0
+CP,f_CTMT_P_HI_Vote_C,2,F T,1
+CP,f_CTMT_P_HI_Vote_C,3,F F,0
+CP,f_CTMT_P_HI_Vote_D,1,T -,0
+CP,f_CTMT_P_HI_Vote_D,2,F T,1
+CP,f_CTMT_P_HI_Vote_D,3,F F,0
+CP,f_CTMT_P_HI_Vote_Cnt,1,,f_CTMT_P_HI_Vote_A + f_CTMT_P_HI_Vote_B + f_CTMT_P_HI_Vote_C + f_CTMT_P_HI_Vote_D
+CP,f_CTMT_P_HI_Coinc,1,T,0
+CP,f_CTMT_P_HI_Coinc,2,F,1
+CP,f_SG1_F_LO_Byp_Cnt,1,,f_A_SG1_F_LO_Byp + f_B_SG1_F_LO_Byp + f_C_SG1_F_LO_Byp + f_D_SG1_F_LO_Byp
+CP,f_SG1_F_LO_Vote_A,1,T -,0
+CP,f_SG1_F_LO_Vote_A,2,F T,1
+CP,f_SG1_F_LO_Vote_A,3,F F,0
+CP,f_SG1_F_LO_Vote_B,1,T -,0
+CP,f_SG1_F_LO_Vote_B,2,F T,1
+CP,f_SG1_F_LO_Vote_B,3,F F,0
+CP,f_SG1_F_LO_Vote_C,1,T -,0
+CP,f_SG1_F_LO_Vote_C,2,F T,1
+CP,f_SG1_F_LO_Vote_C,3,F F,0
+CP,f_SG1_F_LO_Vote_D,1,T -,0
+CP,f_SG1_F_LO_Vote_D,2,F T,1
+CP,f_SG1_F_LO_Vote_D,3,F F,0
+CP,f_SG1_F_LO_Vote_Cnt,1,,f_SG1_F_LO_Vote_A + f_SG1_F_LO_Vote_B + f_SG1_F_LO_Vote_C + f_SG1_F_LO_Vote_D
+CP,f_SG1_F_LO_Coinc,1,T,0
+CP,f_SG1_F_LO_Coinc,2,F,1
+CP,f_SG2_F_LO_Byp_Cnt,1,,f_A_SG2_F_LO_Byp + f_B_SG2_F_LO_Byp + f_C_SG2_F_LO_Byp + f_D_SG2_F_LO_Byp
+CP,f_SG2_F_LO_Vote_A,1,T -,0
+CP,f_SG2_F_LO_Vote_A,2,F T,1
+CP,f_SG2_F_LO_Vote_A,3,F F,0
+CP,f_SG2_F_LO_Vote_B,1,T -,0
+CP,f_SG2_F_LO_Vote_B,2,F T,1
+CP,f_SG2_F_LO_Vote_B,3,F F,0
+CP,f_SG2_F_LO_Vote_C,1,T -,0
+CP,f_SG2_F_LO_Vote_C,2,F T,1
+CP,f_SG2_F_LO_Vote_C,3,F F,0
+CP,f_SG2_F_LO_Vote_D,1,T -,0
+CP,f_SG2_F_LO_Vote_D,2,F T,1
+CP,f_SG2_F_LO_Vote_D,3,F F,0
+CP,f_SG2_F_LO_Vote_Cnt,1,,f_SG2_F_LO_Vote_A + f_SG2_F_LO_Vote_B + f_SG2_F_LO_Vote_C + f_SG2_F_LO_Vote_D
+CP,f_SG2_F_LO_Coinc,1,T,0
+CP,f_SG2_F_LO_Coinc,2,F,1
+CP,f_RT_Init,1,T,0
+CP,f_RT_Init,2,F,1

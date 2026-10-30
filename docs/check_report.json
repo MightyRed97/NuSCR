@@ -1,0 +1,27 @@
+{
+  "errors": 0,
+  "warnings": 0,
+  "stats": {
+    "assertions": 86,
+    "SDTs": 124,
+    "SDT rules": 296,
+    "completeness proofs": 124,
+    "disjointness proofs": 250,
+    "type proofs": 816,
+    "range proofs": 39,
+    "FSMs": 25,
+    "transitions": 504,
+    "determinism proofs": 338,
+    "TTSs": 30,
+    "timed transitions": 60,
+    "persistence proofs": 60,
+    "exit proofs": 60,
+    "forced-value proofs": 180,
+    "obligations": 30,
+    "obligations proved": 30,
+    "connections": 120,
+    "trace links": 539,
+    "requirements": 43
+  },
+  "findings": []
+}

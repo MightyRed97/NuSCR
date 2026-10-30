@@ -1,0 +1,505 @@
+module,variable,kind,id,from,to,timing_lower,timing_upper,guard,action
+BP,h_VOPT_Trip_SP,FSM,T1,INIT,TRACKING,,,f_NPWR_LIN_Valid = 1,f_VOPT_SP_Target
+BP,h_VOPT_Trip_SP,FSM,T2,TRACKING,TRACKING,,,f_NPWR_LIN_Valid = 1 && f_VOPT_SP_Target <= h_VOPT_Trip_SP,f_VOPT_SP_Target
+BP,h_VOPT_Trip_SP,FSM,T3,TRACKING,TRACKING,,,f_NPWR_LIN_Valid = 1 && f_VOPT_SP_Target > h_VOPT_Trip_SP && f_VOPT_SP_Target - h_VOPT_Trip_SP <= k_VOPT_SP_Step,f_VOPT_SP_Target
+BP,h_VOPT_Trip_SP,FSM,T4,TRACKING,TRACKING,,,f_NPWR_LIN_Valid = 1 && f_VOPT_SP_Target - h_VOPT_Trip_SP > k_VOPT_SP_Step,h_VOPT_Trip_SP + k_VOPT_SP_Step
+BP,th_VOPT_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Pretrip,TTS,N2,NORMAL,WAITING,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,1
+BP,th_VOPT_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Pretrip,TTS,W2,WAITING,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,1
+BP,th_VOPT_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_VOPT_Pretrip_Delay,k_VOPT_Pretrip_Delay,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,0
+BP,th_VOPT_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin - k_VOPT_Pretrip_Hys,1
+BP,th_VOPT_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,0
+BP,th_VOPT_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,1
+BP,th_VOPT_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,1
+BP,th_VOPT_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_VOPT_Pretrip_Delay,k_VOPT_Pretrip_Delay,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin,0
+BP,th_VOPT_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin - k_VOPT_Pretrip_Hys,0
+BP,th_VOPT_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Pretrip_Margin - k_VOPT_Pretrip_Hys,1
+BP,th_VOPT_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Trip,TTS,N2,NORMAL,WAITING,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP,1
+BP,th_VOPT_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Trip,TTS,W2,WAITING,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP,1
+BP,th_VOPT_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_VOPT_Trip_Delay,k_VOPT_Trip_Delay,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP,0
+BP,th_VOPT_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Trip_Hys,1
+BP,th_VOPT_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP,0
+BP,th_VOPT_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP,1
+BP,th_VOPT_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_NPWR_LIN_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_VOPT_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP,1
+BP,th_VOPT_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_VOPT_Trip_Delay,k_VOPT_Trip_Delay,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP,0
+BP,th_VOPT_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN >= h_VOPT_Trip_SP - k_VOPT_Trip_Hys,0
+BP,th_VOPT_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_NPWR_LIN_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_NPWR_LIN < h_VOPT_Trip_SP - k_VOPT_Trip_Hys,1
+BP,h_LOGP_HI_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_LOGP_HI_OB_Ini = 1,1
+BP,h_LOGP_HI_OB_Pulse,FSM,T2,FIRED,HELD,,,f_LOGP_HI_OB_Ini = 1,0
+BP,h_LOGP_HI_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_LOGP_HI_OB_Ini = 0,0
+BP,h_LOGP_HI_OB_Pulse,FSM,T4,HELD,ARMED,,,f_LOGP_HI_OB_Ini = 0,0
+BP,h_LOGP_HI_OB_Sta,FSM,T1,NO_OB,OB,,,f_LOGP_HI_OB_Perm = 1 && h_LOGP_HI_OB_Pulse = 1,1
+BP,h_LOGP_HI_OB_Sta,FSM,T2,OB,NO_OB,,,f_LOGP_HI_OB_Perm = 0,0
+BP,th_LOGP_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP,1
+BP,th_LOGP_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Pretrip_SP),1
+BP,th_LOGP_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_LOGP_HI_Pretrip_Delay,k_LOGP_HI_Pretrip_Delay,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP,0
+BP,th_LOGP_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Pretrip_SP - k_LOGP_HI_Pretrip_Hys),1
+BP,th_LOGP_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP,0
+BP,th_LOGP_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Pretrip_SP),1
+BP,th_LOGP_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Pretrip_SP),1
+BP,th_LOGP_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_LOGP_HI_Pretrip_Delay,k_LOGP_HI_Pretrip_Delay,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP,0
+BP,th_LOGP_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Pretrip_SP - k_LOGP_HI_Pretrip_Hys,0
+BP,th_LOGP_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Pretrip_SP - k_LOGP_HI_Pretrip_Hys),1
+BP,th_LOGP_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Trip_SP,1
+BP,th_LOGP_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Trip_SP),1
+BP,th_LOGP_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_LOGP_HI_Trip_Delay,k_LOGP_HI_Trip_Delay,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Trip_SP,0
+BP,th_LOGP_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Trip_SP - k_LOGP_HI_Trip_Hys),1
+BP,th_LOGP_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Trip_SP,0
+BP,th_LOGP_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Trip_SP),1
+BP,th_LOGP_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_NPWR_LOG_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LOGP_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Trip_SP),1
+BP,th_LOGP_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_LOGP_HI_Trip_Delay,k_LOGP_HI_Trip_Delay,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Trip_SP,0
+BP,th_LOGP_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LOGP_HI_OB_Sta = 0 && f_NPWR_LOG >= k_LOGP_HI_Trip_SP - k_LOGP_HI_Trip_Hys,0
+BP,th_LOGP_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_NPWR_LOG_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LOGP_HI_OB_Sta = 1 || f_NPWR_LOG < k_LOGP_HI_Trip_SP - k_LOGP_HI_Trip_Hys),1
+BP,h_LPD_HI_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_LPD_HI_OB_Ini = 1,1
+BP,h_LPD_HI_OB_Pulse,FSM,T2,FIRED,HELD,,,f_LPD_HI_OB_Ini = 1,0
+BP,h_LPD_HI_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_LPD_HI_OB_Ini = 0,0
+BP,h_LPD_HI_OB_Pulse,FSM,T4,HELD,ARMED,,,f_LPD_HI_OB_Ini = 0,0
+BP,h_LPD_HI_OB_Sta,FSM,T1,NO_OB,OB,,,f_LP_OB_Perm = 1 && h_LPD_HI_OB_Pulse = 1,1
+BP,h_LPD_HI_OB_Sta,FSM,T2,OB,NO_OB,,,f_LP_OB_Perm = 0,0
+BP,th_LPD_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Pretrip_In = 0,1
+BP,th_LPD_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Pretrip_In = 1),1
+BP,th_LPD_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_LPD_HI_Pretrip_Delay,k_LPD_HI_Pretrip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Pretrip_In = 0,0
+BP,th_LPD_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Pretrip_In = 1),1
+BP,th_LPD_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Pretrip_In = 0,0
+BP,th_LPD_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Pretrip_In = 1),1
+BP,th_LPD_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Pretrip_In = 1),1
+BP,th_LPD_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_LPD_HI_Pretrip_Delay,k_LPD_HI_Pretrip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Pretrip_In = 0,0
+BP,th_LPD_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Pretrip_In = 0,0
+BP,th_LPD_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Pretrip_In = 1),1
+BP,th_LPD_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Trip_In = 0,1
+BP,th_LPD_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Trip_In = 1),1
+BP,th_LPD_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_LPD_HI_Trip_Delay,k_LPD_HI_Trip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Trip_In = 0,0
+BP,th_LPD_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Trip_In = 1),1
+BP,th_LPD_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Trip_In = 0,0
+BP,th_LPD_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Trip_In = 1),1
+BP,th_LPD_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_LPD_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Trip_In = 1),1
+BP,th_LPD_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_LPD_HI_Trip_Delay,k_LPD_HI_Trip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Trip_In = 0,0
+BP,th_LPD_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_LPD_HI_OB_Sta = 0 && f_LPD_HI_Trip_In = 0,0
+BP,th_LPD_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_LPD_HI_OB_Sta = 1 || f_LPD_HI_Trip_In = 1),1
+BP,h_DNBR_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_DNBR_LO_OB_Ini = 1,1
+BP,h_DNBR_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_DNBR_LO_OB_Ini = 1,0
+BP,h_DNBR_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_DNBR_LO_OB_Ini = 0,0
+BP,h_DNBR_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_DNBR_LO_OB_Ini = 0,0
+BP,h_DNBR_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_LP_OB_Perm = 1 && h_DNBR_LO_OB_Pulse = 1,1
+BP,h_DNBR_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_LP_OB_Perm = 0,0
+BP,th_DNBR_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Pretrip_In = 0,1
+BP,th_DNBR_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Pretrip_In = 1),1
+BP,th_DNBR_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_DNBR_LO_Pretrip_Delay,k_DNBR_LO_Pretrip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Pretrip_In = 0,0
+BP,th_DNBR_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Pretrip_In = 1),1
+BP,th_DNBR_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Pretrip_In = 0,0
+BP,th_DNBR_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Pretrip_In = 1),1
+BP,th_DNBR_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Pretrip_In = 1),1
+BP,th_DNBR_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_DNBR_LO_Pretrip_Delay,k_DNBR_LO_Pretrip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Pretrip_In = 0,0
+BP,th_DNBR_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Pretrip_In = 0,0
+BP,th_DNBR_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Pretrip_In = 1),1
+BP,th_DNBR_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Trip_In = 0,1
+BP,th_DNBR_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Trip_In = 1),1
+BP,th_DNBR_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_DNBR_LO_Trip_Delay,k_DNBR_LO_Trip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Trip_In = 0,0
+BP,th_DNBR_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Trip_In = 1),1
+BP,th_DNBR_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Trip_In = 0,0
+BP,th_DNBR_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Trip_In = 1),1
+BP,th_DNBR_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_CPC_Link_Error = 1 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_DNBR_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Trip_In = 1),1
+BP,th_DNBR_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_DNBR_LO_Trip_Delay,k_DNBR_LO_Trip_Delay,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Trip_In = 0,0
+BP,th_DNBR_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && h_DNBR_LO_OB_Sta = 0 && f_DNBR_LO_Trip_In = 0,0
+BP,th_DNBR_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_CPC_Link_Error = 0 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_DNBR_LO_OB_Sta = 1 || f_DNBR_LO_Trip_In = 1),1
+BP,th_PZR_P_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Pretrip_SP,1
+BP,th_PZR_P_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Pretrip_SP,1
+BP,th_PZR_P_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_PZR_P_HI_Pretrip_Delay,k_PZR_P_HI_Pretrip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Pretrip_SP,0
+BP,th_PZR_P_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Pretrip_SP - k_PZR_P_HI_Pretrip_Hys,1
+BP,th_PZR_P_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Pretrip_SP,0
+BP,th_PZR_P_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Pretrip_SP,1
+BP,th_PZR_P_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Pretrip_SP,1
+BP,th_PZR_P_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_PZR_P_HI_Pretrip_Delay,k_PZR_P_HI_Pretrip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Pretrip_SP,0
+BP,th_PZR_P_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Pretrip_SP - k_PZR_P_HI_Pretrip_Hys,0
+BP,th_PZR_P_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Pretrip_SP - k_PZR_P_HI_Pretrip_Hys,1
+BP,th_PZR_P_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Trip_SP,1
+BP,th_PZR_P_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Trip_SP,1
+BP,th_PZR_P_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_PZR_P_HI_Trip_Delay,k_PZR_P_HI_Trip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Trip_SP,0
+BP,th_PZR_P_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Trip_SP - k_PZR_P_HI_Trip_Hys,1
+BP,th_PZR_P_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Trip_SP,0
+BP,th_PZR_P_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Trip_SP,1
+BP,th_PZR_P_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Trip_SP,1
+BP,th_PZR_P_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_PZR_P_HI_Trip_Delay,k_PZR_P_HI_Trip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Trip_SP,0
+BP,th_PZR_P_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P >= k_PZR_P_HI_Trip_SP - k_PZR_P_HI_Trip_Hys,0
+BP,th_PZR_P_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_PZR_P < k_PZR_P_HI_Trip_SP - k_PZR_P_HI_Trip_Hys,1
+BP,h_PZR_P_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_PZR_P_LO_OB_Ini = 1,1
+BP,h_PZR_P_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_PZR_P_LO_OB_Ini = 1,0
+BP,h_PZR_P_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_PZR_P_LO_OB_Ini = 0,0
+BP,h_PZR_P_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_PZR_P_LO_OB_Ini = 0,0
+BP,h_PZR_P_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_PZR_P_LO_OB_Perm = 1 && h_PZR_P_LO_OB_Pulse = 1,1
+BP,h_PZR_P_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_PZR_P_LO_OB_Perm = 0,0
+BP,h_PZR_P_LO_Reset_Pulse,FSM,T1,ARMED,FIRED,,,f_PZR_P_LO_SP_Reset = 1,1
+BP,h_PZR_P_LO_Reset_Pulse,FSM,T2,FIRED,HELD,,,f_PZR_P_LO_SP_Reset = 1,0
+BP,h_PZR_P_LO_Reset_Pulse,FSM,T3,FIRED,ARMED,,,f_PZR_P_LO_SP_Reset = 0,0
+BP,h_PZR_P_LO_Reset_Pulse,FSM,T4,HELD,ARMED,,,f_PZR_P_LO_SP_Reset = 0,0
+BP,h_PZR_P_LO_Trip_SP,FSM,T1,ACTIVE,ACTIVE,,,f_PZR_P_Valid = 1 && f_PZR_P - k_PZR_P_LO_Band > h_PZR_P_LO_Trip_SP && f_PZR_P - k_PZR_P_LO_Band <= k_PZR_P_LO_SP_Max,f_PZR_P - k_PZR_P_LO_Band
+BP,h_PZR_P_LO_Trip_SP,FSM,T2,ACTIVE,ACTIVE,,,f_PZR_P_Valid = 1 && f_PZR_P - k_PZR_P_LO_Band > k_PZR_P_LO_SP_Max && h_PZR_P_LO_Trip_SP < k_PZR_P_LO_SP_Max,k_PZR_P_LO_SP_Max
+BP,h_PZR_P_LO_Trip_SP,FSM,T3,ACTIVE,ACTIVE,,,f_PZR_P_Valid = 1 && h_PZR_P_LO_Reset_Pulse = 1 && f_PZR_P - k_PZR_P_LO_Band < h_PZR_P_LO_Trip_SP && f_PZR_P - k_PZR_P_LO_Band >= k_PZR_P_LO_SP_Min,f_PZR_P - k_PZR_P_LO_Band
+BP,h_PZR_P_LO_Trip_SP,FSM,T4,ACTIVE,ACTIVE,,,f_PZR_P_Valid = 1 && h_PZR_P_LO_Reset_Pulse = 1 && f_PZR_P - k_PZR_P_LO_Band < k_PZR_P_LO_SP_Min && h_PZR_P_LO_Trip_SP > k_PZR_P_LO_SP_Min,k_PZR_P_LO_SP_Min
+BP,th_PZR_P_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin,1
+BP,th_PZR_P_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin),1
+BP,th_PZR_P_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_PZR_P_LO_Pretrip_Delay,k_PZR_P_LO_Pretrip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin,0
+BP,th_PZR_P_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin + k_PZR_P_LO_Pretrip_Hys),1
+BP,th_PZR_P_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin,0
+BP,th_PZR_P_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin),1
+BP,th_PZR_P_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin),1
+BP,th_PZR_P_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_PZR_P_LO_Pretrip_Delay,k_PZR_P_LO_Pretrip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin,0
+BP,th_PZR_P_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin + k_PZR_P_LO_Pretrip_Hys,0
+BP,th_PZR_P_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Pretrip_Margin + k_PZR_P_LO_Pretrip_Hys),1
+BP,th_PZR_P_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP,1
+BP,th_PZR_P_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP),1
+BP,th_PZR_P_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_PZR_P_LO_Trip_Delay,k_PZR_P_LO_Trip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP,0
+BP,th_PZR_P_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Trip_Hys),1
+BP,th_PZR_P_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP,0
+BP,th_PZR_P_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP),1
+BP,th_PZR_P_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_PZR_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_PZR_P_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP),1
+BP,th_PZR_P_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_PZR_P_LO_Trip_Delay,k_PZR_P_LO_Trip_Delay,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP,0
+BP,th_PZR_P_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_PZR_P_LO_OB_Sta = 0 && f_PZR_P <= h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Trip_Hys,0
+BP,th_PZR_P_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_PZR_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_PZR_P_LO_OB_Sta = 1 || f_PZR_P > h_PZR_P_LO_Trip_SP + k_PZR_P_LO_Trip_Hys),1
+BP,th_SG1_L_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Pretrip_SP,1
+BP,th_SG1_L_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Pretrip_SP,1
+BP,th_SG1_L_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG1_L_LO_Pretrip_Delay,k_SG1_L_LO_Pretrip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Pretrip_SP,0
+BP,th_SG1_L_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Pretrip_SP + k_SG1_L_LO_Pretrip_Hys,1
+BP,th_SG1_L_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Pretrip_SP,0
+BP,th_SG1_L_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Pretrip_SP,1
+BP,th_SG1_L_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Pretrip_SP,1
+BP,th_SG1_L_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG1_L_LO_Pretrip_Delay,k_SG1_L_LO_Pretrip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Pretrip_SP,0
+BP,th_SG1_L_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Pretrip_SP + k_SG1_L_LO_Pretrip_Hys,0
+BP,th_SG1_L_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Pretrip_SP + k_SG1_L_LO_Pretrip_Hys,1
+BP,th_SG1_L_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Trip_SP,1
+BP,th_SG1_L_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Trip_SP,1
+BP,th_SG1_L_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG1_L_LO_Trip_Delay,k_SG1_L_LO_Trip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Trip_SP,0
+BP,th_SG1_L_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Trip_SP + k_SG1_L_LO_Trip_Hys,1
+BP,th_SG1_L_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Trip_SP,0
+BP,th_SG1_L_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Trip_SP,1
+BP,th_SG1_L_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Trip_SP,1
+BP,th_SG1_L_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG1_L_LO_Trip_Delay,k_SG1_L_LO_Trip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Trip_SP,0
+BP,th_SG1_L_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L <= k_SG1_L_LO_Trip_SP + k_SG1_L_LO_Trip_Hys,0
+BP,th_SG1_L_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L > k_SG1_L_LO_Trip_SP + k_SG1_L_LO_Trip_Hys,1
+BP,th_SG2_L_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Pretrip_SP,1
+BP,th_SG2_L_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Pretrip_SP,1
+BP,th_SG2_L_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG2_L_LO_Pretrip_Delay,k_SG2_L_LO_Pretrip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Pretrip_SP,0
+BP,th_SG2_L_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Pretrip_SP + k_SG2_L_LO_Pretrip_Hys,1
+BP,th_SG2_L_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Pretrip_SP,0
+BP,th_SG2_L_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Pretrip_SP,1
+BP,th_SG2_L_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Pretrip_SP,1
+BP,th_SG2_L_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG2_L_LO_Pretrip_Delay,k_SG2_L_LO_Pretrip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Pretrip_SP,0
+BP,th_SG2_L_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Pretrip_SP + k_SG2_L_LO_Pretrip_Hys,0
+BP,th_SG2_L_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Pretrip_SP + k_SG2_L_LO_Pretrip_Hys,1
+BP,th_SG2_L_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Trip_SP,1
+BP,th_SG2_L_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Trip_SP,1
+BP,th_SG2_L_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG2_L_LO_Trip_Delay,k_SG2_L_LO_Trip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Trip_SP,0
+BP,th_SG2_L_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Trip_SP + k_SG2_L_LO_Trip_Hys,1
+BP,th_SG2_L_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Trip_SP,0
+BP,th_SG2_L_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Trip_SP,1
+BP,th_SG2_L_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Trip_SP,1
+BP,th_SG2_L_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG2_L_LO_Trip_Delay,k_SG2_L_LO_Trip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Trip_SP,0
+BP,th_SG2_L_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L <= k_SG2_L_LO_Trip_SP + k_SG2_L_LO_Trip_Hys,0
+BP,th_SG2_L_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L > k_SG2_L_LO_Trip_SP + k_SG2_L_LO_Trip_Hys,1
+BP,th_SG1_L_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Pretrip_SP,1
+BP,th_SG1_L_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Pretrip_SP,1
+BP,th_SG1_L_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG1_L_HI_Pretrip_Delay,k_SG1_L_HI_Pretrip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Pretrip_SP,0
+BP,th_SG1_L_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Pretrip_SP - k_SG1_L_HI_Pretrip_Hys,1
+BP,th_SG1_L_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Pretrip_SP,0
+BP,th_SG1_L_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Pretrip_SP,1
+BP,th_SG1_L_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Pretrip_SP,1
+BP,th_SG1_L_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG1_L_HI_Pretrip_Delay,k_SG1_L_HI_Pretrip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Pretrip_SP,0
+BP,th_SG1_L_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Pretrip_SP - k_SG1_L_HI_Pretrip_Hys,0
+BP,th_SG1_L_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Pretrip_SP - k_SG1_L_HI_Pretrip_Hys,1
+BP,th_SG1_L_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Trip_SP,1
+BP,th_SG1_L_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Trip_SP,1
+BP,th_SG1_L_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG1_L_HI_Trip_Delay,k_SG1_L_HI_Trip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Trip_SP,0
+BP,th_SG1_L_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Trip_SP - k_SG1_L_HI_Trip_Hys,1
+BP,th_SG1_L_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Trip_SP,0
+BP,th_SG1_L_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Trip_SP,1
+BP,th_SG1_L_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG1_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_L_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Trip_SP,1
+BP,th_SG1_L_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG1_L_HI_Trip_Delay,k_SG1_L_HI_Trip_Delay,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Trip_SP,0
+BP,th_SG1_L_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L >= k_SG1_L_HI_Trip_SP - k_SG1_L_HI_Trip_Hys,0
+BP,th_SG1_L_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG1_L < k_SG1_L_HI_Trip_SP - k_SG1_L_HI_Trip_Hys,1
+BP,th_SG2_L_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Pretrip_SP,1
+BP,th_SG2_L_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Pretrip_SP,1
+BP,th_SG2_L_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG2_L_HI_Pretrip_Delay,k_SG2_L_HI_Pretrip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Pretrip_SP,0
+BP,th_SG2_L_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Pretrip_SP - k_SG2_L_HI_Pretrip_Hys,1
+BP,th_SG2_L_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Pretrip_SP,0
+BP,th_SG2_L_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Pretrip_SP,1
+BP,th_SG2_L_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Pretrip_SP,1
+BP,th_SG2_L_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG2_L_HI_Pretrip_Delay,k_SG2_L_HI_Pretrip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Pretrip_SP,0
+BP,th_SG2_L_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Pretrip_SP - k_SG2_L_HI_Pretrip_Hys,0
+BP,th_SG2_L_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Pretrip_SP - k_SG2_L_HI_Pretrip_Hys,1
+BP,th_SG2_L_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Trip_SP,1
+BP,th_SG2_L_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Trip_SP,1
+BP,th_SG2_L_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG2_L_HI_Trip_Delay,k_SG2_L_HI_Trip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Trip_SP,0
+BP,th_SG2_L_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Trip_SP - k_SG2_L_HI_Trip_Hys,1
+BP,th_SG2_L_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Trip_SP,0
+BP,th_SG2_L_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Trip_SP,1
+BP,th_SG2_L_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG2_L_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_L_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Trip_SP,1
+BP,th_SG2_L_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG2_L_HI_Trip_Delay,k_SG2_L_HI_Trip_Delay,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Trip_SP,0
+BP,th_SG2_L_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L >= k_SG2_L_HI_Trip_SP - k_SG2_L_HI_Trip_Hys,0
+BP,th_SG2_L_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_L_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_SG2_L < k_SG2_L_HI_Trip_SP - k_SG2_L_HI_Trip_Hys,1
+BP,h_SG1_P_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_SG1_P_LO_OB_Ini = 1,1
+BP,h_SG1_P_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_SG1_P_LO_OB_Ini = 1,0
+BP,h_SG1_P_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_SG1_P_LO_OB_Ini = 0,0
+BP,h_SG1_P_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_SG1_P_LO_OB_Ini = 0,0
+BP,h_SG1_P_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_SG1_P_LO_OB_Perm = 1 && h_SG1_P_LO_OB_Pulse = 1,1
+BP,h_SG1_P_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_SG1_P_LO_OB_Perm = 0,0
+BP,h_SG1_P_LO_Reset_Pulse,FSM,T1,ARMED,FIRED,,,f_SG1_P_LO_SP_Reset = 1,1
+BP,h_SG1_P_LO_Reset_Pulse,FSM,T2,FIRED,HELD,,,f_SG1_P_LO_SP_Reset = 1,0
+BP,h_SG1_P_LO_Reset_Pulse,FSM,T3,FIRED,ARMED,,,f_SG1_P_LO_SP_Reset = 0,0
+BP,h_SG1_P_LO_Reset_Pulse,FSM,T4,HELD,ARMED,,,f_SG1_P_LO_SP_Reset = 0,0
+BP,h_SG1_P_LO_Trip_SP,FSM,T1,ACTIVE,ACTIVE,,,f_SG1_P_Valid = 1 && f_SG1_P - k_SG1_P_LO_Band > h_SG1_P_LO_Trip_SP && f_SG1_P - k_SG1_P_LO_Band <= k_SG1_P_LO_SP_Max,f_SG1_P - k_SG1_P_LO_Band
+BP,h_SG1_P_LO_Trip_SP,FSM,T2,ACTIVE,ACTIVE,,,f_SG1_P_Valid = 1 && f_SG1_P - k_SG1_P_LO_Band > k_SG1_P_LO_SP_Max && h_SG1_P_LO_Trip_SP < k_SG1_P_LO_SP_Max,k_SG1_P_LO_SP_Max
+BP,h_SG1_P_LO_Trip_SP,FSM,T3,ACTIVE,ACTIVE,,,f_SG1_P_Valid = 1 && h_SG1_P_LO_Reset_Pulse = 1 && f_SG1_P - k_SG1_P_LO_Band < h_SG1_P_LO_Trip_SP && f_SG1_P - k_SG1_P_LO_Band >= k_SG1_P_LO_SP_Min,f_SG1_P - k_SG1_P_LO_Band
+BP,h_SG1_P_LO_Trip_SP,FSM,T4,ACTIVE,ACTIVE,,,f_SG1_P_Valid = 1 && h_SG1_P_LO_Reset_Pulse = 1 && f_SG1_P - k_SG1_P_LO_Band < k_SG1_P_LO_SP_Min && h_SG1_P_LO_Trip_SP > k_SG1_P_LO_SP_Min,k_SG1_P_LO_SP_Min
+BP,th_SG1_P_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin,1
+BP,th_SG1_P_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin),1
+BP,th_SG1_P_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG1_P_LO_Pretrip_Delay,k_SG1_P_LO_Pretrip_Delay,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin,0
+BP,th_SG1_P_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin + k_SG1_P_LO_Pretrip_Hys),1
+BP,th_SG1_P_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin,0
+BP,th_SG1_P_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin),1
+BP,th_SG1_P_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin),1
+BP,th_SG1_P_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG1_P_LO_Pretrip_Delay,k_SG1_P_LO_Pretrip_Delay,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin,0
+BP,th_SG1_P_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin + k_SG1_P_LO_Pretrip_Hys,0
+BP,th_SG1_P_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Pretrip_Margin + k_SG1_P_LO_Pretrip_Hys),1
+BP,th_SG1_P_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP,1
+BP,th_SG1_P_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP),1
+BP,th_SG1_P_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG1_P_LO_Trip_Delay,k_SG1_P_LO_Trip_Delay,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP,0
+BP,th_SG1_P_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Trip_Hys),1
+BP,th_SG1_P_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP,0
+BP,th_SG1_P_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP),1
+BP,th_SG1_P_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG1_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_P_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP),1
+BP,th_SG1_P_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG1_P_LO_Trip_Delay,k_SG1_P_LO_Trip_Delay,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP,0
+BP,th_SG1_P_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_P_LO_OB_Sta = 0 && f_SG1_P <= h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Trip_Hys,0
+BP,th_SG1_P_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_P_LO_OB_Sta = 1 || f_SG1_P > h_SG1_P_LO_Trip_SP + k_SG1_P_LO_Trip_Hys),1
+BP,h_SG2_P_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_SG2_P_LO_OB_Ini = 1,1
+BP,h_SG2_P_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_SG2_P_LO_OB_Ini = 1,0
+BP,h_SG2_P_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_SG2_P_LO_OB_Ini = 0,0
+BP,h_SG2_P_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_SG2_P_LO_OB_Ini = 0,0
+BP,h_SG2_P_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_SG2_P_LO_OB_Perm = 1 && h_SG2_P_LO_OB_Pulse = 1,1
+BP,h_SG2_P_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_SG2_P_LO_OB_Perm = 0,0
+BP,h_SG2_P_LO_Reset_Pulse,FSM,T1,ARMED,FIRED,,,f_SG2_P_LO_SP_Reset = 1,1
+BP,h_SG2_P_LO_Reset_Pulse,FSM,T2,FIRED,HELD,,,f_SG2_P_LO_SP_Reset = 1,0
+BP,h_SG2_P_LO_Reset_Pulse,FSM,T3,FIRED,ARMED,,,f_SG2_P_LO_SP_Reset = 0,0
+BP,h_SG2_P_LO_Reset_Pulse,FSM,T4,HELD,ARMED,,,f_SG2_P_LO_SP_Reset = 0,0
+BP,h_SG2_P_LO_Trip_SP,FSM,T1,ACTIVE,ACTIVE,,,f_SG2_P_Valid = 1 && f_SG2_P - k_SG2_P_LO_Band > h_SG2_P_LO_Trip_SP && f_SG2_P - k_SG2_P_LO_Band <= k_SG2_P_LO_SP_Max,f_SG2_P - k_SG2_P_LO_Band
+BP,h_SG2_P_LO_Trip_SP,FSM,T2,ACTIVE,ACTIVE,,,f_SG2_P_Valid = 1 && f_SG2_P - k_SG2_P_LO_Band > k_SG2_P_LO_SP_Max && h_SG2_P_LO_Trip_SP < k_SG2_P_LO_SP_Max,k_SG2_P_LO_SP_Max
+BP,h_SG2_P_LO_Trip_SP,FSM,T3,ACTIVE,ACTIVE,,,f_SG2_P_Valid = 1 && h_SG2_P_LO_Reset_Pulse = 1 && f_SG2_P - k_SG2_P_LO_Band < h_SG2_P_LO_Trip_SP && f_SG2_P - k_SG2_P_LO_Band >= k_SG2_P_LO_SP_Min,f_SG2_P - k_SG2_P_LO_Band
+BP,h_SG2_P_LO_Trip_SP,FSM,T4,ACTIVE,ACTIVE,,,f_SG2_P_Valid = 1 && h_SG2_P_LO_Reset_Pulse = 1 && f_SG2_P - k_SG2_P_LO_Band < k_SG2_P_LO_SP_Min && h_SG2_P_LO_Trip_SP > k_SG2_P_LO_SP_Min,k_SG2_P_LO_SP_Min
+BP,th_SG2_P_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin,1
+BP,th_SG2_P_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin),1
+BP,th_SG2_P_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG2_P_LO_Pretrip_Delay,k_SG2_P_LO_Pretrip_Delay,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin,0
+BP,th_SG2_P_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin + k_SG2_P_LO_Pretrip_Hys),1
+BP,th_SG2_P_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin,0
+BP,th_SG2_P_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin),1
+BP,th_SG2_P_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin),1
+BP,th_SG2_P_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG2_P_LO_Pretrip_Delay,k_SG2_P_LO_Pretrip_Delay,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin,0
+BP,th_SG2_P_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin + k_SG2_P_LO_Pretrip_Hys,0
+BP,th_SG2_P_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Pretrip_Margin + k_SG2_P_LO_Pretrip_Hys),1
+BP,th_SG2_P_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP,1
+BP,th_SG2_P_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP),1
+BP,th_SG2_P_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG2_P_LO_Trip_Delay,k_SG2_P_LO_Trip_Delay,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP,0
+BP,th_SG2_P_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Trip_Hys),1
+BP,th_SG2_P_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP,0
+BP,th_SG2_P_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP),1
+BP,th_SG2_P_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG2_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_P_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP),1
+BP,th_SG2_P_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG2_P_LO_Trip_Delay,k_SG2_P_LO_Trip_Delay,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP,0
+BP,th_SG2_P_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_P_LO_OB_Sta = 0 && f_SG2_P <= h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Trip_Hys,0
+BP,th_SG2_P_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_P_LO_OB_Sta = 1 || f_SG2_P > h_SG2_P_LO_Trip_SP + k_SG2_P_LO_Trip_Hys),1
+BP,th_CTMT_P_HI_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Pretrip,TTS,N2,NORMAL,WAITING,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP,1
+BP,th_CTMT_P_HI_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Pretrip,TTS,W2,WAITING,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Pretrip_SP,1
+BP,th_CTMT_P_HI_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_CTMT_P_HI_Pretrip_Delay,k_CTMT_P_HI_Pretrip_Delay,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP,0
+BP,th_CTMT_P_HI_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Pretrip_SP - k_CTMT_P_HI_Pretrip_Hys,1
+BP,th_CTMT_P_HI_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP,0
+BP,th_CTMT_P_HI_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Pretrip_SP,1
+BP,th_CTMT_P_HI_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Pretrip_SP,1
+BP,th_CTMT_P_HI_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_CTMT_P_HI_Pretrip_Delay,k_CTMT_P_HI_Pretrip_Delay,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP,0
+BP,th_CTMT_P_HI_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Pretrip_SP - k_CTMT_P_HI_Pretrip_Hys,0
+BP,th_CTMT_P_HI_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Pretrip_SP - k_CTMT_P_HI_Pretrip_Hys,1
+BP,th_CTMT_P_HI_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Trip,TTS,N2,NORMAL,WAITING,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Trip_SP,1
+BP,th_CTMT_P_HI_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Trip,TTS,W2,WAITING,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Trip_SP,1
+BP,th_CTMT_P_HI_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_CTMT_P_HI_Trip_Delay,k_CTMT_P_HI_Trip_Delay,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Trip_SP,0
+BP,th_CTMT_P_HI_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Trip_SP - k_CTMT_P_HI_Trip_Hys,1
+BP,th_CTMT_P_HI_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Trip_SP,0
+BP,th_CTMT_P_HI_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Trip_SP,1
+BP,th_CTMT_P_HI_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_CTMT_P_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_CTMT_P_HI_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Trip_SP,1
+BP,th_CTMT_P_HI_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_CTMT_P_HI_Trip_Delay,k_CTMT_P_HI_Trip_Delay,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Trip_SP,0
+BP,th_CTMT_P_HI_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P >= k_CTMT_P_HI_Trip_SP - k_CTMT_P_HI_Trip_Hys,0
+BP,th_CTMT_P_HI_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_CTMT_P_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && f_CTMT_P < k_CTMT_P_HI_Trip_SP - k_CTMT_P_HI_Trip_Hys,1
+BP,h_SG1_F_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_SG1_F_LO_OB_Ini = 1,1
+BP,h_SG1_F_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_SG1_F_LO_OB_Ini = 1,0
+BP,h_SG1_F_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_SG1_F_LO_OB_Ini = 0,0
+BP,h_SG1_F_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_SG1_F_LO_OB_Ini = 0,0
+BP,h_SG1_F_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_LP_OB_Perm = 1 && h_SG1_F_LO_OB_Pulse = 1,1
+BP,h_SG1_F_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_LP_OB_Perm = 0,0
+BP,h_SG1_F_LO_Trip_SP,FSM,T1,INIT,TRACKING,,,f_SG1_F_Valid = 1,f_SG1_F_LO_SP_Target
+BP,h_SG1_F_LO_Trip_SP,FSM,T2,TRACKING,TRACKING,,,f_SG1_F_Valid = 1 && f_SG1_F_LO_SP_Target >= h_SG1_F_LO_Trip_SP,f_SG1_F_LO_SP_Target
+BP,h_SG1_F_LO_Trip_SP,FSM,T3,TRACKING,TRACKING,,,f_SG1_F_Valid = 1 && f_SG1_F_LO_SP_Target < h_SG1_F_LO_Trip_SP && h_SG1_F_LO_Trip_SP - f_SG1_F_LO_SP_Target <= k_SG1_F_LO_SP_Step,f_SG1_F_LO_SP_Target
+BP,h_SG1_F_LO_Trip_SP,FSM,T4,TRACKING,TRACKING,,,f_SG1_F_Valid = 1 && h_SG1_F_LO_Trip_SP - f_SG1_F_LO_SP_Target > k_SG1_F_LO_SP_Step,h_SG1_F_LO_Trip_SP - k_SG1_F_LO_SP_Step
+BP,th_SG1_F_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin,1
+BP,th_SG1_F_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin),1
+BP,th_SG1_F_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG1_F_LO_Pretrip_Delay,k_SG1_F_LO_Pretrip_Delay,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin,0
+BP,th_SG1_F_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin + k_SG1_F_LO_Pretrip_Hys),1
+BP,th_SG1_F_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin,0
+BP,th_SG1_F_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin),1
+BP,th_SG1_F_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin),1
+BP,th_SG1_F_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG1_F_LO_Pretrip_Delay,k_SG1_F_LO_Pretrip_Delay,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin,0
+BP,th_SG1_F_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin + k_SG1_F_LO_Pretrip_Hys,0
+BP,th_SG1_F_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Pretrip_Margin + k_SG1_F_LO_Pretrip_Hys),1
+BP,th_SG1_F_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP,1
+BP,th_SG1_F_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP),1
+BP,th_SG1_F_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG1_F_LO_Trip_Delay,k_SG1_F_LO_Trip_Delay,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP,0
+BP,th_SG1_F_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Trip_Hys),1
+BP,th_SG1_F_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP,0
+BP,th_SG1_F_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP),1
+BP,th_SG1_F_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG1_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG1_F_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP),1
+BP,th_SG1_F_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG1_F_LO_Trip_Delay,k_SG1_F_LO_Trip_Delay,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP,0
+BP,th_SG1_F_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG1_F_LO_OB_Sta = 0 && f_SG1_F <= h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Trip_Hys,0
+BP,th_SG1_F_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG1_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG1_F_LO_OB_Sta = 1 || f_SG1_F > h_SG1_F_LO_Trip_SP + k_SG1_F_LO_Trip_Hys),1
+BP,h_SG2_F_LO_OB_Pulse,FSM,T1,ARMED,FIRED,,,f_SG2_F_LO_OB_Ini = 1,1
+BP,h_SG2_F_LO_OB_Pulse,FSM,T2,FIRED,HELD,,,f_SG2_F_LO_OB_Ini = 1,0
+BP,h_SG2_F_LO_OB_Pulse,FSM,T3,FIRED,ARMED,,,f_SG2_F_LO_OB_Ini = 0,0
+BP,h_SG2_F_LO_OB_Pulse,FSM,T4,HELD,ARMED,,,f_SG2_F_LO_OB_Ini = 0,0
+BP,h_SG2_F_LO_OB_Sta,FSM,T1,NO_OB,OB,,,f_LP_OB_Perm = 1 && h_SG2_F_LO_OB_Pulse = 1,1
+BP,h_SG2_F_LO_OB_Sta,FSM,T2,OB,NO_OB,,,f_LP_OB_Perm = 0,0
+BP,h_SG2_F_LO_Trip_SP,FSM,T1,INIT,TRACKING,,,f_SG2_F_Valid = 1,f_SG2_F_LO_SP_Target
+BP,h_SG2_F_LO_Trip_SP,FSM,T2,TRACKING,TRACKING,,,f_SG2_F_Valid = 1 && f_SG2_F_LO_SP_Target >= h_SG2_F_LO_Trip_SP,f_SG2_F_LO_SP_Target
+BP,h_SG2_F_LO_Trip_SP,FSM,T3,TRACKING,TRACKING,,,f_SG2_F_Valid = 1 && f_SG2_F_LO_SP_Target < h_SG2_F_LO_Trip_SP && h_SG2_F_LO_Trip_SP - f_SG2_F_LO_SP_Target <= k_SG2_F_LO_SP_Step,f_SG2_F_LO_SP_Target
+BP,h_SG2_F_LO_Trip_SP,FSM,T4,TRACKING,TRACKING,,,f_SG2_F_Valid = 1 && h_SG2_F_LO_Trip_SP - f_SG2_F_LO_SP_Target > k_SG2_F_LO_SP_Step,h_SG2_F_LO_Trip_SP - k_SG2_F_LO_SP_Step
+BP,th_SG2_F_LO_Pretrip,TTS,N1,NORMAL,PRETRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Pretrip,TTS,N2,NORMAL,WAITING,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin,1
+BP,th_SG2_F_LO_Pretrip,TTS,W1,WAITING,PRETRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Pretrip,TTS,W2,WAITING,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin),1
+BP,th_SG2_F_LO_Pretrip,TTS,W3,WAITING,PRETRIP_BY_LOGIC,k_SG2_F_LO_Pretrip_Delay,k_SG2_F_LO_Pretrip_Delay,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin,0
+BP,th_SG2_F_LO_Pretrip,TTS,L1,PRETRIP_BY_LOGIC,PRETRIP_BY_ERROR_LATCHED,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Pretrip,TTS,L2,PRETRIP_BY_LOGIC,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin + k_SG2_F_LO_Pretrip_Hys),1
+BP,th_SG2_F_LO_Pretrip,TTS,E1,PRETRIP_BY_ERROR,PRETRIP_PENDING,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin,0
+BP,th_SG2_F_LO_Pretrip,TTS,E2,PRETRIP_BY_ERROR,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin),1
+BP,th_SG2_F_LO_Pretrip,TTS,P1,PRETRIP_PENDING,PRETRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Pretrip,TTS,P2,PRETRIP_PENDING,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin),1
+BP,th_SG2_F_LO_Pretrip,TTS,P3,PRETRIP_PENDING,PRETRIP_BY_LOGIC,k_SG2_F_LO_Pretrip_Delay,k_SG2_F_LO_Pretrip_Delay,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin,0
+BP,th_SG2_F_LO_Pretrip,TTS,H1,PRETRIP_BY_ERROR_LATCHED,PRETRIP_BY_LOGIC,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin + k_SG2_F_LO_Pretrip_Hys,0
+BP,th_SG2_F_LO_Pretrip,TTS,H2,PRETRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Pretrip_Margin + k_SG2_F_LO_Pretrip_Hys),1
+BP,th_SG2_F_LO_Trip,TTS,N1,NORMAL,TRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Trip,TTS,N2,NORMAL,WAITING,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP,1
+BP,th_SG2_F_LO_Trip,TTS,W1,WAITING,TRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Trip,TTS,W2,WAITING,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP),1
+BP,th_SG2_F_LO_Trip,TTS,W3,WAITING,TRIP_BY_LOGIC,k_SG2_F_LO_Trip_Delay,k_SG2_F_LO_Trip_Delay,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP,0
+BP,th_SG2_F_LO_Trip,TTS,L1,TRIP_BY_LOGIC,TRIP_BY_ERROR_LATCHED,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Trip,TTS,L2,TRIP_BY_LOGIC,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Trip_Hys),1
+BP,th_SG2_F_LO_Trip,TTS,E1,TRIP_BY_ERROR,TRIP_PENDING,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP,0
+BP,th_SG2_F_LO_Trip,TTS,E2,TRIP_BY_ERROR,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP),1
+BP,th_SG2_F_LO_Trip,TTS,P1,TRIP_PENDING,TRIP_BY_ERROR,,,f_SG2_F_Valid = 0 || f_Module_Error = 1 || f_Channel_Error = 1,0
+BP,th_SG2_F_LO_Trip,TTS,P2,TRIP_PENDING,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP),1
+BP,th_SG2_F_LO_Trip,TTS,P3,TRIP_PENDING,TRIP_BY_LOGIC,k_SG2_F_LO_Trip_Delay,k_SG2_F_LO_Trip_Delay,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP,0
+BP,th_SG2_F_LO_Trip,TTS,H1,TRIP_BY_ERROR_LATCHED,TRIP_BY_LOGIC,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && h_SG2_F_LO_OB_Sta = 0 && f_SG2_F <= h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Trip_Hys,0
+BP,th_SG2_F_LO_Trip,TTS,H2,TRIP_BY_ERROR_LATCHED,NORMAL,,,f_SG2_F_Valid = 1 && f_Module_Error = 0 && f_Channel_Error = 0 && (h_SG2_F_LO_OB_Sta = 1 || f_SG2_F > h_SG2_F_LO_Trip_SP + k_SG2_F_LO_Trip_Hys),1

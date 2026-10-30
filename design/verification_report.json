@@ -1,0 +1,780 @@
+{
+  "block_equivalence": [
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 1 scan, with bypass)",
+      "size": "10 state pairs, 160 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 2 scans, with bypass)",
+      "size": "16 state pairs, 256 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 3 scans, with bypass)",
+      "size": "22 state pairs, 352 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 5 scans, with bypass)",
+      "size": "34 state pairs, 544 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 1 scan, without bypass)",
+      "size": "10 state pairs, 80 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 2 scans, without bypass)",
+      "size": "16 state pairs, 128 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 3 scans, without bypass)",
+      "size": "22 state pairs, 176 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_TRIP_BISTABLE == trip TTS pattern (delay 5 scans, without bypass)",
+      "size": "34 state pairs, 272 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_EDGE == pulse FSM pattern (all input sequences)",
+      "size": "5 state pairs, 10 steps",
+      "passed": true,
+      "counterexample": null
+    },
+    {
+      "check": "FB_OPERATING_BYPASS == operating-bypass FSM pattern (all input sequences)",
+      "size": "4 state pairs, 16 steps",
+      "passed": true,
+      "counterexample": null
+    }
+  ],
+  "instance_proofs": [
+    {
+      "check": "BP.VAL_NPWR_LIN (FB_RANGE_CHECK) == f_NPWR_LIN_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_NPWR_LOG (FB_RANGE_CHECK) == f_NPWR_LOG_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_PZR_P (FB_RANGE_CHECK) == f_PZR_P_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG1_L (FB_RANGE_CHECK) == f_SG1_L_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG2_L (FB_RANGE_CHECK) == f_SG2_L_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG1_P (FB_RANGE_CHECK) == f_SG1_P_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG2_P (FB_RANGE_CHECK) == f_SG2_P_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_CTMT_P (FB_RANGE_CHECK) == f_CTMT_P_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG1_F (FB_RANGE_CHECK) == f_SG1_F_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VAL_SG2_F (FB_RANGE_CHECK) == f_SG2_F_Valid",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LP_PERM (FB_PERMISSIVE_BELOW) == f_LP_OB_Perm",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VOPT_SP_TGT (FB_LIMIT) == f_VOPT_SP_Target",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VOPT_SP (FB_SP_RATE_UP) == h_VOPT_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VOPT_PRETRIP (FB_TRIP_BISTABLE) == th_VOPT_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.VOPT_TRIP (FB_TRIP_BISTABLE) == th_VOPT_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LOGP_HI_OB_PERM (FB_PERMISSIVE_ABOVE) == f_LOGP_HI_OB_Perm",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LOGP_HI_OB_EDGE (FB_EDGE) == h_LOGP_HI_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LOGP_HI_OB (FB_OPERATING_BYPASS) == h_LOGP_HI_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LOGP_HI_PRETRIP (FB_TRIP_BISTABLE) == th_LOGP_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LOGP_HI_TRIP (FB_TRIP_BISTABLE) == th_LOGP_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LPD_HI_OB_EDGE (FB_EDGE) == h_LPD_HI_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LPD_HI_OB (FB_OPERATING_BYPASS) == h_LPD_HI_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LPD_HI_PRETRIP (FB_TRIP_BISTABLE) == th_LPD_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.LPD_HI_TRIP (FB_TRIP_BISTABLE) == th_LPD_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.DNBR_LO_OB_EDGE (FB_EDGE) == h_DNBR_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.DNBR_LO_OB (FB_OPERATING_BYPASS) == h_DNBR_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.DNBR_LO_PRETRIP (FB_TRIP_BISTABLE) == th_DNBR_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.DNBR_LO_TRIP (FB_TRIP_BISTABLE) == th_DNBR_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_HI_PRETRIP (FB_TRIP_BISTABLE) == th_PZR_P_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_HI_TRIP (FB_TRIP_BISTABLE) == th_PZR_P_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_OB_PERM (FB_PERMISSIVE_BELOW) == f_PZR_P_LO_OB_Perm",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_OB_EDGE (FB_EDGE) == h_PZR_P_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_OB (FB_OPERATING_BYPASS) == h_PZR_P_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_RST_EDGE (FB_EDGE) == h_PZR_P_LO_Reset_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_SP (FB_SP_MANUAL_RESET) == h_PZR_P_LO_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_PRETRIP (FB_TRIP_BISTABLE) == th_PZR_P_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.PZR_P_LO_TRIP (FB_TRIP_BISTABLE) == th_PZR_P_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_L_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG1_L_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_L_LO_TRIP (FB_TRIP_BISTABLE) == th_SG1_L_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_L_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG2_L_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_L_LO_TRIP (FB_TRIP_BISTABLE) == th_SG2_L_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_L_HI_PRETRIP (FB_TRIP_BISTABLE) == th_SG1_L_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_L_HI_TRIP (FB_TRIP_BISTABLE) == th_SG1_L_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_L_HI_PRETRIP (FB_TRIP_BISTABLE) == th_SG2_L_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_L_HI_TRIP (FB_TRIP_BISTABLE) == th_SG2_L_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_OB_PERM (FB_PERMISSIVE_BELOW) == f_SG1_P_LO_OB_Perm",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_OB_EDGE (FB_EDGE) == h_SG1_P_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_OB (FB_OPERATING_BYPASS) == h_SG1_P_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_RST_EDGE (FB_EDGE) == h_SG1_P_LO_Reset_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_SP (FB_SP_MANUAL_RESET) == h_SG1_P_LO_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG1_P_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_P_LO_TRIP (FB_TRIP_BISTABLE) == th_SG1_P_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_OB_PERM (FB_PERMISSIVE_BELOW) == f_SG2_P_LO_OB_Perm",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_OB_EDGE (FB_EDGE) == h_SG2_P_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_OB (FB_OPERATING_BYPASS) == h_SG2_P_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_RST_EDGE (FB_EDGE) == h_SG2_P_LO_Reset_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_SP (FB_SP_MANUAL_RESET) == h_SG2_P_LO_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG2_P_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_P_LO_TRIP (FB_TRIP_BISTABLE) == th_SG2_P_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.CTMT_P_HI_PRETRIP (FB_TRIP_BISTABLE) == th_CTMT_P_HI_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.CTMT_P_HI_TRIP (FB_TRIP_BISTABLE) == th_CTMT_P_HI_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_OB_EDGE (FB_EDGE) == h_SG1_F_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_OB (FB_OPERATING_BYPASS) == h_SG1_F_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_SP_TGT (FB_LIMIT) == f_SG1_F_LO_SP_Target",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_SP (FB_SP_RATE_DOWN) == h_SG1_F_LO_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG1_F_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG1_F_LO_TRIP (FB_TRIP_BISTABLE) == th_SG1_F_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_OB_EDGE (FB_EDGE) == h_SG2_F_LO_OB_Pulse",
+      "method": "pattern",
+      "size": "4 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_OB (FB_OPERATING_BYPASS) == h_SG2_F_LO_OB_Sta",
+      "method": "pattern",
+      "size": "2 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_SP_TGT (FB_LIMIT) == f_SG2_F_LO_SP_Target",
+      "method": "symbolic",
+      "size": "all inputs",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_SP (FB_SP_RATE_DOWN) == h_SG2_F_LO_Trip_SP",
+      "method": "refinement",
+      "size": "inductive",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_PRETRIP (FB_TRIP_BISTABLE) == th_SG2_F_LO_Pretrip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "BP.SG2_F_LO_TRIP (FB_TRIP_BISTABLE) == th_SG2_F_LO_Trip",
+      "method": "pattern",
+      "size": "14 guards",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.VOPT_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.LOGP_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.LPD_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.DNBR_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.PZR_P_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.PZR_P_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG1_L_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG2_L_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG1_L_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG2_L_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG1_P_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG2_P_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.CTMT_P_HI_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG1_F_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.SG2_F_LO_VOTE (FB_VOTE_2OO4) == 7 NuSCR definitions",
+      "method": "exhaustive",
+      "size": "4096 input combinations",
+      "passed": true,
+      "problems": []
+    },
+    {
+      "check": "CP.RT_INIT (FB_INITIATION) == f_RT_Init",
+      "method": "exhaustive",
+      "size": "32768 input combinations",
+      "passed": true,
+      "problems": []
+    }
+  ],
+  "proof_coverage": {
+    "definitions": 179,
+    "proved": 179,
+    "missing": []
+  },
+  "back_to_back": [
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 1, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 2, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 3, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 4, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 5, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 6, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 7, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "BP back-to-back, boundary-biased random, seed 8, 3000 scans",
+      "size": "219000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "system back-to-back, independent random channels with bypass switches and link failures, seed 1, 1500 scans",
+      "size": "462000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "system back-to-back, independent random channels with bypass switches and link failures, seed 2, 1500 scans",
+      "size": "462000 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "system back-to-back, scenario cooldown_manual_reset.csv",
+      "size": "46508 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "system back-to-back, scenario loss_of_flow_4ch.csv",
+      "size": "9548 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    },
+    {
+      "check": "system back-to-back, scenario pzr_pressure_excursion.csv",
+      "size": "18788 computed-signal comparisons",
+      "passed": true,
+      "first_mismatch": null
+    }
+  ],
+  "transition_coverage": {
+    "transitions": 504,
+    "fired": 504,
+    "not_fired": []
+  },
+  "passed": true
+}

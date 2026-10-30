@@ -1,0 +1,347 @@
+module,name,class,type,unit,range,nominal,source,fod_node,group,description
+BP,f_NPWR_LIN,input,real,%RTP,,100,Analog input module (process instrumentation),,,Excore linear nuclear power.
+BP,f_NPWR_LOG,input,real,%RTP,,100,Analog input module (process instrumentation),,,Excore logarithmic nuclear power.
+BP,f_PZR_P,input,real,psia,,2250,Analog input module (process instrumentation),,,Pressurizer pressure (wide range).
+BP,f_SG1_L,input,real,%NR,,50,Analog input module (process instrumentation),,,Steam generator 1 water level (narrow range).
+BP,f_SG2_L,input,real,%NR,,50,Analog input module (process instrumentation),,,Steam generator 2 water level (narrow range).
+BP,f_SG1_P,input,real,psia,,1000,Analog input module (process instrumentation),,,Steam generator 1 pressure.
+BP,f_SG2_P,input,real,psia,,1000,Analog input module (process instrumentation),,,Steam generator 2 pressure.
+BP,f_CTMT_P,input,real,psig,,0,Analog input module (process instrumentation),,,Containment pressure.
+BP,f_SG1_F,input,real,%DF,,100,Analog input module (process instrumentation),,,"Reactor coolant flow, SG1 loop (from SG differential pressure)."
+BP,f_SG2_F,input,real,%DF,,100,Analog input module (process instrumentation),,,"Reactor coolant flow, SG2 loop (from SG differential pressure)."
+BP,f_LPD_HI_Trip_In,input,trip,,,1,CPCS data link,,,High Local Power Density (CPC) trip signal from the core protection calculator.
+BP,f_LPD_HI_Pretrip_In,input,pretrip,,,1,CPCS data link,,,High Local Power Density (CPC) pre-trip signal from the core protection calculator.
+BP,f_DNBR_LO_Trip_In,input,trip,,,1,CPCS data link,,,Low DNBR (CPC) trip signal from the core protection calculator.
+BP,f_DNBR_LO_Pretrip_In,input,pretrip,,,1,CPCS data link,,,Low DNBR (CPC) pre-trip signal from the core protection calculator.
+BP,f_CPC_Link_Error,input,error_flag,,,0,Communication diagnostics,,,Loss or corruption of the CPCS data link.
+BP,f_Module_Error,input,error_flag,,,0,Processor self-diagnostics,,,Processor module self-diagnostic error.
+BP,f_Channel_Error,input,error_flag,,,0,Channel diagnostics,,,Channel-level error (e.g. input module or power supply fault).
+BP,f_LOGP_HI_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the High Logarithmic Power Level operating bypass.
+BP,f_LPD_HI_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the High Local Power Density (CPC) operating bypass.
+BP,f_DNBR_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low DNBR (CPC) operating bypass.
+BP,f_PZR_P_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low Pressurizer Pressure operating bypass.
+BP,f_SG1_P_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low Steam Generator 1 Pressure operating bypass.
+BP,f_SG2_P_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low Steam Generator 2 Pressure operating bypass.
+BP,f_SG1_F_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low Reactor Coolant Flow (SG1 loop) operating bypass.
+BP,f_SG2_F_LO_OB_Ini,input,pushbutton,,,0,Operator module,,,Operator initiation of the Low Reactor Coolant Flow (SG2 loop) operating bypass.
+BP,f_PZR_P_LO_SP_Reset,input,pushbutton,,,0,Operator module,,,Operator setpoint reset pushbutton of the Low Pressurizer Pressure trip.
+BP,f_SG1_P_LO_SP_Reset,input,pushbutton,,,0,Operator module,,,Operator setpoint reset pushbutton of the Low Steam Generator 1 Pressure trip.
+BP,f_SG2_P_LO_SP_Reset,input,pushbutton,,,0,Operator module,,,Operator setpoint reset pushbutton of the Low Steam Generator 2 Pressure trip.
+BP,f_VOPT_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Variable Overpower trip; passed to the coincidence processors.
+BP,f_LOGP_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Logarithmic Power Level trip; passed to the coincidence processors.
+BP,f_LPD_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Local Power Density (CPC) trip; passed to the coincidence processors.
+BP,f_DNBR_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low DNBR (CPC) trip; passed to the coincidence processors.
+BP,f_PZR_P_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Pressurizer Pressure trip; passed to the coincidence processors.
+BP,f_PZR_P_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Pressurizer Pressure trip; passed to the coincidence processors.
+BP,f_SG1_L_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Steam Generator 1 Water Level trip; passed to the coincidence processors.
+BP,f_SG2_L_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Steam Generator 2 Water Level trip; passed to the coincidence processors.
+BP,f_SG1_L_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Steam Generator 1 Water Level trip; passed to the coincidence processors.
+BP,f_SG2_L_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Steam Generator 2 Water Level trip; passed to the coincidence processors.
+BP,f_SG1_P_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Steam Generator 1 Pressure trip; passed to the coincidence processors.
+BP,f_SG2_P_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Steam Generator 2 Pressure trip; passed to the coincidence processors.
+BP,f_CTMT_P_HI_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the High Containment Pressure trip; passed to the coincidence processors.
+BP,f_SG1_F_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Reactor Coolant Flow (SG1 loop) trip; passed to the coincidence processors.
+BP,f_SG2_F_LO_Byp_Sw,input,switch,,,0,Operator module / maintenance panel,,,Trip channel (maintenance) bypass switch of the Low Reactor Coolant Flow (SG2 loop) trip; passed to the coincidence processors.
+BP,f_NPWR_LIN_Valid,function,valid_flag,,,,,1.1,g_Input_Validation,Validity of f_NPWR_LIN.
+BP,f_NPWR_LOG_Valid,function,valid_flag,,,,,1.2,g_Input_Validation,Validity of f_NPWR_LOG.
+BP,f_PZR_P_Valid,function,valid_flag,,,,,1.3,g_Input_Validation,Validity of f_PZR_P.
+BP,f_SG1_L_Valid,function,valid_flag,,,,,1.4,g_Input_Validation,Validity of f_SG1_L.
+BP,f_SG2_L_Valid,function,valid_flag,,,,,1.5,g_Input_Validation,Validity of f_SG2_L.
+BP,f_SG1_P_Valid,function,valid_flag,,,,,1.6,g_Input_Validation,Validity of f_SG1_P.
+BP,f_SG2_P_Valid,function,valid_flag,,,,,1.7,g_Input_Validation,Validity of f_SG2_P.
+BP,f_CTMT_P_Valid,function,valid_flag,,,,,1.8,g_Input_Validation,Validity of f_CTMT_P.
+BP,f_SG1_F_Valid,function,valid_flag,,,,,1.9,g_Input_Validation,Validity of f_SG1_F.
+BP,f_SG2_F_Valid,function,valid_flag,,,,,1.10,g_Input_Validation,Validity of f_SG2_F.
+BP,f_LP_OB_Perm,function,permissive,,,,,2.1,g_Permissives,Low-power operating-bypass permissive.
+BP,th_VOPT_Trip,timed_history,trip,,,,,3.4,g_VOPT,Variable Overpower channel trip (0 = TRIP).
+BP,th_VOPT_Pretrip,timed_history,pretrip,,,,,3.3,g_VOPT,Variable Overpower pre-trip alarm (0 = PRETRIP).
+BP,f_VOPT_SP_Target,function,real,%RTP,k_VOPT_SP_Min .. k_VOPT_SP_Max,,,3.1,g_VOPT,"Variable Overpower setpoint target: f_NPWR_LIN + k_VOPT_Band clamped to [k_VOPT_SP_Min, k_VOPT_SP_Max]."
+BP,h_VOPT_Trip_SP,history,real,%RTP,k_VOPT_SP_Min .. k_VOPT_SP_Max,,,3.2,g_VOPT,Variable Overpower variable trip setpoint.
+BP,th_LOGP_HI_Trip,timed_history,trip,,,,,4.5,g_LOGP_HI,High Logarithmic Power Level channel trip (0 = TRIP).
+BP,th_LOGP_HI_Pretrip,timed_history,pretrip,,,,,4.4,g_LOGP_HI,High Logarithmic Power Level pre-trip alarm (0 = PRETRIP).
+BP,f_LOGP_HI_OB_Perm,function,permissive,,,,,4.1,g_LOGP_HI,High Logarithmic Power Level operating-bypass permissive.
+BP,h_LOGP_HI_OB_Pulse,history,pulse,,,,,4.2,g_LOGP_HI,One-scan pulse for each actuation of f_LOGP_HI_OB_Ini.
+BP,h_LOGP_HI_OB_Sta,history,bypass_status,,,,,4.3,g_LOGP_HI,High Logarithmic Power Level operating-bypass status (1 = bypassed).
+BP,th_LPD_HI_Trip,timed_history,trip,,,,,5.4,g_LPD_HI,High Local Power Density (CPC) channel trip (0 = TRIP).
+BP,th_LPD_HI_Pretrip,timed_history,pretrip,,,,,5.3,g_LPD_HI,High Local Power Density (CPC) pre-trip alarm (0 = PRETRIP).
+BP,h_LPD_HI_OB_Pulse,history,pulse,,,,,5.1,g_LPD_HI,One-scan pulse for each actuation of f_LPD_HI_OB_Ini.
+BP,h_LPD_HI_OB_Sta,history,bypass_status,,,,,5.2,g_LPD_HI,High Local Power Density (CPC) operating-bypass status (1 = bypassed).
+BP,th_DNBR_LO_Trip,timed_history,trip,,,,,6.4,g_DNBR_LO,Low DNBR (CPC) channel trip (0 = TRIP).
+BP,th_DNBR_LO_Pretrip,timed_history,pretrip,,,,,6.3,g_DNBR_LO,Low DNBR (CPC) pre-trip alarm (0 = PRETRIP).
+BP,h_DNBR_LO_OB_Pulse,history,pulse,,,,,6.1,g_DNBR_LO,One-scan pulse for each actuation of f_DNBR_LO_OB_Ini.
+BP,h_DNBR_LO_OB_Sta,history,bypass_status,,,,,6.2,g_DNBR_LO,Low DNBR (CPC) operating-bypass status (1 = bypassed).
+BP,th_PZR_P_HI_Trip,timed_history,trip,,,,,7.2,g_PZR_P_HI,High Pressurizer Pressure channel trip (0 = TRIP).
+BP,th_PZR_P_HI_Pretrip,timed_history,pretrip,,,,,7.1,g_PZR_P_HI,High Pressurizer Pressure pre-trip alarm (0 = PRETRIP).
+BP,th_PZR_P_LO_Trip,timed_history,trip,,,,,8.7,g_PZR_P_LO,Low Pressurizer Pressure channel trip (0 = TRIP).
+BP,th_PZR_P_LO_Pretrip,timed_history,pretrip,,,,,8.6,g_PZR_P_LO,Low Pressurizer Pressure pre-trip alarm (0 = PRETRIP).
+BP,f_PZR_P_LO_OB_Perm,function,permissive,,,,,8.1,g_PZR_P_LO,Low Pressurizer Pressure operating-bypass permissive.
+BP,h_PZR_P_LO_OB_Pulse,history,pulse,,,,,8.2,g_PZR_P_LO,One-scan pulse for each actuation of f_PZR_P_LO_OB_Ini.
+BP,h_PZR_P_LO_OB_Sta,history,bypass_status,,,,,8.3,g_PZR_P_LO,Low Pressurizer Pressure operating-bypass status (1 = bypassed).
+BP,h_PZR_P_LO_Reset_Pulse,history,pulse,,,,,8.4,g_PZR_P_LO,One-scan pulse for each actuation of f_PZR_P_LO_SP_Reset.
+BP,h_PZR_P_LO_Trip_SP,history,real,psia,k_PZR_P_LO_SP_Min .. k_PZR_P_LO_SP_Max,,,8.5,g_PZR_P_LO,Low Pressurizer Pressure manually reset trip setpoint.
+BP,th_SG1_L_LO_Trip,timed_history,trip,,,,,9.2,g_SG1_L_LO,Low Steam Generator 1 Water Level channel trip (0 = TRIP).
+BP,th_SG1_L_LO_Pretrip,timed_history,pretrip,,,,,9.1,g_SG1_L_LO,Low Steam Generator 1 Water Level pre-trip alarm (0 = PRETRIP).
+BP,th_SG2_L_LO_Trip,timed_history,trip,,,,,10.2,g_SG2_L_LO,Low Steam Generator 2 Water Level channel trip (0 = TRIP).
+BP,th_SG2_L_LO_Pretrip,timed_history,pretrip,,,,,10.1,g_SG2_L_LO,Low Steam Generator 2 Water Level pre-trip alarm (0 = PRETRIP).
+BP,th_SG1_L_HI_Trip,timed_history,trip,,,,,11.2,g_SG1_L_HI,High Steam Generator 1 Water Level channel trip (0 = TRIP).
+BP,th_SG1_L_HI_Pretrip,timed_history,pretrip,,,,,11.1,g_SG1_L_HI,High Steam Generator 1 Water Level pre-trip alarm (0 = PRETRIP).
+BP,th_SG2_L_HI_Trip,timed_history,trip,,,,,12.2,g_SG2_L_HI,High Steam Generator 2 Water Level channel trip (0 = TRIP).
+BP,th_SG2_L_HI_Pretrip,timed_history,pretrip,,,,,12.1,g_SG2_L_HI,High Steam Generator 2 Water Level pre-trip alarm (0 = PRETRIP).
+BP,th_SG1_P_LO_Trip,timed_history,trip,,,,,13.7,g_SG1_P_LO,Low Steam Generator 1 Pressure channel trip (0 = TRIP).
+BP,th_SG1_P_LO_Pretrip,timed_history,pretrip,,,,,13.6,g_SG1_P_LO,Low Steam Generator 1 Pressure pre-trip alarm (0 = PRETRIP).
+BP,f_SG1_P_LO_OB_Perm,function,permissive,,,,,13.1,g_SG1_P_LO,Low Steam Generator 1 Pressure operating-bypass permissive.
+BP,h_SG1_P_LO_OB_Pulse,history,pulse,,,,,13.2,g_SG1_P_LO,One-scan pulse for each actuation of f_SG1_P_LO_OB_Ini.
+BP,h_SG1_P_LO_OB_Sta,history,bypass_status,,,,,13.3,g_SG1_P_LO,Low Steam Generator 1 Pressure operating-bypass status (1 = bypassed).
+BP,h_SG1_P_LO_Reset_Pulse,history,pulse,,,,,13.4,g_SG1_P_LO,One-scan pulse for each actuation of f_SG1_P_LO_SP_Reset.
+BP,h_SG1_P_LO_Trip_SP,history,real,psia,k_SG1_P_LO_SP_Min .. k_SG1_P_LO_SP_Max,,,13.5,g_SG1_P_LO,Low Steam Generator 1 Pressure manually reset trip setpoint.
+BP,th_SG2_P_LO_Trip,timed_history,trip,,,,,14.7,g_SG2_P_LO,Low Steam Generator 2 Pressure channel trip (0 = TRIP).
+BP,th_SG2_P_LO_Pretrip,timed_history,pretrip,,,,,14.6,g_SG2_P_LO,Low Steam Generator 2 Pressure pre-trip alarm (0 = PRETRIP).
+BP,f_SG2_P_LO_OB_Perm,function,permissive,,,,,14.1,g_SG2_P_LO,Low Steam Generator 2 Pressure operating-bypass permissive.
+BP,h_SG2_P_LO_OB_Pulse,history,pulse,,,,,14.2,g_SG2_P_LO,One-scan pulse for each actuation of f_SG2_P_LO_OB_Ini.
+BP,h_SG2_P_LO_OB_Sta,history,bypass_status,,,,,14.3,g_SG2_P_LO,Low Steam Generator 2 Pressure operating-bypass status (1 = bypassed).
+BP,h_SG2_P_LO_Reset_Pulse,history,pulse,,,,,14.4,g_SG2_P_LO,One-scan pulse for each actuation of f_SG2_P_LO_SP_Reset.
+BP,h_SG2_P_LO_Trip_SP,history,real,psia,k_SG2_P_LO_SP_Min .. k_SG2_P_LO_SP_Max,,,14.5,g_SG2_P_LO,Low Steam Generator 2 Pressure manually reset trip setpoint.
+BP,th_CTMT_P_HI_Trip,timed_history,trip,,,,,15.2,g_CTMT_P_HI,High Containment Pressure channel trip (0 = TRIP).
+BP,th_CTMT_P_HI_Pretrip,timed_history,pretrip,,,,,15.1,g_CTMT_P_HI,High Containment Pressure pre-trip alarm (0 = PRETRIP).
+BP,th_SG1_F_LO_Trip,timed_history,trip,,,,,16.6,g_SG1_F_LO,Low Reactor Coolant Flow (SG1 loop) channel trip (0 = TRIP).
+BP,th_SG1_F_LO_Pretrip,timed_history,pretrip,,,,,16.5,g_SG1_F_LO,Low Reactor Coolant Flow (SG1 loop) pre-trip alarm (0 = PRETRIP).
+BP,h_SG1_F_LO_OB_Pulse,history,pulse,,,,,16.1,g_SG1_F_LO,One-scan pulse for each actuation of f_SG1_F_LO_OB_Ini.
+BP,h_SG1_F_LO_OB_Sta,history,bypass_status,,,,,16.2,g_SG1_F_LO,Low Reactor Coolant Flow (SG1 loop) operating-bypass status (1 = bypassed).
+BP,f_SG1_F_LO_SP_Target,function,real,%DF,k_SG1_F_LO_SP_Min .. k_SG1_F_LO_SP_Max,,,16.3,g_SG1_F_LO,"Low Reactor Coolant Flow (SG1 loop) setpoint target: f_SG1_F - k_SG1_F_LO_Band clamped to [k_SG1_F_LO_SP_Min, k_SG1_F_LO_SP_Max]."
+BP,h_SG1_F_LO_Trip_SP,history,real,%DF,k_SG1_F_LO_SP_Min .. k_SG1_F_LO_SP_Max,,,16.4,g_SG1_F_LO,Low Reactor Coolant Flow (SG1 loop) variable trip setpoint.
+BP,th_SG2_F_LO_Trip,timed_history,trip,,,,,17.6,g_SG2_F_LO,Low Reactor Coolant Flow (SG2 loop) channel trip (0 = TRIP).
+BP,th_SG2_F_LO_Pretrip,timed_history,pretrip,,,,,17.5,g_SG2_F_LO,Low Reactor Coolant Flow (SG2 loop) pre-trip alarm (0 = PRETRIP).
+BP,h_SG2_F_LO_OB_Pulse,history,pulse,,,,,17.1,g_SG2_F_LO,One-scan pulse for each actuation of f_SG2_F_LO_OB_Ini.
+BP,h_SG2_F_LO_OB_Sta,history,bypass_status,,,,,17.2,g_SG2_F_LO,Low Reactor Coolant Flow (SG2 loop) operating-bypass status (1 = bypassed).
+BP,f_SG2_F_LO_SP_Target,function,real,%DF,k_SG2_F_LO_SP_Min .. k_SG2_F_LO_SP_Max,,,17.3,g_SG2_F_LO,"Low Reactor Coolant Flow (SG2 loop) setpoint target: f_SG2_F - k_SG2_F_LO_Band clamped to [k_SG2_F_LO_SP_Min, k_SG2_F_LO_SP_Max]."
+BP,h_SG2_F_LO_Trip_SP,history,real,%DF,k_SG2_F_LO_SP_Min .. k_SG2_F_LO_SP_Max,,,17.4,g_SG2_F_LO,Low Reactor Coolant Flow (SG2 loop) variable trip setpoint.
+CP,f_A_VOPT_Trip,input,trip,,,1,BP_A.th_VOPT_Trip via data link,,,Variable Overpower trip of channel A (from BP_A).
+CP,f_A_VOPT_Byp,input,switch,,,0,BP_A.f_VOPT_Byp_Sw via data link,,,Variable Overpower trip channel bypass request of channel A.
+CP,f_A_LOGP_HI_Trip,input,trip,,,1,BP_A.th_LOGP_HI_Trip via data link,,,High Logarithmic Power Level trip of channel A (from BP_A).
+CP,f_A_LOGP_HI_Byp,input,switch,,,0,BP_A.f_LOGP_HI_Byp_Sw via data link,,,High Logarithmic Power Level trip channel bypass request of channel A.
+CP,f_A_LPD_HI_Trip,input,trip,,,1,BP_A.th_LPD_HI_Trip via data link,,,High Local Power Density (CPC) trip of channel A (from BP_A).
+CP,f_A_LPD_HI_Byp,input,switch,,,0,BP_A.f_LPD_HI_Byp_Sw via data link,,,High Local Power Density (CPC) trip channel bypass request of channel A.
+CP,f_A_DNBR_LO_Trip,input,trip,,,1,BP_A.th_DNBR_LO_Trip via data link,,,Low DNBR (CPC) trip of channel A (from BP_A).
+CP,f_A_DNBR_LO_Byp,input,switch,,,0,BP_A.f_DNBR_LO_Byp_Sw via data link,,,Low DNBR (CPC) trip channel bypass request of channel A.
+CP,f_A_PZR_P_HI_Trip,input,trip,,,1,BP_A.th_PZR_P_HI_Trip via data link,,,High Pressurizer Pressure trip of channel A (from BP_A).
+CP,f_A_PZR_P_HI_Byp,input,switch,,,0,BP_A.f_PZR_P_HI_Byp_Sw via data link,,,High Pressurizer Pressure trip channel bypass request of channel A.
+CP,f_A_PZR_P_LO_Trip,input,trip,,,1,BP_A.th_PZR_P_LO_Trip via data link,,,Low Pressurizer Pressure trip of channel A (from BP_A).
+CP,f_A_PZR_P_LO_Byp,input,switch,,,0,BP_A.f_PZR_P_LO_Byp_Sw via data link,,,Low Pressurizer Pressure trip channel bypass request of channel A.
+CP,f_A_SG1_L_LO_Trip,input,trip,,,1,BP_A.th_SG1_L_LO_Trip via data link,,,Low Steam Generator 1 Water Level trip of channel A (from BP_A).
+CP,f_A_SG1_L_LO_Byp,input,switch,,,0,BP_A.f_SG1_L_LO_Byp_Sw via data link,,,Low Steam Generator 1 Water Level trip channel bypass request of channel A.
+CP,f_A_SG2_L_LO_Trip,input,trip,,,1,BP_A.th_SG2_L_LO_Trip via data link,,,Low Steam Generator 2 Water Level trip of channel A (from BP_A).
+CP,f_A_SG2_L_LO_Byp,input,switch,,,0,BP_A.f_SG2_L_LO_Byp_Sw via data link,,,Low Steam Generator 2 Water Level trip channel bypass request of channel A.
+CP,f_A_SG1_L_HI_Trip,input,trip,,,1,BP_A.th_SG1_L_HI_Trip via data link,,,High Steam Generator 1 Water Level trip of channel A (from BP_A).
+CP,f_A_SG1_L_HI_Byp,input,switch,,,0,BP_A.f_SG1_L_HI_Byp_Sw via data link,,,High Steam Generator 1 Water Level trip channel bypass request of channel A.
+CP,f_A_SG2_L_HI_Trip,input,trip,,,1,BP_A.th_SG2_L_HI_Trip via data link,,,High Steam Generator 2 Water Level trip of channel A (from BP_A).
+CP,f_A_SG2_L_HI_Byp,input,switch,,,0,BP_A.f_SG2_L_HI_Byp_Sw via data link,,,High Steam Generator 2 Water Level trip channel bypass request of channel A.
+CP,f_A_SG1_P_LO_Trip,input,trip,,,1,BP_A.th_SG1_P_LO_Trip via data link,,,Low Steam Generator 1 Pressure trip of channel A (from BP_A).
+CP,f_A_SG1_P_LO_Byp,input,switch,,,0,BP_A.f_SG1_P_LO_Byp_Sw via data link,,,Low Steam Generator 1 Pressure trip channel bypass request of channel A.
+CP,f_A_SG2_P_LO_Trip,input,trip,,,1,BP_A.th_SG2_P_LO_Trip via data link,,,Low Steam Generator 2 Pressure trip of channel A (from BP_A).
+CP,f_A_SG2_P_LO_Byp,input,switch,,,0,BP_A.f_SG2_P_LO_Byp_Sw via data link,,,Low Steam Generator 2 Pressure trip channel bypass request of channel A.
+CP,f_A_CTMT_P_HI_Trip,input,trip,,,1,BP_A.th_CTMT_P_HI_Trip via data link,,,High Containment Pressure trip of channel A (from BP_A).
+CP,f_A_CTMT_P_HI_Byp,input,switch,,,0,BP_A.f_CTMT_P_HI_Byp_Sw via data link,,,High Containment Pressure trip channel bypass request of channel A.
+CP,f_A_SG1_F_LO_Trip,input,trip,,,1,BP_A.th_SG1_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG1 loop) trip of channel A (from BP_A).
+CP,f_A_SG1_F_LO_Byp,input,switch,,,0,BP_A.f_SG1_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG1 loop) trip channel bypass request of channel A.
+CP,f_A_SG2_F_LO_Trip,input,trip,,,1,BP_A.th_SG2_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG2 loop) trip of channel A (from BP_A).
+CP,f_A_SG2_F_LO_Byp,input,switch,,,0,BP_A.f_SG2_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG2 loop) trip channel bypass request of channel A.
+CP,f_B_VOPT_Trip,input,trip,,,1,BP_B.th_VOPT_Trip via data link,,,Variable Overpower trip of channel B (from BP_B).
+CP,f_B_VOPT_Byp,input,switch,,,0,BP_B.f_VOPT_Byp_Sw via data link,,,Variable Overpower trip channel bypass request of channel B.
+CP,f_B_LOGP_HI_Trip,input,trip,,,1,BP_B.th_LOGP_HI_Trip via data link,,,High Logarithmic Power Level trip of channel B (from BP_B).
+CP,f_B_LOGP_HI_Byp,input,switch,,,0,BP_B.f_LOGP_HI_Byp_Sw via data link,,,High Logarithmic Power Level trip channel bypass request of channel B.
+CP,f_B_LPD_HI_Trip,input,trip,,,1,BP_B.th_LPD_HI_Trip via data link,,,High Local Power Density (CPC) trip of channel B (from BP_B).
+CP,f_B_LPD_HI_Byp,input,switch,,,0,BP_B.f_LPD_HI_Byp_Sw via data link,,,High Local Power Density (CPC) trip channel bypass request of channel B.
+CP,f_B_DNBR_LO_Trip,input,trip,,,1,BP_B.th_DNBR_LO_Trip via data link,,,Low DNBR (CPC) trip of channel B (from BP_B).
+CP,f_B_DNBR_LO_Byp,input,switch,,,0,BP_B.f_DNBR_LO_Byp_Sw via data link,,,Low DNBR (CPC) trip channel bypass request of channel B.
+CP,f_B_PZR_P_HI_Trip,input,trip,,,1,BP_B.th_PZR_P_HI_Trip via data link,,,High Pressurizer Pressure trip of channel B (from BP_B).
+CP,f_B_PZR_P_HI_Byp,input,switch,,,0,BP_B.f_PZR_P_HI_Byp_Sw via data link,,,High Pressurizer Pressure trip channel bypass request of channel B.
+CP,f_B_PZR_P_LO_Trip,input,trip,,,1,BP_B.th_PZR_P_LO_Trip via data link,,,Low Pressurizer Pressure trip of channel B (from BP_B).
+CP,f_B_PZR_P_LO_Byp,input,switch,,,0,BP_B.f_PZR_P_LO_Byp_Sw via data link,,,Low Pressurizer Pressure trip channel bypass request of channel B.
+CP,f_B_SG1_L_LO_Trip,input,trip,,,1,BP_B.th_SG1_L_LO_Trip via data link,,,Low Steam Generator 1 Water Level trip of channel B (from BP_B).
+CP,f_B_SG1_L_LO_Byp,input,switch,,,0,BP_B.f_SG1_L_LO_Byp_Sw via data link,,,Low Steam Generator 1 Water Level trip channel bypass request of channel B.
+CP,f_B_SG2_L_LO_Trip,input,trip,,,1,BP_B.th_SG2_L_LO_Trip via data link,,,Low Steam Generator 2 Water Level trip of channel B (from BP_B).
+CP,f_B_SG2_L_LO_Byp,input,switch,,,0,BP_B.f_SG2_L_LO_Byp_Sw via data link,,,Low Steam Generator 2 Water Level trip channel bypass request of channel B.
+CP,f_B_SG1_L_HI_Trip,input,trip,,,1,BP_B.th_SG1_L_HI_Trip via data link,,,High Steam Generator 1 Water Level trip of channel B (from BP_B).
+CP,f_B_SG1_L_HI_Byp,input,switch,,,0,BP_B.f_SG1_L_HI_Byp_Sw via data link,,,High Steam Generator 1 Water Level trip channel bypass request of channel B.
+CP,f_B_SG2_L_HI_Trip,input,trip,,,1,BP_B.th_SG2_L_HI_Trip via data link,,,High Steam Generator 2 Water Level trip of channel B (from BP_B).
+CP,f_B_SG2_L_HI_Byp,input,switch,,,0,BP_B.f_SG2_L_HI_Byp_Sw via data link,,,High Steam Generator 2 Water Level trip channel bypass request of channel B.
+CP,f_B_SG1_P_LO_Trip,input,trip,,,1,BP_B.th_SG1_P_LO_Trip via data link,,,Low Steam Generator 1 Pressure trip of channel B (from BP_B).
+CP,f_B_SG1_P_LO_Byp,input,switch,,,0,BP_B.f_SG1_P_LO_Byp_Sw via data link,,,Low Steam Generator 1 Pressure trip channel bypass request of channel B.
+CP,f_B_SG2_P_LO_Trip,input,trip,,,1,BP_B.th_SG2_P_LO_Trip via data link,,,Low Steam Generator 2 Pressure trip of channel B (from BP_B).
+CP,f_B_SG2_P_LO_Byp,input,switch,,,0,BP_B.f_SG2_P_LO_Byp_Sw via data link,,,Low Steam Generator 2 Pressure trip channel bypass request of channel B.
+CP,f_B_CTMT_P_HI_Trip,input,trip,,,1,BP_B.th_CTMT_P_HI_Trip via data link,,,High Containment Pressure trip of channel B (from BP_B).
+CP,f_B_CTMT_P_HI_Byp,input,switch,,,0,BP_B.f_CTMT_P_HI_Byp_Sw via data link,,,High Containment Pressure trip channel bypass request of channel B.
+CP,f_B_SG1_F_LO_Trip,input,trip,,,1,BP_B.th_SG1_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG1 loop) trip of channel B (from BP_B).
+CP,f_B_SG1_F_LO_Byp,input,switch,,,0,BP_B.f_SG1_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG1 loop) trip channel bypass request of channel B.
+CP,f_B_SG2_F_LO_Trip,input,trip,,,1,BP_B.th_SG2_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG2 loop) trip of channel B (from BP_B).
+CP,f_B_SG2_F_LO_Byp,input,switch,,,0,BP_B.f_SG2_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG2 loop) trip channel bypass request of channel B.
+CP,f_C_VOPT_Trip,input,trip,,,1,BP_C.th_VOPT_Trip via data link,,,Variable Overpower trip of channel C (from BP_C).
+CP,f_C_VOPT_Byp,input,switch,,,0,BP_C.f_VOPT_Byp_Sw via data link,,,Variable Overpower trip channel bypass request of channel C.
+CP,f_C_LOGP_HI_Trip,input,trip,,,1,BP_C.th_LOGP_HI_Trip via data link,,,High Logarithmic Power Level trip of channel C (from BP_C).
+CP,f_C_LOGP_HI_Byp,input,switch,,,0,BP_C.f_LOGP_HI_Byp_Sw via data link,,,High Logarithmic Power Level trip channel bypass request of channel C.
+CP,f_C_LPD_HI_Trip,input,trip,,,1,BP_C.th_LPD_HI_Trip via data link,,,High Local Power Density (CPC) trip of channel C (from BP_C).
+CP,f_C_LPD_HI_Byp,input,switch,,,0,BP_C.f_LPD_HI_Byp_Sw via data link,,,High Local Power Density (CPC) trip channel bypass request of channel C.
+CP,f_C_DNBR_LO_Trip,input,trip,,,1,BP_C.th_DNBR_LO_Trip via data link,,,Low DNBR (CPC) trip of channel C (from BP_C).
+CP,f_C_DNBR_LO_Byp,input,switch,,,0,BP_C.f_DNBR_LO_Byp_Sw via data link,,,Low DNBR (CPC) trip channel bypass request of channel C.
+CP,f_C_PZR_P_HI_Trip,input,trip,,,1,BP_C.th_PZR_P_HI_Trip via data link,,,High Pressurizer Pressure trip of channel C (from BP_C).
+CP,f_C_PZR_P_HI_Byp,input,switch,,,0,BP_C.f_PZR_P_HI_Byp_Sw via data link,,,High Pressurizer Pressure trip channel bypass request of channel C.
+CP,f_C_PZR_P_LO_Trip,input,trip,,,1,BP_C.th_PZR_P_LO_Trip via data link,,,Low Pressurizer Pressure trip of channel C (from BP_C).
+CP,f_C_PZR_P_LO_Byp,input,switch,,,0,BP_C.f_PZR_P_LO_Byp_Sw via data link,,,Low Pressurizer Pressure trip channel bypass request of channel C.
+CP,f_C_SG1_L_LO_Trip,input,trip,,,1,BP_C.th_SG1_L_LO_Trip via data link,,,Low Steam Generator 1 Water Level trip of channel C (from BP_C).
+CP,f_C_SG1_L_LO_Byp,input,switch,,,0,BP_C.f_SG1_L_LO_Byp_Sw via data link,,,Low Steam Generator 1 Water Level trip channel bypass request of channel C.
+CP,f_C_SG2_L_LO_Trip,input,trip,,,1,BP_C.th_SG2_L_LO_Trip via data link,,,Low Steam Generator 2 Water Level trip of channel C (from BP_C).
+CP,f_C_SG2_L_LO_Byp,input,switch,,,0,BP_C.f_SG2_L_LO_Byp_Sw via data link,,,Low Steam Generator 2 Water Level trip channel bypass request of channel C.
+CP,f_C_SG1_L_HI_Trip,input,trip,,,1,BP_C.th_SG1_L_HI_Trip via data link,,,High Steam Generator 1 Water Level trip of channel C (from BP_C).
+CP,f_C_SG1_L_HI_Byp,input,switch,,,0,BP_C.f_SG1_L_HI_Byp_Sw via data link,,,High Steam Generator 1 Water Level trip channel bypass request of channel C.
+CP,f_C_SG2_L_HI_Trip,input,trip,,,1,BP_C.th_SG2_L_HI_Trip via data link,,,High Steam Generator 2 Water Level trip of channel C (from BP_C).
+CP,f_C_SG2_L_HI_Byp,input,switch,,,0,BP_C.f_SG2_L_HI_Byp_Sw via data link,,,High Steam Generator 2 Water Level trip channel bypass request of channel C.
+CP,f_C_SG1_P_LO_Trip,input,trip,,,1,BP_C.th_SG1_P_LO_Trip via data link,,,Low Steam Generator 1 Pressure trip of channel C (from BP_C).
+CP,f_C_SG1_P_LO_Byp,input,switch,,,0,BP_C.f_SG1_P_LO_Byp_Sw via data link,,,Low Steam Generator 1 Pressure trip channel bypass request of channel C.
+CP,f_C_SG2_P_LO_Trip,input,trip,,,1,BP_C.th_SG2_P_LO_Trip via data link,,,Low Steam Generator 2 Pressure trip of channel C (from BP_C).
+CP,f_C_SG2_P_LO_Byp,input,switch,,,0,BP_C.f_SG2_P_LO_Byp_Sw via data link,,,Low Steam Generator 2 Pressure trip channel bypass request of channel C.
+CP,f_C_CTMT_P_HI_Trip,input,trip,,,1,BP_C.th_CTMT_P_HI_Trip via data link,,,High Containment Pressure trip of channel C (from BP_C).
+CP,f_C_CTMT_P_HI_Byp,input,switch,,,0,BP_C.f_CTMT_P_HI_Byp_Sw via data link,,,High Containment Pressure trip channel bypass request of channel C.
+CP,f_C_SG1_F_LO_Trip,input,trip,,,1,BP_C.th_SG1_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG1 loop) trip of channel C (from BP_C).
+CP,f_C_SG1_F_LO_Byp,input,switch,,,0,BP_C.f_SG1_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG1 loop) trip channel bypass request of channel C.
+CP,f_C_SG2_F_LO_Trip,input,trip,,,1,BP_C.th_SG2_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG2 loop) trip of channel C (from BP_C).
+CP,f_C_SG2_F_LO_Byp,input,switch,,,0,BP_C.f_SG2_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG2 loop) trip channel bypass request of channel C.
+CP,f_D_VOPT_Trip,input,trip,,,1,BP_D.th_VOPT_Trip via data link,,,Variable Overpower trip of channel D (from BP_D).
+CP,f_D_VOPT_Byp,input,switch,,,0,BP_D.f_VOPT_Byp_Sw via data link,,,Variable Overpower trip channel bypass request of channel D.
+CP,f_D_LOGP_HI_Trip,input,trip,,,1,BP_D.th_LOGP_HI_Trip via data link,,,High Logarithmic Power Level trip of channel D (from BP_D).
+CP,f_D_LOGP_HI_Byp,input,switch,,,0,BP_D.f_LOGP_HI_Byp_Sw via data link,,,High Logarithmic Power Level trip channel bypass request of channel D.
+CP,f_D_LPD_HI_Trip,input,trip,,,1,BP_D.th_LPD_HI_Trip via data link,,,High Local Power Density (CPC) trip of channel D (from BP_D).
+CP,f_D_LPD_HI_Byp,input,switch,,,0,BP_D.f_LPD_HI_Byp_Sw via data link,,,High Local Power Density (CPC) trip channel bypass request of channel D.
+CP,f_D_DNBR_LO_Trip,input,trip,,,1,BP_D.th_DNBR_LO_Trip via data link,,,Low DNBR (CPC) trip of channel D (from BP_D).
+CP,f_D_DNBR_LO_Byp,input,switch,,,0,BP_D.f_DNBR_LO_Byp_Sw via data link,,,Low DNBR (CPC) trip channel bypass request of channel D.
+CP,f_D_PZR_P_HI_Trip,input,trip,,,1,BP_D.th_PZR_P_HI_Trip via data link,,,High Pressurizer Pressure trip of channel D (from BP_D).
+CP,f_D_PZR_P_HI_Byp,input,switch,,,0,BP_D.f_PZR_P_HI_Byp_Sw via data link,,,High Pressurizer Pressure trip channel bypass request of channel D.
+CP,f_D_PZR_P_LO_Trip,input,trip,,,1,BP_D.th_PZR_P_LO_Trip via data link,,,Low Pressurizer Pressure trip of channel D (from BP_D).
+CP,f_D_PZR_P_LO_Byp,input,switch,,,0,BP_D.f_PZR_P_LO_Byp_Sw via data link,,,Low Pressurizer Pressure trip channel bypass request of channel D.
+CP,f_D_SG1_L_LO_Trip,input,trip,,,1,BP_D.th_SG1_L_LO_Trip via data link,,,Low Steam Generator 1 Water Level trip of channel D (from BP_D).
+CP,f_D_SG1_L_LO_Byp,input,switch,,,0,BP_D.f_SG1_L_LO_Byp_Sw via data link,,,Low Steam Generator 1 Water Level trip channel bypass request of channel D.
+CP,f_D_SG2_L_LO_Trip,input,trip,,,1,BP_D.th_SG2_L_LO_Trip via data link,,,Low Steam Generator 2 Water Level trip of channel D (from BP_D).
+CP,f_D_SG2_L_LO_Byp,input,switch,,,0,BP_D.f_SG2_L_LO_Byp_Sw via data link,,,Low Steam Generator 2 Water Level trip channel bypass request of channel D.
+CP,f_D_SG1_L_HI_Trip,input,trip,,,1,BP_D.th_SG1_L_HI_Trip via data link,,,High Steam Generator 1 Water Level trip of channel D (from BP_D).
+CP,f_D_SG1_L_HI_Byp,input,switch,,,0,BP_D.f_SG1_L_HI_Byp_Sw via data link,,,High Steam Generator 1 Water Level trip channel bypass request of channel D.
+CP,f_D_SG2_L_HI_Trip,input,trip,,,1,BP_D.th_SG2_L_HI_Trip via data link,,,High Steam Generator 2 Water Level trip of channel D (from BP_D).
+CP,f_D_SG2_L_HI_Byp,input,switch,,,0,BP_D.f_SG2_L_HI_Byp_Sw via data link,,,High Steam Generator 2 Water Level trip channel bypass request of channel D.
+CP,f_D_SG1_P_LO_Trip,input,trip,,,1,BP_D.th_SG1_P_LO_Trip via data link,,,Low Steam Generator 1 Pressure trip of channel D (from BP_D).
+CP,f_D_SG1_P_LO_Byp,input,switch,,,0,BP_D.f_SG1_P_LO_Byp_Sw via data link,,,Low Steam Generator 1 Pressure trip channel bypass request of channel D.
+CP,f_D_SG2_P_LO_Trip,input,trip,,,1,BP_D.th_SG2_P_LO_Trip via data link,,,Low Steam Generator 2 Pressure trip of channel D (from BP_D).
+CP,f_D_SG2_P_LO_Byp,input,switch,,,0,BP_D.f_SG2_P_LO_Byp_Sw via data link,,,Low Steam Generator 2 Pressure trip channel bypass request of channel D.
+CP,f_D_CTMT_P_HI_Trip,input,trip,,,1,BP_D.th_CTMT_P_HI_Trip via data link,,,High Containment Pressure trip of channel D (from BP_D).
+CP,f_D_CTMT_P_HI_Byp,input,switch,,,0,BP_D.f_CTMT_P_HI_Byp_Sw via data link,,,High Containment Pressure trip channel bypass request of channel D.
+CP,f_D_SG1_F_LO_Trip,input,trip,,,1,BP_D.th_SG1_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG1 loop) trip of channel D (from BP_D).
+CP,f_D_SG1_F_LO_Byp,input,switch,,,0,BP_D.f_SG1_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG1 loop) trip channel bypass request of channel D.
+CP,f_D_SG2_F_LO_Trip,input,trip,,,1,BP_D.th_SG2_F_LO_Trip via data link,,,Low Reactor Coolant Flow (SG2 loop) trip of channel D (from BP_D).
+CP,f_D_SG2_F_LO_Byp,input,switch,,,0,BP_D.f_SG2_F_LO_Byp_Sw via data link,,,Low Reactor Coolant Flow (SG2 loop) trip channel bypass request of channel D.
+CP,f_A_Link_Error,input,error_flag,,,0,Communication diagnostics,,,Failure of the data link from channel A.
+CP,f_B_Link_Error,input,error_flag,,,0,Communication diagnostics,,,Failure of the data link from channel B.
+CP,f_C_Link_Error,input,error_flag,,,0,Communication diagnostics,,,Failure of the data link from channel C.
+CP,f_D_Link_Error,input,error_flag,,,0,Communication diagnostics,,,Failure of the data link from channel D.
+CP,f_VOPT_Byp_Cnt,function,count_0_4,,,,,1.1,g_VOPT_Coincidence,Number of channels requesting bypass of the Variable Overpower trip.
+CP,f_VOPT_Vote_A,function,vote,,,,,1.2,g_VOPT_Coincidence,Channel A vote for the Variable Overpower coincidence.
+CP,f_VOPT_Vote_B,function,vote,,,,,1.3,g_VOPT_Coincidence,Channel B vote for the Variable Overpower coincidence.
+CP,f_VOPT_Vote_C,function,vote,,,,,1.4,g_VOPT_Coincidence,Channel C vote for the Variable Overpower coincidence.
+CP,f_VOPT_Vote_D,function,vote,,,,,1.5,g_VOPT_Coincidence,Channel D vote for the Variable Overpower coincidence.
+CP,f_VOPT_Vote_Cnt,function,count_0_4,,,,,1.6,g_VOPT_Coincidence,Number of channel votes for the Variable Overpower coincidence.
+CP,f_VOPT_Coinc,function,trip,,,,,1.7,g_VOPT_Coincidence,Variable Overpower coincidence trip (0 = TRIP).
+CP,f_LOGP_HI_Byp_Cnt,function,count_0_4,,,,,2.1,g_LOGP_HI_Coincidence,Number of channels requesting bypass of the High Logarithmic Power Level trip.
+CP,f_LOGP_HI_Vote_A,function,vote,,,,,2.2,g_LOGP_HI_Coincidence,Channel A vote for the High Logarithmic Power Level coincidence.
+CP,f_LOGP_HI_Vote_B,function,vote,,,,,2.3,g_LOGP_HI_Coincidence,Channel B vote for the High Logarithmic Power Level coincidence.
+CP,f_LOGP_HI_Vote_C,function,vote,,,,,2.4,g_LOGP_HI_Coincidence,Channel C vote for the High Logarithmic Power Level coincidence.
+CP,f_LOGP_HI_Vote_D,function,vote,,,,,2.5,g_LOGP_HI_Coincidence,Channel D vote for the High Logarithmic Power Level coincidence.
+CP,f_LOGP_HI_Vote_Cnt,function,count_0_4,,,,,2.6,g_LOGP_HI_Coincidence,Number of channel votes for the High Logarithmic Power Level coincidence.
+CP,f_LOGP_HI_Coinc,function,trip,,,,,2.7,g_LOGP_HI_Coincidence,High Logarithmic Power Level coincidence trip (0 = TRIP).
+CP,f_LPD_HI_Byp_Cnt,function,count_0_4,,,,,3.1,g_LPD_HI_Coincidence,Number of channels requesting bypass of the High Local Power Density (CPC) trip.
+CP,f_LPD_HI_Vote_A,function,vote,,,,,3.2,g_LPD_HI_Coincidence,Channel A vote for the High Local Power Density (CPC) coincidence.
+CP,f_LPD_HI_Vote_B,function,vote,,,,,3.3,g_LPD_HI_Coincidence,Channel B vote for the High Local Power Density (CPC) coincidence.
+CP,f_LPD_HI_Vote_C,function,vote,,,,,3.4,g_LPD_HI_Coincidence,Channel C vote for the High Local Power Density (CPC) coincidence.
+CP,f_LPD_HI_Vote_D,function,vote,,,,,3.5,g_LPD_HI_Coincidence,Channel D vote for the High Local Power Density (CPC) coincidence.
+CP,f_LPD_HI_Vote_Cnt,function,count_0_4,,,,,3.6,g_LPD_HI_Coincidence,Number of channel votes for the High Local Power Density (CPC) coincidence.
+CP,f_LPD_HI_Coinc,function,trip,,,,,3.7,g_LPD_HI_Coincidence,High Local Power Density (CPC) coincidence trip (0 = TRIP).
+CP,f_DNBR_LO_Byp_Cnt,function,count_0_4,,,,,4.1,g_DNBR_LO_Coincidence,Number of channels requesting bypass of the Low DNBR (CPC) trip.
+CP,f_DNBR_LO_Vote_A,function,vote,,,,,4.2,g_DNBR_LO_Coincidence,Channel A vote for the Low DNBR (CPC) coincidence.
+CP,f_DNBR_LO_Vote_B,function,vote,,,,,4.3,g_DNBR_LO_Coincidence,Channel B vote for the Low DNBR (CPC) coincidence.
+CP,f_DNBR_LO_Vote_C,function,vote,,,,,4.4,g_DNBR_LO_Coincidence,Channel C vote for the Low DNBR (CPC) coincidence.
+CP,f_DNBR_LO_Vote_D,function,vote,,,,,4.5,g_DNBR_LO_Coincidence,Channel D vote for the Low DNBR (CPC) coincidence.
+CP,f_DNBR_LO_Vote_Cnt,function,count_0_4,,,,,4.6,g_DNBR_LO_Coincidence,Number of channel votes for the Low DNBR (CPC) coincidence.
+CP,f_DNBR_LO_Coinc,function,trip,,,,,4.7,g_DNBR_LO_Coincidence,Low DNBR (CPC) coincidence trip (0 = TRIP).
+CP,f_PZR_P_HI_Byp_Cnt,function,count_0_4,,,,,5.1,g_PZR_P_HI_Coincidence,Number of channels requesting bypass of the High Pressurizer Pressure trip.
+CP,f_PZR_P_HI_Vote_A,function,vote,,,,,5.2,g_PZR_P_HI_Coincidence,Channel A vote for the High Pressurizer Pressure coincidence.
+CP,f_PZR_P_HI_Vote_B,function,vote,,,,,5.3,g_PZR_P_HI_Coincidence,Channel B vote for the High Pressurizer Pressure coincidence.
+CP,f_PZR_P_HI_Vote_C,function,vote,,,,,5.4,g_PZR_P_HI_Coincidence,Channel C vote for the High Pressurizer Pressure coincidence.
+CP,f_PZR_P_HI_Vote_D,function,vote,,,,,5.5,g_PZR_P_HI_Coincidence,Channel D vote for the High Pressurizer Pressure coincidence.
+CP,f_PZR_P_HI_Vote_Cnt,function,count_0_4,,,,,5.6,g_PZR_P_HI_Coincidence,Number of channel votes for the High Pressurizer Pressure coincidence.
+CP,f_PZR_P_HI_Coinc,function,trip,,,,,5.7,g_PZR_P_HI_Coincidence,High Pressurizer Pressure coincidence trip (0 = TRIP).
+CP,f_PZR_P_LO_Byp_Cnt,function,count_0_4,,,,,6.1,g_PZR_P_LO_Coincidence,Number of channels requesting bypass of the Low Pressurizer Pressure trip.
+CP,f_PZR_P_LO_Vote_A,function,vote,,,,,6.2,g_PZR_P_LO_Coincidence,Channel A vote for the Low Pressurizer Pressure coincidence.
+CP,f_PZR_P_LO_Vote_B,function,vote,,,,,6.3,g_PZR_P_LO_Coincidence,Channel B vote for the Low Pressurizer Pressure coincidence.
+CP,f_PZR_P_LO_Vote_C,function,vote,,,,,6.4,g_PZR_P_LO_Coincidence,Channel C vote for the Low Pressurizer Pressure coincidence.
+CP,f_PZR_P_LO_Vote_D,function,vote,,,,,6.5,g_PZR_P_LO_Coincidence,Channel D vote for the Low Pressurizer Pressure coincidence.
+CP,f_PZR_P_LO_Vote_Cnt,function,count_0_4,,,,,6.6,g_PZR_P_LO_Coincidence,Number of channel votes for the Low Pressurizer Pressure coincidence.
+CP,f_PZR_P_LO_Coinc,function,trip,,,,,6.7,g_PZR_P_LO_Coincidence,Low Pressurizer Pressure coincidence trip (0 = TRIP).
+CP,f_SG1_L_LO_Byp_Cnt,function,count_0_4,,,,,7.1,g_SG1_L_LO_Coincidence,Number of channels requesting bypass of the Low Steam Generator 1 Water Level trip.
+CP,f_SG1_L_LO_Vote_A,function,vote,,,,,7.2,g_SG1_L_LO_Coincidence,Channel A vote for the Low Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_LO_Vote_B,function,vote,,,,,7.3,g_SG1_L_LO_Coincidence,Channel B vote for the Low Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_LO_Vote_C,function,vote,,,,,7.4,g_SG1_L_LO_Coincidence,Channel C vote for the Low Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_LO_Vote_D,function,vote,,,,,7.5,g_SG1_L_LO_Coincidence,Channel D vote for the Low Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_LO_Vote_Cnt,function,count_0_4,,,,,7.6,g_SG1_L_LO_Coincidence,Number of channel votes for the Low Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_LO_Coinc,function,trip,,,,,7.7,g_SG1_L_LO_Coincidence,Low Steam Generator 1 Water Level coincidence trip (0 = TRIP).
+CP,f_SG2_L_LO_Byp_Cnt,function,count_0_4,,,,,8.1,g_SG2_L_LO_Coincidence,Number of channels requesting bypass of the Low Steam Generator 2 Water Level trip.
+CP,f_SG2_L_LO_Vote_A,function,vote,,,,,8.2,g_SG2_L_LO_Coincidence,Channel A vote for the Low Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_LO_Vote_B,function,vote,,,,,8.3,g_SG2_L_LO_Coincidence,Channel B vote for the Low Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_LO_Vote_C,function,vote,,,,,8.4,g_SG2_L_LO_Coincidence,Channel C vote for the Low Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_LO_Vote_D,function,vote,,,,,8.5,g_SG2_L_LO_Coincidence,Channel D vote for the Low Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_LO_Vote_Cnt,function,count_0_4,,,,,8.6,g_SG2_L_LO_Coincidence,Number of channel votes for the Low Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_LO_Coinc,function,trip,,,,,8.7,g_SG2_L_LO_Coincidence,Low Steam Generator 2 Water Level coincidence trip (0 = TRIP).
+CP,f_SG1_L_HI_Byp_Cnt,function,count_0_4,,,,,9.1,g_SG1_L_HI_Coincidence,Number of channels requesting bypass of the High Steam Generator 1 Water Level trip.
+CP,f_SG1_L_HI_Vote_A,function,vote,,,,,9.2,g_SG1_L_HI_Coincidence,Channel A vote for the High Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_HI_Vote_B,function,vote,,,,,9.3,g_SG1_L_HI_Coincidence,Channel B vote for the High Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_HI_Vote_C,function,vote,,,,,9.4,g_SG1_L_HI_Coincidence,Channel C vote for the High Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_HI_Vote_D,function,vote,,,,,9.5,g_SG1_L_HI_Coincidence,Channel D vote for the High Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_HI_Vote_Cnt,function,count_0_4,,,,,9.6,g_SG1_L_HI_Coincidence,Number of channel votes for the High Steam Generator 1 Water Level coincidence.
+CP,f_SG1_L_HI_Coinc,function,trip,,,,,9.7,g_SG1_L_HI_Coincidence,High Steam Generator 1 Water Level coincidence trip (0 = TRIP).
+CP,f_SG2_L_HI_Byp_Cnt,function,count_0_4,,,,,10.1,g_SG2_L_HI_Coincidence,Number of channels requesting bypass of the High Steam Generator 2 Water Level trip.
+CP,f_SG2_L_HI_Vote_A,function,vote,,,,,10.2,g_SG2_L_HI_Coincidence,Channel A vote for the High Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_HI_Vote_B,function,vote,,,,,10.3,g_SG2_L_HI_Coincidence,Channel B vote for the High Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_HI_Vote_C,function,vote,,,,,10.4,g_SG2_L_HI_Coincidence,Channel C vote for the High Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_HI_Vote_D,function,vote,,,,,10.5,g_SG2_L_HI_Coincidence,Channel D vote for the High Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_HI_Vote_Cnt,function,count_0_4,,,,,10.6,g_SG2_L_HI_Coincidence,Number of channel votes for the High Steam Generator 2 Water Level coincidence.
+CP,f_SG2_L_HI_Coinc,function,trip,,,,,10.7,g_SG2_L_HI_Coincidence,High Steam Generator 2 Water Level coincidence trip (0 = TRIP).
+CP,f_SG1_P_LO_Byp_Cnt,function,count_0_4,,,,,11.1,g_SG1_P_LO_Coincidence,Number of channels requesting bypass of the Low Steam Generator 1 Pressure trip.
+CP,f_SG1_P_LO_Vote_A,function,vote,,,,,11.2,g_SG1_P_LO_Coincidence,Channel A vote for the Low Steam Generator 1 Pressure coincidence.
+CP,f_SG1_P_LO_Vote_B,function,vote,,,,,11.3,g_SG1_P_LO_Coincidence,Channel B vote for the Low Steam Generator 1 Pressure coincidence.
+CP,f_SG1_P_LO_Vote_C,function,vote,,,,,11.4,g_SG1_P_LO_Coincidence,Channel C vote for the Low Steam Generator 1 Pressure coincidence.
+CP,f_SG1_P_LO_Vote_D,function,vote,,,,,11.5,g_SG1_P_LO_Coincidence,Channel D vote for the Low Steam Generator 1 Pressure coincidence.
+CP,f_SG1_P_LO_Vote_Cnt,function,count_0_4,,,,,11.6,g_SG1_P_LO_Coincidence,Number of channel votes for the Low Steam Generator 1 Pressure coincidence.
+CP,f_SG1_P_LO_Coinc,function,trip,,,,,11.7,g_SG1_P_LO_Coincidence,Low Steam Generator 1 Pressure coincidence trip (0 = TRIP).
+CP,f_SG2_P_LO_Byp_Cnt,function,count_0_4,,,,,12.1,g_SG2_P_LO_Coincidence,Number of channels requesting bypass of the Low Steam Generator 2 Pressure trip.
+CP,f_SG2_P_LO_Vote_A,function,vote,,,,,12.2,g_SG2_P_LO_Coincidence,Channel A vote for the Low Steam Generator 2 Pressure coincidence.
+CP,f_SG2_P_LO_Vote_B,function,vote,,,,,12.3,g_SG2_P_LO_Coincidence,Channel B vote for the Low Steam Generator 2 Pressure coincidence.
+CP,f_SG2_P_LO_Vote_C,function,vote,,,,,12.4,g_SG2_P_LO_Coincidence,Channel C vote for the Low Steam Generator 2 Pressure coincidence.
+CP,f_SG2_P_LO_Vote_D,function,vote,,,,,12.5,g_SG2_P_LO_Coincidence,Channel D vote for the Low Steam Generator 2 Pressure coincidence.
+CP,f_SG2_P_LO_Vote_Cnt,function,count_0_4,,,,,12.6,g_SG2_P_LO_Coincidence,Number of channel votes for the Low Steam Generator 2 Pressure coincidence.
+CP,f_SG2_P_LO_Coinc,function,trip,,,,,12.7,g_SG2_P_LO_Coincidence,Low Steam Generator 2 Pressure coincidence trip (0 = TRIP).
+CP,f_CTMT_P_HI_Byp_Cnt,function,count_0_4,,,,,13.1,g_CTMT_P_HI_Coincidence,Number of channels requesting bypass of the High Containment Pressure trip.
+CP,f_CTMT_P_HI_Vote_A,function,vote,,,,,13.2,g_CTMT_P_HI_Coincidence,Channel A vote for the High Containment Pressure coincidence.
+CP,f_CTMT_P_HI_Vote_B,function,vote,,,,,13.3,g_CTMT_P_HI_Coincidence,Channel B vote for the High Containment Pressure coincidence.
+CP,f_CTMT_P_HI_Vote_C,function,vote,,,,,13.4,g_CTMT_P_HI_Coincidence,Channel C vote for the High Containment Pressure coincidence.
+CP,f_CTMT_P_HI_Vote_D,function,vote,,,,,13.5,g_CTMT_P_HI_Coincidence,Channel D vote for the High Containment Pressure coincidence.
+CP,f_CTMT_P_HI_Vote_Cnt,function,count_0_4,,,,,13.6,g_CTMT_P_HI_Coincidence,Number of channel votes for the High Containment Pressure coincidence.
+CP,f_CTMT_P_HI_Coinc,function,trip,,,,,13.7,g_CTMT_P_HI_Coincidence,High Containment Pressure coincidence trip (0 = TRIP).
+CP,f_SG1_F_LO_Byp_Cnt,function,count_0_4,,,,,14.1,g_SG1_F_LO_Coincidence,Number of channels requesting bypass of the Low Reactor Coolant Flow (SG1 loop) trip.
+CP,f_SG1_F_LO_Vote_A,function,vote,,,,,14.2,g_SG1_F_LO_Coincidence,Channel A vote for the Low Reactor Coolant Flow (SG1 loop) coincidence.
+CP,f_SG1_F_LO_Vote_B,function,vote,,,,,14.3,g_SG1_F_LO_Coincidence,Channel B vote for the Low Reactor Coolant Flow (SG1 loop) coincidence.
+CP,f_SG1_F_LO_Vote_C,function,vote,,,,,14.4,g_SG1_F_LO_Coincidence,Channel C vote for the Low Reactor Coolant Flow (SG1 loop) coincidence.
+CP,f_SG1_F_LO_Vote_D,function,vote,,,,,14.5,g_SG1_F_LO_Coincidence,Channel D vote for the Low Reactor Coolant Flow (SG1 loop) coincidence.
+CP,f_SG1_F_LO_Vote_Cnt,function,count_0_4,,,,,14.6,g_SG1_F_LO_Coincidence,Number of channel votes for the Low Reactor Coolant Flow (SG1 loop) coincidence.
+CP,f_SG1_F_LO_Coinc,function,trip,,,,,14.7,g_SG1_F_LO_Coincidence,Low Reactor Coolant Flow (SG1 loop) coincidence trip (0 = TRIP).
+CP,f_SG2_F_LO_Byp_Cnt,function,count_0_4,,,,,15.1,g_SG2_F_LO_Coincidence,Number of channels requesting bypass of the Low Reactor Coolant Flow (SG2 loop) trip.
+CP,f_SG2_F_LO_Vote_A,function,vote,,,,,15.2,g_SG2_F_LO_Coincidence,Channel A vote for the Low Reactor Coolant Flow (SG2 loop) coincidence.
+CP,f_SG2_F_LO_Vote_B,function,vote,,,,,15.3,g_SG2_F_LO_Coincidence,Channel B vote for the Low Reactor Coolant Flow (SG2 loop) coincidence.
+CP,f_SG2_F_LO_Vote_C,function,vote,,,,,15.4,g_SG2_F_LO_Coincidence,Channel C vote for the Low Reactor Coolant Flow (SG2 loop) coincidence.
+CP,f_SG2_F_LO_Vote_D,function,vote,,,,,15.5,g_SG2_F_LO_Coincidence,Channel D vote for the Low Reactor Coolant Flow (SG2 loop) coincidence.
+CP,f_SG2_F_LO_Vote_Cnt,function,count_0_4,,,,,15.6,g_SG2_F_LO_Coincidence,Number of channel votes for the Low Reactor Coolant Flow (SG2 loop) coincidence.
+CP,f_SG2_F_LO_Coinc,function,trip,,,,,15.7,g_SG2_F_LO_Coincidence,Low Reactor Coolant Flow (SG2 loop) coincidence trip (0 = TRIP).
+CP,f_RT_Init,function,trip,,,,,16.1,g_Trip_Initiation,Reactor trip initiation (0 = initiate reactor trip).
