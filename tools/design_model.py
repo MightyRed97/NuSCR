@@ -11,7 +11,7 @@ Every output, state variable and local is assigned exactly once, in statement or
 state variable S at the end of the previous scan; S read after its assignment is the current value.  Boolean
 expressions assigned to a variable yield 1 (TRUE) or 0 (FALSE).
 
-    python -B tools/design_model.py            static check of design/rps_design.json
+    python -B tools/design_model.py            static check of 2_design/rps_design.json
 """
 from __future__ import annotations
 
@@ -26,8 +26,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from nuscr_lang import ExprError, compile_expr, evaluate, parse, variables   # noqa: E402
 from nuscr_model import default_spec_path, load                              # noqa: E402
 from nuscr_sim import SimulationError, to_fraction                          # noqa: E402
+from paths import DESIGN_JSON                                                # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
 FORMAT = "rps-design-json/2.0"
 BOOL_TAGS = {"bool", "cmp", "and", "or", "not"}
 ONE, ZERO = Fraction(1), Fraction(0)
@@ -38,7 +38,7 @@ class DesignError(Exception):
 
 
 def default_design_path():
-    return ROOT / "design" / "rps_design.json"
+    return DESIGN_JSON
 
 
 def is_bool(ast):

@@ -21,7 +21,7 @@ Tests (additional evidence):
      transition coverage of the requirements model is reported.  The four-channel system is compared with
      independent random inputs per channel, bypass switches and link failures, and on the example scenarios.
 
-    python -B tools/design_verify.py [--scans N] [--seeds 1,2] [--out design/verification_report.json]
+    python -B tools/design_verify.py [--scans N] [--seeds 1,2] [--out 6_verification/design_verification_report.json]
 """
 from __future__ import annotations
 
@@ -43,8 +43,8 @@ from nuscr_lang import (TRUE, compile_expr, conj, disj, evaluate, neg, parse,   
                         simplify, variables)
 from nuscr_model import FORMAT, Spec, topological_order                        # noqa: E402
 from nuscr_sim import ModuleSim, SystemSim, _read_scenario                     # noqa: E402
+from paths import DESIGN_REPORT, SCENARIOS_DIR                                 # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
 F = Fraction
 ONE_AST, ZERO_AST = ("num", F(1)), ("num", F(0))
 
@@ -664,7 +664,7 @@ def run_all(design, seeds=BP_SEEDS, scans=3000, system_scans=1500, system_seeds=
     coverage = set()
     tests = [back_to_back_bp(design, s, scans, coverage) for s in seeds]
     tests += [back_to_back_system_random(design, s, system_scans) for s in system_seeds]
-    tests += [back_to_back_system(design, sc) for sc in sorted((ROOT / "scenarios").glob("*.csv"))]
+    tests += [back_to_back_system(design, sc) for sc in sorted(SCENARIOS_DIR.glob("*.csv"))]
     report["back_to_back"] = tests
     all_t = {(v, t.id) for v, d in design.spec.modules["BP"].definitions.items() for t in d.transitions}
     report["transition_coverage"] = {"transitions": len(all_t), "fired": len(all_t & coverage),
@@ -680,7 +680,7 @@ def main(argv=None):
     ap.add_argument("--seeds", default=",".join(map(str, BP_SEEDS)))
     ap.add_argument("--scans", type=int, default=3000)
     ap.add_argument("--system-scans", type=int, default=1500)
-    ap.add_argument("--out", default=str(ROOT / "design" / "verification_report.json"))
+    ap.add_argument("--out", default=str(DESIGN_REPORT))
     args = ap.parse_args(argv)
     design = load_design()
     report = run_all(design, tuple(int(s) for s in args.seeds.split(",")), args.scans, args.system_scans)

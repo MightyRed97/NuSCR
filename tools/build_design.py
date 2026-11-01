@@ -1,9 +1,9 @@
-"""Generates design/rps_design.json: the software design (function-block level) that implements the NuSCR
-requirements in spec/rps_nuscr_spec.json.
+"""Generates 2_design/rps_design.json: the software design (function-block level) that implements the NuSCR
+requirements in 1_requirements/rps_nuscr_spec.json.
 
 The design is tool-neutral: a library of reusable function blocks with explicit state and single-assignment
 bodies, instantiated and wired per module.  It is prepared for entry into a synchronous model-based design tool
-(SCADE Suite recommended) or a safety platform's engineering tool.  Code generation is out of scope.
+(SCADE Suite recommended) or a safety platform's engineering tool.  C code generated from it is in 4_code/.
 
 Body notation (rps-design-json/2.0): every output, state variable and local is assigned exactly once per scan,
 either by  {"set": V, "expr": E}  or by the conditional form  {"set": V, "cases": [[G1, E1], ...], "else": E}
@@ -23,8 +23,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import build_spec as B                                  # noqa: E402
 from nuscr_model import default_spec_path, load         # noqa: E402
+from paths import DESIGN_JSON                           # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
 FORMAT = "rps-design-json/2.0"
 CH = B.CHANNELS
 
@@ -412,6 +412,8 @@ TOOL = {
         "semantics and time-based temporal operators need care.",
         "UML/SysML tools (e.g. IBM Rhapsody): suited to architecture, less to safety logic with exact scan "
         "semantics.",
+        "OpenModelica: free, and used in this package (3_case_tool/openmodelica) to simulate the design and "
+        "inspect its block diagrams over time; it is not a qualified tool for safety software.",
     ],
     "mapping": [
         ["Function block (FB_*)", "operator (node)", "FUNCTION_BLOCK, or a composition of platform library blocks"],
@@ -468,8 +470,9 @@ OPEN_ITEMS = [
     "Timing budget: scan period, input-to-trip response time, BP-to-CP link latency (modelled here as ideal "
     "same-scan transfers) and the effect of unsynchronised BP and CP scan cycles, in scans.",
     "Confirm on the platform that every restart and redundancy switchover is a cold start.",
-    "Code generation and back-to-back testing of the generated code against this design and the NuSCR "
-    "requirements model.",
+    "Code generation for the target platform.  The C code in 4_code/ runs this design on a desktop for "
+    "simulation and is compared back-to-back with this design and the NuSCR requirements model; it is not "
+    "target code and its generator is not qualified.",
     "All constants are illustrative placeholders inherited from the requirements specification.",
 ]
 
@@ -486,9 +489,10 @@ def build(spec_path):
             "revision": "1",
             "date": doc.get("date"),
             "status": doc.get("status"),
-            "implements": {"id": doc.get("id"), "file": "spec/rps_nuscr_spec.json"},
+            "implements": {"id": doc.get("id"), "file": "1_requirements/rps_nuscr_spec.json"},
             "scope": "Function-block design of the bistable processor (BP) and coincidence processor (CP) "
-                     "software.  Code generation and implementation are out of scope.",
+                     "software.  The C code generated from this design for simulation is in 4_code/ and is compared with it "
+                     "scan by scan; this document covers the design only.",
         },
         "target_tool": TOOL,
         "types": TYPES,
@@ -506,7 +510,7 @@ def build(spec_path):
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--spec", default=str(default_spec_path()))
-    ap.add_argument("-o", "--output", default=str(ROOT / "design" / "rps_design.json"))
+    ap.add_argument("-o", "--output", default=str(DESIGN_JSON))
     args = ap.parse_args()
     raw = build(args.spec)
     out = Path(args.output)

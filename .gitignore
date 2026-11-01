@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+4_code/build/
+3_case_tool/openmodelica/build/

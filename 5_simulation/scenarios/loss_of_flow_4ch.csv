@@ -1,0 +1,21 @@
+# Loss of reactor coolant flow in loop 1 seen by all four channels (-3 %DF per scan, i.e. 60 %DF/s):
+# the rate-limited setpoint cannot follow, every channel trips and CP_A initiates a reactor trip (2-out-of-4).
+# Bare column names apply to all four bistable processors.
+# Run: python -B tools/nuscr_sim.py 5_simulation/scenarios/loss_of_flow_4ch.csv --system --watch BP_A.f_SG1_F,BP_A.h_SG1_F_LO_Trip_SP,BP_A.th_SG1_F_LO_Trip,CP_A.f_SG1_F_LO_Coinc,CP_A.f_RT_Init
+# At-power start: each channel's high log power trip is tripped on cycle 0 (fail-safe start-up) until its
+# operating bypass is initiated by a button press on cycle 1 (a press held from power-up is ignored).
+cycle,f_LOGP_HI_OB_Ini,f_SG1_F
+0,0,100
+1,1,
+2,0,
+10,,97
+11,,94
+12,,91
+13,,88
+14,,85
+15,,82
+16,,79
+17,,76
+18,,73
+19,,70
+30,,

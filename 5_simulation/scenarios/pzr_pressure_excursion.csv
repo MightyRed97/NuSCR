@@ -1,0 +1,14 @@
+# High pressurizer pressure excursion in one channel (single BP):
+# pre-trip at 2360 psia, trip at 2400 psia, trip held inside the hysteresis band (2380), reset at 2300.
+# Run: python -B tools/nuscr_sim.py 5_simulation/scenarios/pzr_pressure_excursion.csv --watch f_PZR_P,th_PZR_P_HI_Pretrip,th_PZR_P_HI_Trip --changes-only
+# At-power start: each channel's high log power trip is tripped on cycle 0 (fail-safe start-up) until its
+# operating bypass is initiated by a button press on cycle 1 (a press held from power-up is ignored).
+cycle,f_LOGP_HI_OB_Ini,f_PZR_P
+0,0,2250
+1,1,
+2,0,
+10,,2360
+20,,2400
+40,,2380
+50,,2300
+60,,

@@ -14,6 +14,7 @@ from fractions import Fraction
 from pathlib import Path
 
 from nuscr_lang import ExprError, conj, evaluate, neg, parse, variables
+from paths import SPEC_JSON
 
 FORMAT = "nuscr-json/1.0"
 VAR_CLASSES = ("input", "function", "history", "timed_history")
@@ -372,7 +373,7 @@ def load(path) -> Spec:
 
 
 def default_spec_path() -> Path:
-    return Path(__file__).resolve().parent.parent / "spec" / "rps_nuscr_spec.json"
+    return SPEC_JSON
 
 
 def _req(d, key, where):

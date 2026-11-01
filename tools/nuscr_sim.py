@@ -14,7 +14,7 @@ Library use:
     res = plant.step({"BP_B": {"f_Module_Error": 1}})    # one instance only
 
 Command line (scenario replay):
-    python tools/nuscr_sim.py scenarios/<file>.csv [--system] [--until N] [--watch a,b] [--out trace.csv]
+    python tools/nuscr_sim.py 5_simulation/scenarios/<file>.csv [--system] [--until N] [--watch a,b] [--out trace.csv]
 
 Scenario CSV: a 'cycle' column plus one column per input.  An empty cell leaves
 the input unchanged.  In --system mode a column is either 'INSTANCE.var',

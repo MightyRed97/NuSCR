@@ -1,0 +1,1739 @@
+{
+  "implementation": "OpenModelica model 3_case_tool/openmodelica/RPS.mo (tools/export_modelica.py)",
+  "tool": "OpenModelica v1.27.1 (64-bit)",
+  "method": "each reference run simulated by omc (CSV result); every computed signal of every scan compared with the NuSCR requirements model (exact), reals within 1e-9",
+  "runs": [
+    {
+      "run": "bp_pzr_pressure_excursion",
+      "title": "BP scenario pzr_pressure_excursion (5_simulation/scenarios/pzr_pressure_excursion.csv)",
+      "scans": 61,
+      "comparisons": 4453,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_cooldown_manual_reset",
+      "title": "BP scenario cooldown_manual_reset (5_simulation/scenarios/cooldown_manual_reset.csv)",
+      "scans": 151,
+      "comparisons": 11023,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "system_loss_of_flow_4ch",
+      "title": "Four-channel scenario loss_of_flow_4ch (5_simulation/scenarios/loss_of_flow_4ch.csv)",
+      "scans": 31,
+      "comparisons": 9548,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_boundaries",
+      "title": "BP comparator boundaries: every analog trip and pre-trip threshold and reset threshold hit exactly",
+      "scans": 1302,
+      "comparisons": 95046,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_boundary_seed1",
+      "title": "BP boundary-biased random run, seed 1, 1000 cycles",
+      "scans": 1000,
+      "comparisons": 73000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 2,
+      "listed_rounding_effects": [
+        {
+          "scan": 439,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 440,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "cp_random_seed1",
+      "title": "CP random run, seed 1, 1000 cycles",
+      "scans": 1000,
+      "comparisons": 16000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "system_random_seed1",
+      "title": "Four-channel random run, seed 1, 500 scans",
+      "scans": 500,
+      "comparisons": 154000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 7,
+      "listed_rounding_effects": [
+        {
+          "scan": 421,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 437,
+          "signal": "BP_C.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 438,
+          "signal": "BP_C.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 439,
+          "signal": "BP_C.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 440,
+          "signal": "BP_C.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 457,
+          "signal": "BP_A.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 457,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed1_exact",
+      "title": "BP boundary-biased random run, seed 1, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 24,
+      "listed_rounding_effects": [
+        {
+          "scan": 439,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 440,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 903,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 904,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 905,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 906,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 907,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 908,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 909,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 910,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1291,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1292,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1293,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1294,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1295,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1296,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1297,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1298,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1299,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1300,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1861,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1862,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1863,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1864,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed2_exact",
+      "title": "BP boundary-biased random run, seed 2, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 6,
+      "listed_rounding_effects": [
+        {
+          "scan": 1196,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1197,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1198,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1529,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1530,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2408,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed3_exact",
+      "title": "BP boundary-biased random run, seed 3, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 16,
+      "listed_rounding_effects": [
+        {
+          "scan": 709,
+          "signal": "th_VOPT_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 715,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 716,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 717,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1446,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1583,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1871,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2241,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2242,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2243,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2244,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2245,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2248,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2249,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2250,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2251,
+          "signal": "th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed4_exact",
+      "title": "BP boundary-biased random run, seed 4, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 3,
+      "listed_rounding_effects": [
+        {
+          "scan": 2942,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2943,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2944,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed5_exact",
+      "title": "BP boundary-biased random run, seed 5, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 0,
+      "listed_rounding_effects": [],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed6_exact",
+      "title": "BP boundary-biased random run, seed 6, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 11,
+      "listed_rounding_effects": [
+        {
+          "scan": 634,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 635,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 636,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 637,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 638,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1458,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1459,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1460,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1461,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1462,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2148,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed7_exact",
+      "title": "BP boundary-biased random run, seed 7, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 28,
+      "listed_rounding_effects": [
+        {
+          "scan": 412,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 413,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 414,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 415,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 416,
+          "signal": "th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1804,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1805,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1806,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1817,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1818,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1819,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1820,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1821,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1822,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1823,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1824,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1825,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1826,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1879,
+          "signal": "th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1880,
+          "signal": "th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2391,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2392,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2393,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2394,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2395,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2396,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2397,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 2398,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "bp_random_seed8_exact",
+      "title": "BP boundary-biased random run, seed 8, 3000 scans, exact stimuli of tools/design_verify.py",
+      "scans": 3000,
+      "comparisons": 219000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 29,
+      "listed_rounding_effects": [
+        {
+          "scan": 208,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 209,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 210,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 421,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 422,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 423,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 424,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 425,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 701,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 702,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 703,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1031,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1032,
+          "signal": "th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1577,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1578,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1579,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1580,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1581,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1584,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1585,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1586,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1587,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1588,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1589,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1590,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1591,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1592,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1593,
+          "signal": "th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1627,
+          "signal": "th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "system_random_seed1_exact",
+      "title": "Four-channel random run, seed 1, 1500 scans, exact stimuli of tools/design_verify.py",
+      "scans": 1500,
+      "comparisons": 462000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 57,
+      "listed_rounding_effects": [
+        {
+          "scan": 437,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 438,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 439,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 440,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 441,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 442,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 443,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 444,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 445,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 445,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 446,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 446,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 447,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 447,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 448,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 448,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 449,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 457,
+          "signal": "BP_A.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 457,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 459,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 460,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 460,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 461,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 461,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 463,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 463,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 464,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 464,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 465,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 465,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 466,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 466,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 467,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 467,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 468,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 468,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 469,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 469,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 470,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 569,
+          "signal": "BP_A.th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 581,
+          "signal": "BP_A.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 581,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 582,
+          "signal": "BP_A.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 769,
+          "signal": "BP_A.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 769,
+          "signal": "CP_A.f_SG2_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 770,
+          "signal": "BP_A.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 771,
+          "signal": "BP_A.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1331,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1331,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1439,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1439,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1440,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1440,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1441,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1441,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1442,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1443,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    },
+    {
+      "run": "system_random_seed2_exact",
+      "title": "Four-channel random run, seed 2, 1500 scans, exact stimuli of tools/design_verify.py",
+      "scans": 1500,
+      "comparisons": 462000,
+      "failures": 0,
+      "listed_failures": [],
+      "rounding_effects": 60,
+      "listed_rounding_effects": [
+        {
+          "scan": 59,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 59,
+          "signal": "CP_A.f_PZR_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 60,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 61,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 62,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 63,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 64,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 65,
+          "signal": "BP_A.th_PZR_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 259,
+          "signal": "BP_D.th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 261,
+          "signal": "BP_D.th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 262,
+          "signal": "BP_D.th_SG1_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 446,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 446,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 447,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 447,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 448,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 448,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 449,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 449,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 450,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 450,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 451,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 451,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 452,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 452,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 453,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 453,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 454,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 454,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 455,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 455,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 456,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 459,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 460,
+          "signal": "BP_D.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 461,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 462,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 502,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 503,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 504,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 505,
+          "signal": "BP_B.th_SG2_P_LO_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 521,
+          "signal": "BP_B.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 522,
+          "signal": "BP_B.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 615,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 615,
+          "signal": "CP_A.f_SG1_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 616,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 617,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 618,
+          "signal": "BP_B.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 867,
+          "signal": "BP_D.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 868,
+          "signal": "BP_D.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 869,
+          "signal": "BP_D.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 870,
+          "signal": "BP_D.th_SG1_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1066,
+          "signal": "BP_C.th_SG2_F_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1066,
+          "signal": "CP_A.f_SG2_F_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1272,
+          "signal": "BP_D.th_VOPT_Pretrip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1372,
+          "signal": "BP_D.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1372,
+          "signal": "CP_A.f_SG2_P_LO_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1373,
+          "signal": "BP_D.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1374,
+          "signal": "BP_D.th_SG2_P_LO_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1414,
+          "signal": "BP_B.th_VOPT_Trip",
+          "expected": "0",
+          "got": "1.0"
+        },
+        {
+          "scan": 1414,
+          "signal": "CP_A.f_VOPT_Coinc",
+          "expected": "0",
+          "got": "1.0"
+        }
+      ],
+      "float64_differences": 0,
+      "listed_float64_differences": [],
+      "reference_errors": 0,
+      "listed_reference_errors": [],
+      "passed": true
+    }
+  ],
+  "comparisons": 3039070,
+  "rounding_effects": 243,
+  "transition_coverage": {
+    "transitions": 504,
+    "fired": 504,
+    "not_fired": []
+  },
+  "passed": true
+}

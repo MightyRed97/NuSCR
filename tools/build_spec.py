@@ -1,4 +1,4 @@
-"""Generates spec/rps_nuscr_spec.json, the NuSCR specification of a notional
+"""Generates 1_requirements/rps_nuscr_spec.json, the NuSCR specification of a notional
 four-channel digital Reactor Protection System (bistable + coincidence logic).
 
 This script is the source of truth for the specification: edit the tables and
@@ -20,8 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from nuscr_lang import parse, variables                     # noqa: E402
 from nuscr_model import FORMAT, Spec, topological_order      # noqa: E402
+from paths import SPEC_JSON                                  # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
 CHANNELS = ("A", "B", "C", "D")
 
 # ============================================================================
@@ -952,7 +952,7 @@ def build():
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("-o", "--output", default=str(ROOT / "spec" / "rps_nuscr_spec.json"))
+    ap.add_argument("-o", "--output", default=str(SPEC_JSON))
     args = ap.parse_args()
     raw = build()
     out = Path(args.output)
